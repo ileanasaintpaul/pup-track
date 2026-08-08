@@ -4,7 +4,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useCreateDog, useDog, useUpdateDog } from '../hooks/useDogs';
 import { useAuth } from '../hooks/useAuth';
 import { useHousehold } from '../hooks/useHousehold';
-import type { Dog, DogInput, DogSex } from '../types/models';
+import { SIZE_LABELS } from '../lib/growth';
+import type { Dog, DogInput, DogSex, SizeCategory } from '../types/models';
 
 export function NewDog() {
   const { session } = useAuth();
@@ -57,6 +58,7 @@ function DogFields({
   const [name, setName] = useState(dog?.name ?? '');
   const [breed, setBreed] = useState(dog?.breed ?? '');
   const [sex, setSex] = useState<DogSex | ''>(dog?.sex ?? '');
+  const [size, setSize] = useState<SizeCategory | ''>(dog?.size_category ?? '');
   const [birthDate, setBirthDate] = useState(dog?.birth_date ?? '');
   const [adoptionDate, setAdoptionDate] = useState(dog?.adoption_date ?? '');
   const [error, setError] = useState<string | null>(null);
@@ -70,6 +72,7 @@ function DogFields({
       await onSubmit({
         name: name.trim(),
         breed: breed.trim() || null,
+        size_category: size || null,
         sex: sex || null,
         birth_date: birthDate || null,
         adoption_date: adoptionDate || null,
@@ -108,6 +111,20 @@ function DogFields({
             value={breed}
             onChange={(e) => setBreed(e.target.value)}
           />
+
+          <label htmlFor="dog-size">Gabarit adulte</label>
+          <select
+            id="dog-size"
+            value={size}
+            onChange={(e) => setSize(e.target.value as SizeCategory | '')}
+          >
+            <option value="">Non renseigné</option>
+            {(Object.keys(SIZE_LABELS) as SizeCategory[]).map((key) => (
+              <option key={key} value={key}>
+                {SIZE_LABELS[key]}
+              </option>
+            ))}
+          </select>
 
           <label htmlFor="dog-sex">Sexe</label>
           <select id="dog-sex" value={sex} onChange={(e) => setSex(e.target.value as DogSex | '')}>
