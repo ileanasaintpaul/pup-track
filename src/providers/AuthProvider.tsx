@@ -22,15 +22,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     () => ({
       session,
       loading,
-      async sendMagicLink(email) {
-        const { error } = await supabase.auth.signInWithOtp({
+      async signIn(email, password) {
+        const { error } = await supabase.auth.signInWithPassword({
           email: email.trim().toLowerCase(),
-          options: {
-            shouldCreateUser: true,
-            emailRedirectTo: window.location.origin,
-          },
+          password,
         });
         if (error) throw error;
+      },
+      async signUp(email, password) {
+        const { data, error } = await supabase.auth.signUp({
+          email: email.trim().toLowerCase(),
+          password,
+        });
+        if (error) throw error;
+        if (!data.session) {
+          throw new Error(
+            "Compte créé. Confirme ton adresse e-mail depuis le message qu'on vient de t'envoyer, puis connecte-toi.",
+          );
+        }
       },
       async signOut() {
         const { error } = await supabase.auth.signOut();
