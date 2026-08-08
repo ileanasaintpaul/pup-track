@@ -70,7 +70,11 @@ npm run db:push           # applique supabase/migrations/
 npm run db:types          # génère src/types/database.ts
 ```
 
-Sur le projet distant, Authentication → Sign In / Providers → Email :
+Sur le projet distant, Authentication → URL Configuration : `Site URL` sur l'URL du
+site et `Redirect URLs` avec le motif `<url-du-site>/**`, sinon le lien de
+réinitialisation du mot de passe ne revient pas sur la bonne page.
+
+Authentication → Sign In / Providers → Email :
 désactive `Confirm email` pour que l'inscription ouvre la session tout de suite,
 et impose un mot de passe d'au moins 8 caractères avec lettres et chiffres.
 Les mots de passe sont hachés en bcrypt par Supabase dans `auth.users`.
