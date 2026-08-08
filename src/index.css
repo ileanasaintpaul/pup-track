@@ -421,3 +421,11 @@ code {
 .small-text {
   font-size: 13px;
 }
+
+.linkish {
+  align-self: center;
+  background: transparent;
+  color: var(--primary);
+  font-size: 14px;
+  padding: 4px 8px;
+}
