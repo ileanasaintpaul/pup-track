@@ -160,6 +160,117 @@ select {
   font-size: 14px;
 }
 
+.ghost-button {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.hero {
+  margin: 0;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.hero-unit {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.chart {
+  position: relative;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.chart svg {
+  display: block;
+  width: 100%;
+  overflow: visible;
+  touch-action: pan-y;
+}
+
+.chart-grid {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.chart-tick {
+  fill: var(--muted);
+  font-size: 11px;
+}
+
+.chart-line {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.chart-dot {
+  fill: var(--primary);
+  stroke: var(--card);
+  stroke-width: 2;
+}
+
+.chart-crosshair {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.chart-value {
+  fill: var(--text);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.chart-tooltip {
+  position: absolute;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  font-size: 13px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.table th {
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  padding-bottom: 6px;
+}
+
+.table td {
+  border-top: 1px solid var(--border);
+  padding: 8px 0;
+  vertical-align: baseline;
+}
+
+.numeric {
+  text-align: right;
+  white-space: nowrap;
+}
+
+button.small {
+  padding: 4px 10px;
+  font-size: 13px;
+}
+
 .code {
   margin: 0;
   text-align: center;

@@ -4,7 +4,9 @@ import { Link } from 'react-router-dom';
 import { useDogs } from '../hooks/useDogs';
 import { useCreateInvite, useHousehold, useMembers } from '../hooks/useHousehold';
 import { useAuth } from '../hooks/useAuth';
+import { latestWeight, useWeights, weightChange } from '../hooks/useWeights';
 import { formatAge, isInSocializationWindow } from '../lib/age';
+import { formatKg, formatSignedKg } from '../lib/format';
 import type { Dog } from '../types/models';
 
 export function Home() {
@@ -90,6 +92,9 @@ export function Home() {
 
 function DogCard({ dog }: { dog: Dog }) {
   const age = formatAge(dog.birth_date);
+  const { data: weights } = useWeights(dog.id);
+  const last = latestWeight(weights);
+  const change = weightChange(weights);
 
   return (
     <section className="card">
@@ -113,6 +118,15 @@ function DogCard({ dog }: { dog: Dog }) {
           <span className="muted">Sexe</span>
           <span>{dog.sex === 'female' ? 'Femelle' : dog.sex === 'male' ? 'Mâle' : '—'}</span>
         </li>
+        <li>
+          <span className="muted">Poids</span>
+          <span>
+            {last ? `${formatKg(last.weight_kg)} kg` : '—'}
+            {change !== null ? (
+              <span className="muted"> · {formatSignedKg(change)} kg</span>
+            ) : null}
+          </span>
+        </li>
       </ul>
 
       {isInSocializationWindow(dog.birth_date) ? (
@@ -120,6 +134,10 @@ function DogCard({ dog }: { dog: Dog }) {
           Période critique de socialisation : chaque nouvelle expérience compte jusqu'à 16 semaines.
         </p>
       ) : null}
+
+      <Link to={`/dog/${dog.id}/poids`} className="button ghost-button">
+        Suivi du poids
+      </Link>
     </section>
   );
 }
