@@ -226,6 +226,43 @@ select {
   font-weight: 700;
 }
 
+.chart-band {
+  fill: var(--primary);
+  opacity: 0.16;
+}
+
+.legend {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 6px 0 0;
+  padding: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-line {
+  width: 16px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--primary);
+}
+
+.legend-band {
+  width: 16px;
+  height: 10px;
+  border-radius: 3px;
+  background: var(--primary);
+  opacity: 0.28;
+}
+
 .chart-tooltip {
   position: absolute;
   transform: translateX(-50%);

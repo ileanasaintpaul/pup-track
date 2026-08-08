@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { formatKg, formatShortDate } from '../lib/format';
+import type { ExpectedRange } from '../lib/growth';
 import type { WeightEntry } from '../types/models';
 
 const HEIGHT = 190;
@@ -30,7 +31,15 @@ function buildTicks(low: number, step: number, count: number) {
   return Array.from({ length: count }, (_, index) => Number((low + step * index).toFixed(2)));
 }
 
-export function WeightChart({ entries }: { entries: WeightEntry[] }) {
+export function WeightChart({
+  entries,
+  expected,
+  expectedLabel,
+}: {
+  entries: WeightEntry[];
+  expected?: (ExpectedRange | null)[] | null;
+  expectedLabel?: string;
+}) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(320);
   const [hovered, setHovered] = useState<number | null>(null);
@@ -48,11 +57,12 @@ export function WeightChart({ entries }: { entries: WeightEntry[] }) {
 
   const times = entries.map((entry) => new Date(`${entry.measured_on}T00:00:00`).getTime());
   const weights = entries.map((entry) => entry.weight_kg);
+  const bandValues = (expected ?? []).flatMap((range) => (range ? [range.min, range.max] : []));
 
   const minTime = Math.min(...times);
   const maxTime = Math.max(...times);
-  const minWeight = Math.min(...weights);
-  const maxWeight = Math.max(...weights);
+  const minWeight = Math.min(...weights, ...bandValues);
+  const maxWeight = Math.max(...weights, ...bandValues);
 
   const { low, high, ticks } = niceScale(minWeight, maxWeight);
 
@@ -69,11 +79,13 @@ export function WeightChart({ entries }: { entries: WeightEntry[] }) {
 
   const points = entries.map((entry, index) => ({
     entry,
+    range: expected?.[index] ?? null,
     cx: x(times[index]),
     cy: y(entry.weight_kg),
   }));
 
   const path = points.map((point, index) => `${index === 0 ? 'M' : 'L'}${point.cx} ${point.cy}`).join(' ');
+  const bandPath = buildBandPath(points, y);
 
   const last = points[points.length - 1];
   const active = hovered === null ? null : points[hovered];
@@ -118,6 +130,8 @@ export function WeightChart({ entries }: { entries: WeightEntry[] }) {
           </g>
         ))}
 
+        {bandPath ? <path className="chart-band" d={bandPath} /> : null}
+
         <text className="chart-tick" x={PADDING.left} y={HEIGHT - 8}>
           {formatShortDate(entries[0].measured_on)}
         </text>
@@ -147,14 +161,50 @@ export function WeightChart({ entries }: { entries: WeightEntry[] }) {
         <div
           className="chart-tooltip"
           style={{
-            left: Math.min(Math.max(active.cx, 62), width - 62),
-            top: active.cy < 60 ? active.cy + 16 : active.cy - 62,
+            left: Math.min(Math.max(active.cx, 74), width - 74),
+            top: active.cy < 74 ? active.cy + 16 : active.cy - (active.range ? 76 : 62),
           }}
         >
           <strong>{formatKg(active.entry.weight_kg)} kg</strong>
           <span className="muted">{formatShortDate(active.entry.measured_on)}</span>
+          {active.range ? (
+            <span className="muted">
+              attendu {formatKg(active.range.min)}–{formatKg(active.range.max)} kg
+            </span>
+          ) : null}
         </div>
+      ) : null}
+
+      {bandPath ? (
+        <ul className="legend">
+          <li>
+            <span className="legend-line" />
+            Poids mesuré
+          </li>
+          <li>
+            <span className="legend-band" />
+            {expectedLabel ?? 'Fourchette attendue'}
+          </li>
+        </ul>
       ) : null}
     </div>
   );
+}
+
+function buildBandPath(
+  points: { cx: number; range: ExpectedRange | null }[],
+  y: (weight: number) => number,
+): string | null {
+  const covered = points.filter((point) => point.range) as {
+    cx: number;
+    range: ExpectedRange;
+  }[];
+  if (covered.length < 2) return null;
+
+  const top = covered.map((point, index) => `${index === 0 ? 'M' : 'L'}${point.cx} ${y(point.range.max)}`);
+  const bottom = [...covered]
+    .reverse()
+    .map((point) => `L${point.cx} ${y(point.range.min)}`);
+
+  return `${top.join(' ')} ${bottom.join(' ')} Z`;
 }

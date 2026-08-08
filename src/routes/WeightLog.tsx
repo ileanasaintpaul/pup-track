@@ -3,8 +3,11 @@ import { Link, useParams } from 'react-router-dom';
 
 import { WeightChart } from '../components/WeightChart';
 import { useDog } from '../hooks/useDogs';
+import { useGrowthStandard } from '../hooks/useGrowthStandard';
 import { useDeleteWeight, useSaveWeight, useWeights, weightChange } from '../hooks/useWeights';
+import { ageInWeeks } from '../lib/age';
 import { formatKg, formatLongDate, formatSignedKg } from '../lib/format';
+import { expectedAt, expectedForEntries, rangePosition } from '../lib/growth';
 
 export function WeightLog() {
   const { dogId } = useParams();
@@ -21,6 +24,14 @@ export function WeightLog() {
 
   const change = weightChange(entries);
   const history = entries ? [...entries].reverse() : [];
+
+  const standard = useGrowthStandard(dog?.breed ?? null, dog?.size_category ?? null).data;
+  const expected = entries ? expectedForEntries(entries, standard?.points, dog?.birth_date ?? null) : null;
+  const weeks = ageInWeeks(dog?.birth_date ?? null);
+  const todayRange = standard && weeks !== null ? expectedAt(standard.points, weeks) : null;
+  const lastWeight = entries?.length ? entries[entries.length - 1].weight_kg : null;
+  const position = todayRange && lastWeight !== null ? rangePosition(lastWeight, todayRange) : null;
+  const expectedLabel = standard?.source === 'breed' ? `Fourchette ${dog?.breed}` : 'Fourchette du gabarit';
 
   async function submit(event: FormEvent) {
     event.preventDefault();
@@ -68,7 +79,17 @@ export function WeightLog() {
             ) : (
               <p className="muted">Première pesée enregistrée.</p>
             )}
-            <WeightChart entries={entries} />
+            <WeightChart entries={entries} expected={expected} expectedLabel={expectedLabel} />
+            {todayRange ? (
+              <p className="muted">
+                À {weeks} semaines, fourchette indicative : {formatKg(todayRange.min)}–
+                {formatKg(todayRange.max)} kg
+                {position === 'inside' ? ' · dans la fourchette' : null}
+                {position === 'below' ? ' · en dessous' : null}
+                {position === 'above' ? ' · au-dessus' : null}
+                . Ces repères ne remplacent pas l'avis du vétérinaire.
+              </p>
+            ) : null}
           </>
         ) : (
           <p className="muted">Aucune pesée pour l'instant. Ajoute la première ci-dessous.</p>
