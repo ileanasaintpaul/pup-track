@@ -17,3 +17,23 @@ export type Member = {
   joined_at: string;
   display_name: string;
 };
+
+export type DogSex = 'male' | 'female';
+
+export type Dog = {
+  id: string;
+  household_id: string;
+  name: string;
+  breed: string | null;
+  sex: DogSex | null;
+  birth_date: string | null;
+  adoption_date: string | null;
+};
+
+export type DogInput = {
+  name: string;
+  breed: string | null;
+  sex: DogSex | null;
+  birth_date: string | null;
+  adoption_date: string | null;
+};

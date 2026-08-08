@@ -8,6 +8,7 @@ import { useAuth } from './hooks/useAuth';
 import { AuthProvider } from './providers/AuthProvider';
 import { Login } from './routes/Login';
 import { Home } from './routes/Home';
+import { EditDog, NewDog } from './routes/DogForm';
 import { Onboarding } from './routes/Onboarding';
 import { Setup } from './routes/Setup';
 
@@ -81,6 +82,26 @@ export default function App() {
                 <RequireAuth>
                   <RequireHousehold>
                     <Home />
+                  </RequireHousehold>
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/dog/new"
+              element={
+                <RequireAuth>
+                  <RequireHousehold>
+                    <NewDog />
+                  </RequireHousehold>
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/dog/:dogId"
+              element={
+                <RequireAuth>
+                  <RequireHousehold>
+                    <EditDog />
                   </RequireHousehold>
                 </RequireAuth>
               }
