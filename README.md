@@ -96,7 +96,7 @@ Les features arrivent une par une, chacune avec sa migration SQL.
 - [x] Écrans foyer : créer / rejoindre avec un code, inviter l'autre maître
 - [x] Fiche profil du chien (nom, race, sexe, naissance, adoption, âge)
 - [x] Suivi du poids : pesées, courbe et historique
-- [ ] Fourchette de poids attendue selon la race
+- [x] Fourchette de poids attendue selon la race ou le gabarit
 - [ ] Taille au garrot
 - [ ] Module éducation avec paliers de compétence
 - [ ] Tracker de socialisation
