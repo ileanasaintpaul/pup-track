@@ -1,6 +1,3 @@
-// Types du domaine, écrits à la main tant que `npm run db:types` n'a pas
-// généré src/types/database.ts depuis le projet Supabase.
-
 export type HouseholdRole = 'owner' | 'member';
 
 export type Profile = {

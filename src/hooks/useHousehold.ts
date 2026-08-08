@@ -3,7 +3,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../lib/supabase';
 import type { Household, Member } from '../types/models';
 
-/** Le foyer de l'utilisateur courant — celui qu'il partage avec l'autre maître. */
 export function useHousehold(userId: string | undefined) {
   return useQuery({
     queryKey: ['household', userId],
@@ -83,7 +82,6 @@ export function useCreateInvite() {
   });
 }
 
-/** Sans prénom, la liste des membres n'affiche que « Membre ». */
 async function saveDisplayName(displayName: string) {
   const name = displayName.trim();
   if (!name) return;

@@ -1,7 +1,3 @@
--- gen_random_bytes vient de pgcrypto, installé dans le schéma `extensions` sur
--- Supabase : invisible depuis une fonction en `search_path = public`.
--- gen_random_uuid est natif Postgres, donc toujours accessible.
-
 create or replace function public.create_household_invite(target_household uuid)
 returns text
 language plpgsql

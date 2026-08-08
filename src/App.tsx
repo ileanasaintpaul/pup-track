@@ -4,7 +4,8 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { useHousehold } from './hooks/useHousehold';
 import { isSupabaseConfigured } from './lib/env';
 import { queryClient } from './lib/queryClient';
-import { AuthProvider, useAuth } from './providers/AuthProvider';
+import { useAuth } from './hooks/useAuth';
+import { AuthProvider } from './providers/AuthProvider';
 import { Login } from './routes/Login';
 import { Home } from './routes/Home';
 import { Onboarding } from './routes/Onboarding';
@@ -22,7 +23,6 @@ function RequireAuth({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-/** Sans foyer, rien à afficher : on passe d'abord par la création ou l'invitation. */
 function RequireHousehold({ children }: { children: React.ReactNode }) {
   const { session } = useAuth();
   const { data: household, isPending } = useHousehold(session?.user.id);
