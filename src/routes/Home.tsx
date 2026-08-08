@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { useCreateInvite, useHousehold, useMembers } from '../hooks/useHousehold';
-import { useAuth } from '../providers/AuthProvider';
+import { useAuth } from '../hooks/useAuth';
 
 export function Home() {
   const { session, signOut } = useAuth();
