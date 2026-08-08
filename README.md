@@ -94,7 +94,8 @@ Les features arrivent une par une, chacune avec sa migration SQL.
 
 - [x] Socle : projet, auth par e-mail, foyer partagé + invitation, fiche chien (schéma)
 - [x] Écrans foyer : créer / rejoindre avec un code, inviter l'autre maître
-- [ ] Fiche profil + courbes de croissance
+- [x] Fiche profil du chien (nom, race, sexe, naissance, adoption, âge)
+- [ ] Courbes de croissance (poids, taille)
 - [ ] Module éducation avec paliers de compétence
 - [ ] Tracker de socialisation
 - [ ] Journal quotidien (repas, sorties, sommeil)
