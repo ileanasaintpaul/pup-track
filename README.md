@@ -46,7 +46,7 @@ données que l'autre — en temps réel.
 Application **web**, utilisable depuis le navigateur du téléphone comme de l'ordinateur.
 
 - **Front** : [Vite](https://vite.dev/) + React + TypeScript, routage par `react-router`
-- **Backend** : [Supabase](https://supabase.com/) — Postgres, Auth (lien magique par e-mail), Realtime, Storage
+- **Backend** : [Supabase](https://supabase.com/) — Postgres, Auth (e-mail + mot de passe), Realtime, Storage
 - **Isolation des données** : Row Level Security par foyer (`household`) — personne d'autre ne voit le chien
 - **Données serveur** : TanStack Query
 - **Déploiement** : build statique (`npm run build` → `dist/`), déployable sur Vercel, Netlify ou Cloudflare Pages
@@ -70,8 +70,14 @@ npm run db:push           # applique supabase/migrations/
 npm run db:types          # génère src/types/database.ts
 ```
 
-Sur le projet distant, pense à déclarer `Site URL` et `Redirect URLs` dans
-Authentication → URL Configuration, sinon le lien magique renvoie ailleurs.
+Sur le projet distant, Authentication → URL Configuration : `Site URL` sur l'URL du
+site et `Redirect URLs` avec le motif `<url-du-site>/**`, sinon le lien de
+réinitialisation du mot de passe ne revient pas sur la bonne page.
+
+Authentication → Sign In / Providers → Email :
+désactive `Confirm email` pour que l'inscription ouvre la session tout de suite,
+et impose un mot de passe d'au moins 8 caractères avec lettres et chiffres.
+Les mots de passe sont hachés en bcrypt par Supabase dans `auth.users`.
 
 ### En local, sans projet distant
 
@@ -84,7 +90,7 @@ npx supabase db reset     # rejoue tout à zéro
 npx supabase stop         # arrête les conteneurs
 ```
 
-Les e-mails de connexion ne partent pas : ils s'ouvrent sur http://127.0.0.1:54324.
+Les e-mails éventuels ne partent pas : ils s'ouvrent sur http://127.0.0.1:54324.
 
 Scripts : `dev`, `build`, `preview`, `lint`, `typecheck`, `db:push`, `db:types`.
 
@@ -92,7 +98,7 @@ Scripts : `dev`, `build`, `preview`, `lint`, `typecheck`, `db:push`, `db:types`.
 
 Les features arrivent une par une, chacune avec sa migration SQL.
 
-- [x] Socle : projet, auth par e-mail, foyer partagé + invitation, fiche chien (schéma)
+- [x] Socle : projet, auth e-mail + mot de passe, foyer partagé + invitation, fiche chien (schéma)
 - [x] Écrans foyer : créer / rejoindre avec un code, inviter l'autre maître
 - [x] Fiche profil du chien (nom, race, sexe, naissance, adoption, âge)
 - [x] Suivi du poids : pesées, courbe et historique

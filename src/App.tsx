@@ -10,8 +10,9 @@ import { Login } from './routes/Login';
 import { Home } from './routes/Home';
 import { EditDog, NewDog } from './routes/DogForm';
 import { Onboarding } from './routes/Onboarding';
-import { WeightLog } from './routes/WeightLog';
+import { ResetPassword } from './routes/ResetPassword';
 import { Setup } from './routes/Setup';
+import { WeightLog } from './routes/WeightLog';
 
 function Loading() {
   return <p className="centered muted">Chargement…</p>;
@@ -117,6 +118,7 @@ export default function App() {
                 </RequireAuth>
               }
             />
+            <Route path="/nouveau-mot-de-passe" element={<ResetPassword />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>

@@ -1,23 +1,47 @@
 import { useState, type FormEvent } from 'react';
 
 import { useAuth } from '../hooks/useAuth';
+import { authErrorMessage } from '../lib/authErrors';
+
+const MIN_PASSWORD_LENGTH = 8;
+
+type Mode = 'signin' | 'signup' | 'forgot';
 
 export function Login() {
-  const { sendMagicLink } = useAuth();
+  const { signIn, signUp, requestPasswordReset } = useAuth();
+  const [mode, setMode] = useState<Mode>('signin');
   const [email, setEmail] = useState('');
-  const [sent, setSent] = useState(false);
+  const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [sent, setSent] = useState(false);
+
+  const creating = mode === 'signup';
+  const forgot = mode === 'forgot';
+  const tooShort = creating && password.length > 0 && password.length < MIN_PASSWORD_LENGTH;
+
+  function switchMode(next: Mode) {
+    setMode(next);
+    setError(null);
+    setSent(false);
+    setPassword('');
+  }
 
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
     setBusy(true);
     setError(null);
     try {
-      await sendMagicLink(email);
-      setSent(true);
+      if (forgot) {
+        await requestPasswordReset(email);
+        setSent(true);
+      } else if (creating) {
+        await signUp(email, password);
+      } else {
+        await signIn(email, password);
+      }
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Une erreur est survenue');
+      setError(authErrorMessage(e));
     } finally {
       setBusy(false);
     }
@@ -29,13 +53,40 @@ export function Login() {
         <p className="logo">🐾</p>
         <h1>PupTrack</h1>
 
+        {forgot ? (
+          <p className="muted">
+            On t'envoie un lien pour choisir un nouveau mot de passe.
+          </p>
+        ) : (
+          <div className="tabs" role="tablist">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={!creating}
+              className={creating ? 'tab' : 'tab tab-active'}
+              onClick={() => switchMode('signin')}
+            >
+              Se connecter
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={creating}
+              className={creating ? 'tab tab-active' : 'tab'}
+              onClick={() => switchMode('signup')}
+            >
+              Créer un compte
+            </button>
+          </div>
+        )}
+
         {sent ? (
           <p className="muted">
-            Lien de connexion envoyé à <strong>{email}</strong>. Ouvre-le depuis ce navigateur.
+            Si un compte existe pour <strong>{email}</strong>, le lien vient de partir. Ouvre-le
+            depuis ce navigateur.
           </p>
         ) : (
           <form onSubmit={onSubmit}>
-            <p className="muted">Connecte-toi par e-mail, sans mot de passe.</p>
             <label htmlFor="email">Adresse e-mail</label>
             <input
               id="email"
@@ -46,13 +97,44 @@ export function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            <button type="submit" disabled={busy || !email}>
-              {busy ? 'Envoi…' : 'Recevoir le lien'}
+
+            {forgot ? null : (
+              <>
+                <label htmlFor="password">Mot de passe</label>
+                <input
+                  id="password"
+                  type="password"
+                  required
+                  minLength={creating ? MIN_PASSWORD_LENGTH : undefined}
+                  autoComplete={creating ? 'new-password' : 'current-password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                {creating ? (
+                  <p className="muted small-text">
+                    Au moins {MIN_PASSWORD_LENGTH} caractères, avec des lettres et des chiffres.
+                  </p>
+                ) : null}
+              </>
+            )}
+
+            <button type="submit" disabled={busy || !email || (!forgot && !password) || tooShort}>
+              {busy
+                ? 'Un instant…'
+                : forgot
+                  ? 'Envoyer le lien'
+                  : creating
+                    ? 'Créer mon compte'
+                    : 'Se connecter'}
             </button>
           </form>
         )}
 
         {error ? <p className="error">{error}</p> : null}
+
+        <button type="button" className="linkish" onClick={() => switchMode(forgot ? 'signin' : 'forgot')}>
+          {forgot ? 'Revenir à la connexion' : 'Mot de passe oublié ?'}
+        </button>
       </div>
     </main>
   );
