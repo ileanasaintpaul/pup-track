@@ -70,6 +70,22 @@ npm run db:push           # applique supabase/migrations/
 npm run db:types          # génère src/types/database.ts
 ```
 
+Sur le projet distant, pense à déclarer `Site URL` et `Redirect URLs` dans
+Authentication → URL Configuration, sinon le lien magique renvoie ailleurs.
+
+### En local, sans projet distant
+
+`npx supabase start` lance Postgres, l'API et une boîte mail de test dans Docker,
+puis affiche l'`API URL` et l'`anon key` à mettre dans `.env`.
+
+```bash
+npx supabase start        # applique les migrations
+npx supabase db reset     # rejoue tout à zéro
+npx supabase stop         # arrête les conteneurs
+```
+
+Les e-mails de connexion ne partent pas : ils s'ouvrent sur http://127.0.0.1:54324.
+
 Scripts : `dev`, `build`, `preview`, `lint`, `typecheck`, `db:push`, `db:types`.
 
 ## 🗺️ Roadmap
@@ -77,7 +93,7 @@ Scripts : `dev`, `build`, `preview`, `lint`, `typecheck`, `db:push`, `db:types`.
 Les features arrivent une par une, chacune avec sa migration SQL.
 
 - [x] Socle : projet, auth par e-mail, foyer partagé + invitation, fiche chien (schéma)
-- [ ] Écrans foyer : créer / rejoindre avec un code, inviter l'autre maître
+- [x] Écrans foyer : créer / rejoindre avec un code, inviter l'autre maître
 - [ ] Fiche profil + courbes de croissance
 - [ ] Module éducation avec paliers de compétence
 - [ ] Tracker de socialisation
