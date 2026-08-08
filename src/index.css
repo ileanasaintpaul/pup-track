@@ -1,0 +1,152 @@
+:root {
+  --bg: #fffbf5;
+  --card: #ffffff;
+  --border: #ede3d6;
+  --text: #2e2a26;
+  --muted: #8a8078;
+  --primary: #c4703a;
+  --primary-soft: #fbede2;
+  --danger: #b3453a;
+  --radius: 14px;
+
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1917;
+    --card: #262220;
+    --border: #3a332e;
+    --text: #f5efe8;
+    --muted: #a89c92;
+    --primary-soft: #3a2a1f;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--bg);
+}
+
+.shell {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.centered {
+  min-height: 100dvh;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.card {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.logo {
+  margin: 0;
+  font-size: 44px;
+}
+
+.muted {
+  margin: 0;
+  color: var(--muted);
+}
+
+.error {
+  margin: 0;
+  color: var(--danger);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+input {
+  font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+input:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+button {
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  background: var(--primary);
+  color: #fff;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button.ghost {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+code {
+  background: var(--primary-soft);
+  color: var(--primary);
+  padding: 1px 5px;
+  border-radius: 5px;
+  font-size: 0.9em;
+}
