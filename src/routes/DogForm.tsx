@@ -2,8 +2,8 @@ import { useState, type FormEvent } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import { useCreateDog, useDog, useUpdateDog } from '../hooks/useDogs';
+import { useAuth } from '../hooks/useAuth';
 import { useHousehold } from '../hooks/useHousehold';
-import { useAuth } from '../providers/AuthProvider';
 import type { Dog, DogInput, DogSex } from '../types/models';
 
 export function NewDog() {

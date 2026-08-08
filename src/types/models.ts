@@ -30,7 +30,6 @@ export type Dog = {
   adoption_date: string | null;
 };
 
-/** Champs éditables depuis le formulaire. */
 export type DogInput = {
   name: string;
   breed: string | null;

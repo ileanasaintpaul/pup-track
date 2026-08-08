@@ -133,7 +133,6 @@ h2 {
   text-decoration: underline;
 }
 
-/* Un <Link> qui doit ressembler à un bouton. */
 .button {
   display: inline-block;
   text-align: center;
