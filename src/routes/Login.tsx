@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 
-import { useAuth } from '../providers/AuthProvider';
+import { useAuth } from '../hooks/useAuth';
 
 export function Login() {
   const { sendMagicLink } = useAuth();

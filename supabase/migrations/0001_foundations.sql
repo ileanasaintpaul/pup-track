@@ -1,17 +1,4 @@
--- PupTrack — fondations
---
--- Modèle de partage : un « foyer » (household) regroupe plusieurs utilisateurs
--- (les deux maîtres du chien). Les données du chien appartiennent au foyer,
--- jamais à un utilisateur : les deux membres voient et éditent les mêmes lignes.
---
--- Les tables métier (éducation, santé, journal…) arriveront dans des migrations
--- suivantes, une par feature.
-
 create extension if not exists "pgcrypto";
-
--- ---------------------------------------------------------------------------
--- Utilisateurs & foyers
--- ---------------------------------------------------------------------------
 
 create table public.profiles (
   id uuid primary key references auth.users (id) on delete cascade,
@@ -38,7 +25,6 @@ create table public.household_members (
 
 create index household_members_user_idx on public.household_members (user_id);
 
--- Codes d'invitation : le second maître rejoint le foyer avec un code court.
 create table public.household_invites (
   code text primary key,
   household_id uuid not null references public.households (id) on delete cascade,
@@ -47,10 +33,6 @@ create table public.household_invites (
   used_at timestamptz,
   used_by uuid references auth.users (id) on delete set null
 );
-
--- ---------------------------------------------------------------------------
--- Chien
--- ---------------------------------------------------------------------------
 
 create type public.dog_sex as enum ('male', 'female');
 
@@ -68,12 +50,6 @@ create table public.dogs (
 
 create index dogs_household_idx on public.dogs (household_id);
 
--- ---------------------------------------------------------------------------
--- Sécurité (RLS)
--- ---------------------------------------------------------------------------
-
--- security definer : contourne la RLS de household_members pour éviter une
--- récursion infinie quand la fonction sert dans les policies de cette table.
 create or replace function public.is_household_member(target_household uuid)
 returns boolean
 language sql
@@ -89,7 +65,6 @@ as $$
   );
 $$;
 
--- Utilisée par les futures tables rattachées à un chien.
 create or replace function public.can_access_dog(target_dog uuid)
 returns boolean
 language sql
@@ -112,7 +87,6 @@ alter table public.household_members enable row level security;
 alter table public.household_invites enable row level security;
 alter table public.dogs enable row level security;
 
--- Profils : chacun gère le sien, et voit celui des autres membres de son foyer.
 create policy "own profile" on public.profiles
   for all to authenticated
   using (id = auth.uid())
@@ -130,7 +104,6 @@ create policy "household profiles readable" on public.profiles
     )
   );
 
--- Foyers
 create policy "household readable by members" on public.households
   for select to authenticated using (public.is_household_member(id));
 
@@ -142,7 +115,6 @@ create policy "household updatable by members" on public.households
   using (public.is_household_member(id))
   with check (public.is_household_member(id));
 
--- Membres
 create policy "members readable" on public.household_members
   for select to authenticated using (public.is_household_member(household_id));
 
@@ -159,24 +131,16 @@ create policy "members insertable" on public.household_members
 create policy "members removable" on public.household_members
   for delete to authenticated using (public.is_household_member(household_id));
 
--- Invitations : gérées par les membres. Rejoindre passe par la fonction
--- join_household_with_code (security definer), pas par un select direct.
 create policy "invites managed by members" on public.household_invites
   for all to authenticated
   using (public.is_household_member(household_id))
   with check (public.is_household_member(household_id));
 
--- Chiens
 create policy "dogs accessible to household" on public.dogs
   for all to authenticated
   using (public.is_household_member(household_id))
   with check (public.is_household_member(household_id));
 
--- ---------------------------------------------------------------------------
--- Fonctions applicatives
--- ---------------------------------------------------------------------------
-
--- Crée le profil à l'inscription.
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
@@ -195,7 +159,6 @@ create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.handle_new_user();
 
--- Crée un foyer et y place son créateur comme propriétaire.
 create or replace function public.create_household(household_name text default 'Ma maison')
 returns uuid
 language plpgsql
@@ -220,7 +183,6 @@ begin
 end;
 $$;
 
--- Génère un code d'invitation à 8 caractères.
 create or replace function public.create_household_invite(target_household uuid)
 returns text
 language plpgsql
@@ -246,7 +208,6 @@ begin
 end;
 $$;
 
--- Rejoint un foyer avec un code d'invitation.
 create or replace function public.join_household_with_code(invite_code text)
 returns uuid
 language plpgsql
@@ -286,9 +247,5 @@ begin
   return invite.household_id;
 end;
 $$;
-
--- ---------------------------------------------------------------------------
--- Realtime : ce que l'un enregistre apparaît chez l'autre sans rechargement.
--- ---------------------------------------------------------------------------
 
 alter publication supabase_realtime add table public.dogs;
