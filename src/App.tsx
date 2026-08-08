@@ -10,6 +10,7 @@ import { Login } from './routes/Login';
 import { Home } from './routes/Home';
 import { EditDog, NewDog } from './routes/DogForm';
 import { Onboarding } from './routes/Onboarding';
+import { WeightLog } from './routes/WeightLog';
 import { Setup } from './routes/Setup';
 
 function Loading() {
@@ -102,6 +103,16 @@ export default function App() {
                 <RequireAuth>
                   <RequireHousehold>
                     <EditDog />
+                  </RequireHousehold>
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/dog/:dogId/poids"
+              element={
+                <RequireAuth>
+                  <RequireHousehold>
+                    <WeightLog />
                   </RequireHousehold>
                 </RequireAuth>
               }

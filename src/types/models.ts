@@ -30,6 +30,14 @@ export type Dog = {
   adoption_date: string | null;
 };
 
+export type WeightEntry = {
+  id: string;
+  dog_id: string;
+  measured_on: string;
+  weight_kg: number;
+  note: string | null;
+};
+
 export type DogInput = {
   name: string;
   breed: string | null;
