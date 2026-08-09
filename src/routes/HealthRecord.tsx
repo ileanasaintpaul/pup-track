@@ -3,38 +3,61 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { BackLink } from '../components/BackLink';
+import { useVaccines } from '../hooks/useVaccines';
 import {
   useDeleteHealthEvent,
   useHealthEvents,
   useSaveHealthEvent,
 } from '../hooks/useHealthEvents';
-import { formatLongDate } from '../lib/format';
+import { formatLongDate, toISODate } from '../lib/format';
 import {
   HEALTH_EVENT_TYPES,
   HEALTH_TYPE_ICONS,
   HEALTH_TYPE_KEYS,
+  addMonths,
   daysUntil,
   dueStatus,
   pendingReminders,
 } from '../lib/health';
-import type { HealthEvent, HealthEventType } from '../types/models';
+import type { HealthEvent, HealthEventType, Vaccine } from '../types/models';
 
 export function HealthRecord() {
   const { t } = useTranslation();
   const { dogId } = useParams();
   const { data: events, isPending } = useHealthEvents(dogId);
+  const { data: vaccines } = useVaccines();
   const saveEvent = useSaveHealthEvent(dogId!);
   const deleteEvent = useDeleteHealthEvent(dogId!);
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = toISODate();
   const [type, setType] = useState<HealthEventType>('vaccine');
   const [label, setLabel] = useState('');
   const [occurredOn, setOccurredOn] = useState(today);
   const [nextDueOn, setNextDueOn] = useState('');
   const [notes, setNotes] = useState('');
+  const [vaccineSlug, setVaccineSlug] = useState('');
   const [error, setError] = useState<string | null>(null);
 
   const reminders = pendingReminders(events);
+  const vaccine = vaccines?.find((item) => item.slug === vaccineSlug) ?? null;
+  const isVaccine = type === 'vaccine';
+
+  function pickVaccine(slug: string) {
+    setVaccineSlug(slug);
+    const picked = vaccines?.find((item) => item.slug === slug);
+    if (!picked) return;
+    setLabel(picked.name);
+    setNextDueOn(
+      picked.booster_interval_months ? addMonths(occurredOn, picked.booster_interval_months) : '',
+    );
+  }
+
+  function pickDate(next: string) {
+    setOccurredOn(next);
+    if (vaccine?.booster_interval_months) {
+      setNextDueOn(addMonths(next, vaccine.booster_interval_months));
+    }
+  }
 
   async function submit(event: FormEvent) {
     event.preventDefault();
@@ -53,6 +76,7 @@ export function HealthRecord() {
       await saveEvent.mutateAsync({
         type,
         label: label.trim(),
+        vaccine_slug: isVaccine ? vaccineSlug || null : null,
         occurred_on: occurredOn,
         next_due_on: nextDueOn || null,
         notes: notes.trim() || null,
@@ -60,6 +84,7 @@ export function HealthRecord() {
       setLabel('');
       setNextDueOn('');
       setNotes('');
+      setVaccineSlug('');
     } catch (e) {
       setError(e instanceof Error ? e.message : t('common.error'));
     }
@@ -95,7 +120,10 @@ export function HealthRecord() {
           <select
             id="event-type"
             value={type}
-            onChange={(e) => setType(e.target.value as HealthEventType)}
+            onChange={(e) => {
+              setType(e.target.value as HealthEventType);
+              setVaccineSlug('');
+            }}
           >
             {HEALTH_EVENT_TYPES.map((item) => (
               <option key={item} value={item}>
@@ -103,6 +131,38 @@ export function HealthRecord() {
               </option>
             ))}
           </select>
+
+          {isVaccine ? (
+            <>
+              <label htmlFor="event-vaccine">{t('health.record.form.vaccine')}</label>
+              <select
+                id="event-vaccine"
+                value={vaccineSlug}
+                onChange={(e) => pickVaccine(e.target.value)}
+              >
+                <option value="">{t('health.record.form.vaccineFree')}</option>
+                <optgroup label={t('health.record.form.vaccineCore')}>
+                  {vaccines
+                    ?.filter((item) => item.core)
+                    .map((item) => (
+                      <option key={item.slug} value={item.slug}>
+                        {item.name}
+                      </option>
+                    ))}
+                </optgroup>
+                <optgroup label={t('health.record.form.vaccineNonCore')}>
+                  {vaccines
+                    ?.filter((item) => !item.core)
+                    .map((item) => (
+                      <option key={item.slug} value={item.slug}>
+                        {item.name}
+                      </option>
+                    ))}
+                </optgroup>
+              </select>
+              {vaccine ? <VaccineHint vaccine={vaccine} /> : null}
+            </>
+          ) : null}
 
           <label htmlFor="event-label">{t('health.record.form.label')}</label>
           <input
@@ -121,7 +181,7 @@ export function HealthRecord() {
             max={today}
             required
             value={occurredOn}
-            onChange={(e) => setOccurredOn(e.target.value)}
+            onChange={(e) => pickDate(e.target.value)}
           />
 
           <label htmlFor="event-due">{t('health.record.form.nextDue')}</label>
@@ -179,6 +239,21 @@ export function HealthRecord() {
         </section>
       ) : null}
     </>
+  );
+}
+
+function VaccineHint({ vaccine }: { vaccine: Vaccine }) {
+  const { t } = useTranslation();
+
+  return (
+    <p className="muted small-text">
+      {vaccine.diseases ? `${vaccine.diseases}. ` : ''}
+      {vaccine.booster_interval_months
+        ? t('health.record.form.vaccineInterval', { count: vaccine.booster_interval_months })
+        : t('health.record.form.vaccineNoInterval')}
+      {vaccine.availability ? ` ${vaccine.availability}` : ''}{' '}
+      {t('health.record.form.vaccineSource', { source: vaccine.source })}
+    </p>
   );
 }
 

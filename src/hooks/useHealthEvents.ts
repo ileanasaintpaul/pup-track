@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../lib/supabase';
 import type { HealthEvent, HealthEventInput } from '../types/models';
 
-const EVENT_COLUMNS = 'id, dog_id, type, label, occurred_on, next_due_on, notes';
+const EVENT_COLUMNS = 'id, dog_id, type, label, vaccine_slug, occurred_on, next_due_on, notes';
 
 export function useHealthEvents(dogId: string | undefined) {
   return useQuery({
