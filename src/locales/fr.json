@@ -117,6 +117,7 @@
   "profile": {
     "otherDogs": "Les autres chiens",
     "you": "Toi",
+    "memberFallback": "Membre",
     "member": "membre",
     "owner": "propriétaire",
     "codeHint": "Valable 7 jours, utilisable une fois.",

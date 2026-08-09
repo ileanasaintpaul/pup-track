@@ -77,7 +77,9 @@ export function Profile() {
             <li key={member.user_id}>
               <span>
                 {member.display_name ||
-                  (member.user_id === session?.user.id ? t('profile.you') : t('profile.member'))}
+                  (member.user_id === session?.user.id
+                    ? t('profile.you')
+                    : t('profile.memberFallback'))}
               </span>
               <span className="muted">
                 {member.role === 'owner' ? t('profile.owner') : t('profile.member')}
