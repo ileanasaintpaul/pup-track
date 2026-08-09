@@ -29,7 +29,7 @@ export function useDogSkills(dogId: string | undefined) {
     queryFn: async (): Promise<Map<string, DogSkill>> => {
       const { data, error } = await supabase
         .from('dog_skills')
-        .select('skill_slug, level, started_on, updated_at')
+        .select('skill_slug, level, favourite, started_on, updated_at')
         .eq('dog_id', dogId!);
 
       if (error) throw error;

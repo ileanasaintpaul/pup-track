@@ -85,8 +85,31 @@ export type Skill = {
 export type DogSkill = {
   skill_slug: string;
   level: SkillLevel;
+  favourite: boolean;
   started_on: string | null;
   updated_at: string;
+};
+
+export type CollectionItem = {
+  skill_slug: string;
+  position: number;
+  start_age_weeks: number | null;
+  note: string | null;
+};
+
+export type Collection = {
+  slug: string;
+  name: string;
+  description: string | null;
+  source: string | null;
+  items: CollectionItem[];
+};
+
+export type DogList = {
+  id: string;
+  name: string;
+  position: number;
+  items: { skill_slug: string; position: number }[];
 };
 
 export type TrainingSession = {
