@@ -70,3 +70,41 @@ export type DogInput = {
   birth_date: string | null;
   adoption_date: string | null;
 };
+
+export type SkillLevel = 0 | 1 | 2 | 3 | 4;
+
+export type Skill = {
+  slug: string;
+  name: string;
+  category: string;
+  description: string | null;
+  min_age_weeks: number;
+  sort_order: number;
+};
+
+export type DogSkill = {
+  skill_slug: string;
+  level: SkillLevel;
+  started_on: string | null;
+  updated_at: string;
+};
+
+export type TrainingSession = {
+  id: string;
+  dog_id: string;
+  skill_slug: string | null;
+  occurred_on: string;
+  duration_min: number | null;
+  success_rate: number | null;
+  environment: string | null;
+  notes: string | null;
+};
+
+export type TrainingSessionInput = {
+  skill_slug: string | null;
+  occurred_on: string;
+  duration_min: number | null;
+  success_rate: number | null;
+  environment: string | null;
+  notes: string | null;
+};

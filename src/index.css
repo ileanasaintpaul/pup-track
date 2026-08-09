@@ -470,3 +470,60 @@ code {
   font-size: 14px;
   padding: 4px 8px;
 }
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.actions .button {
+  flex: 1;
+  min-width: 140px;
+}
+
+.skill {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 0;
+  border-top: 1px solid var(--border);
+}
+
+.skill:first-of-type {
+  border-top: none;
+}
+
+.skill-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.skill-name {
+  font-weight: 600;
+}
+
+.steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.step {
+  flex: 1;
+  min-width: 96px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 8px;
+}
+
+.step-reached {
+  background: var(--primary-soft);
+  border-color: var(--primary);
+  color: var(--primary);
+}

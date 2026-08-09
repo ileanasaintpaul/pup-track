@@ -135,9 +135,14 @@ function DogCard({ dog }: { dog: Dog }) {
         </p>
       ) : null}
 
-      <Link to={`/dog/${dog.id}/poids`} className="button ghost-button">
-        Suivi du poids
-      </Link>
+      <div className="actions">
+        <Link to={`/dog/${dog.id}/poids`} className="button ghost-button">
+          Suivi du poids
+        </Link>
+        <Link to={`/dog/${dog.id}/education`} className="button ghost-button">
+          Éducation
+        </Link>
+      </div>
     </section>
   );
 }
