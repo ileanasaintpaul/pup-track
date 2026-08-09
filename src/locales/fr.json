@@ -26,5 +26,63 @@
   },
   "placeholder": {
     "body": "Cette partie arrive bientôt. Elle est déjà prévue dans la feuille de route."
-  }
+  },
+  "growth": {
+    "title": "Croissance",
+    "toggle": { "weight": "Poids", "height": "Taille" },
+    "weight": {
+      "title": "Poids",
+      "unit": "kg",
+      "change": "{{value}} kg depuis la pesée précédente",
+      "first": "Première pesée enregistrée.",
+      "empty": "Aucune pesée pour l'instant. Ajoute la première ci-dessous.",
+      "addTitle": "Ajouter une pesée",
+      "dateLabel": "Date",
+      "valueLabel": "Poids en kilos",
+      "valuePlaceholder": "5,4",
+      "noteLabel": "Note",
+      "notePlaceholder": "Après la visite chez le véto",
+      "invalid": "Entre un poids en kilos, par exemple 5,4",
+      "range": "À {{weeks}} semaines, 82 % des chiens de ce gabarit pèsent entre {{low}} et {{high}} kg",
+      "position": {
+        "below": "sous la fourchette",
+        "inside": "dans la fourchette",
+        "above": "au-dessus de la fourchette"
+      },
+      "centile": ", autour du {{centile}}",
+      "source": "Courbes WALTHAM Petcare Science Institute, catégorie {{min}}–{{max}} kg de poids adulte, {{sex}}. Un repère, pas un diagnostic : c'est la régularité de la courbe qui compte, et le vétérinaire qui tranche.",
+      "missing": "Renseigne {{fields}} dans la fiche pour comparer aux courbes de croissance.",
+      "missingLink": "Compléter",
+      "missingBreed": "la race",
+      "missingSex": "le sexe",
+      "missingBirthDate": "la date de naissance",
+      "tooYoung_one": "Les courbes de référence démarrent à 12 semaines. Encore {{count}} semaine avant de pouvoir situer la croissance.",
+      "tooYoung_other": "Les courbes de référence démarrent à 12 semaines. Encore {{count}} semaines avant de pouvoir situer la croissance.",
+      "historyTitle": "Historique",
+      "historyDate": "Date",
+      "historyValue": "Poids"
+    },
+    "height": {
+      "title": "Taille au garrot",
+      "unit": "cm au garrot",
+      "change": "{{value}} cm depuis la mesure précédente",
+      "first": "Première mesure enregistrée.",
+      "empty": "Aucune mesure pour l'instant. La taille au garrot se prend du sol au sommet des omoplates, chien debout sur un sol plat.",
+      "addTitle": "Ajouter une mesure",
+      "dateLabel": "Date",
+      "valueLabel": "Taille au garrot en centimètres",
+      "valuePlaceholder": "26,5",
+      "noteLabel": "Note",
+      "notePlaceholder": "Mesuré contre le mur",
+      "invalid": "Entre une taille en centimètres, par exemple 26,5",
+      "measuredAt": "Mesuré à {{weeks}} semaines. ",
+      "method": "La taille au garrot se prend du sol au sommet des omoplates, chien debout sur un sol plat. Aucun barème publié n'existe par race et par âge : la courbe montre sa progression à lui, sans comparaison.",
+      "standard": "{{breed}} : le standard de race donne une taille adulte, pas une courbe de croissance. À confirmer auprès du club de race ou du vétérinaire.",
+      "cmUnit": "cm",
+      "historyTitle": "Historique",
+      "historyDate": "Date",
+      "historyValue": "Taille"
+    }
+  },
+  "dogSex": { "female": "femelle", "male": "mâle" }
 }

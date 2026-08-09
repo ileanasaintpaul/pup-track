@@ -1,14 +1,16 @@
 import { useState, type FormEvent } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
-import { HeightChart } from '../components/HeightChart';
+import { HeightChart } from './HeightChart';
 import { useBreed } from '../hooks/useBreeds';
 import { useDog } from '../hooks/useDogs';
 import { useDeleteHeight, useHeights, useSaveHeight, heightChange } from '../hooks/useHeights';
 import { ageInWeeks } from '../lib/age';
 import { formatCm, formatLongDate, formatSignedCm } from '../lib/format';
 
-export function HeightLog() {
+export function HeightPanel() {
+  const { t } = useTranslation();
   const { dogId } = useParams();
   const { data: dog } = useDog(dogId);
   const { data: breed } = useBreed(dog?.breed_slug);
@@ -33,7 +35,7 @@ export function HeightLog() {
 
     const value = Number(height.replace(',', '.'));
     if (!Number.isFinite(value) || value <= 0) {
-      setError('Entre une taille en centimètres, par exemple 26,5');
+      setError(t('growth.height.invalid'));
       return;
     }
 
@@ -46,55 +48,44 @@ export function HeightLog() {
       setHeight('');
       setNote('');
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Une erreur est survenue');
+      setError(e instanceof Error ? e.message : t('common.error'));
     }
   }
 
   return (
-    <div className="shell">
-      <header className="topbar">
-        <Link to="/" className="link">
-          ← Retour
-        </Link>
-      </header>
-
+    <>
       <section className="card">
-        <h1>Taille de {dog?.name ?? 'ton chien'}</h1>
+        <h2>{t('growth.height.title')}</h2>
 
         {isPending ? (
-          <p className="muted">Chargement…</p>
+          <p className="muted">{t('common.loading')}</p>
         ) : entries?.length ? (
           <>
             <p className="hero">
-              {formatCm(last!.withers_cm)} <span className="hero-unit">cm au garrot</span>
+              {formatCm(last!.withers_cm)} <span className="hero-unit">{t('growth.height.unit')}</span>
             </p>
             {change !== null ? (
-              <p className="muted">{formatSignedCm(change)} cm depuis la mesure précédente</p>
+              <p className="muted">{t('growth.height.change', { value: formatSignedCm(change) })}</p>
             ) : (
-              <p className="muted">Première mesure enregistrée.</p>
+              <p className="muted">{t('growth.height.first')}</p>
             )}
 
             {entries.length > 1 ? <HeightChart entries={entries} /> : null}
 
             <p className="muted small-text">
-              {weeks !== null ? `Mesuré à ${weeks} semaines. ` : ''}
-              La taille au garrot se prend du sol au sommet des omoplates, chien debout sur un sol
-              plat. Aucun barème publié n'existe par race et par âge : la courbe montre sa
-              progression à lui, sans comparaison.
+              {weeks !== null ? t('growth.height.measuredAt', { weeks }) : ''}
+              {t('growth.height.method')}
             </p>
           </>
         ) : (
-          <p className="muted">
-            Aucune mesure pour l'instant. La taille au garrot se prend du sol au sommet des
-            omoplates, chien debout sur un sol plat.
-          </p>
+          <p className="muted">{t('growth.height.empty')}</p>
         )}
       </section>
 
       <section className="card">
-        <h2>Ajouter une mesure</h2>
+        <h2>{t('growth.height.addTitle')}</h2>
         <form onSubmit={submit}>
-          <label htmlFor="height-date">Date</label>
+          <label htmlFor="height-date">{t('growth.height.dateLabel')}</label>
           <input
             id="height-date"
             type="date"
@@ -104,47 +95,44 @@ export function HeightLog() {
             onChange={(e) => setMeasuredOn(e.target.value)}
           />
 
-          <label htmlFor="height-value">Taille au garrot en centimètres</label>
+          <label htmlFor="height-value">{t('growth.height.valueLabel')}</label>
           <input
             id="height-value"
             type="text"
             inputMode="decimal"
             required
-            placeholder="26,5"
+            placeholder={t('growth.height.valuePlaceholder')}
             value={height}
             onChange={(e) => setHeight(e.target.value)}
           />
 
-          <label htmlFor="height-note">Note</label>
+          <label htmlFor="height-note">{t('growth.height.noteLabel')}</label>
           <input
             id="height-note"
             type="text"
-            placeholder="Mesuré contre le mur"
+            placeholder={t('growth.height.notePlaceholder')}
             value={note}
             onChange={(e) => setNote(e.target.value)}
           />
 
           <button type="submit" disabled={saveHeight.isPending || !height.trim()}>
-            {saveHeight.isPending ? 'Enregistrement…' : 'Enregistrer'}
+            {saveHeight.isPending ? t('common.saving') : t('common.save')}
           </button>
         </form>
         {error ? <p className="error">{error}</p> : null}
         {breed ? (
-          <p className="muted small-text">
-            {breed.name} : le standard de race donne une taille adulte, pas une courbe de
-            croissance. À confirmer auprès du club de race ou du vétérinaire.
-          </p>
+          <p className="muted small-text">{t('growth.height.standard', { breed: breed.name })}</p>
         ) : null}
       </section>
 
       {history.length ? (
         <section className="card">
-          <h2>Historique</h2>
+          <h2>{t('growth.height.historyTitle')}</h2>
           <table className="table">
             <thead>
               <tr>
-                <th>Date</th>
-                <th>Taille</th>
+                <th>{t('growth.height.historyDate')}</th>
+                <th>{t('growth.height.historyValue')}</th>
                 <th />
               </tr>
             </thead>
@@ -155,7 +143,9 @@ export function HeightLog() {
                     {formatLongDate(entry.measured_on)}
                     {entry.note ? <span className="muted"> · {entry.note}</span> : null}
                   </td>
-                  <td className="numeric">{formatCm(entry.withers_cm)} cm</td>
+                  <td className="numeric">
+                    {formatCm(entry.withers_cm)} {t('growth.height.cmUnit')}
+                  </td>
                   <td className="numeric">
                     <button
                       type="button"
@@ -163,7 +153,7 @@ export function HeightLog() {
                       disabled={deleteHeight.isPending}
                       onClick={() => deleteHeight.mutate(entry.id)}
                     >
-                      Supprimer
+                      {t('common.delete')}
                     </button>
                   </td>
                 </tr>
@@ -172,6 +162,6 @@ export function HeightLog() {
           </table>
         </section>
       ) : null}
-    </div>
+    </>
   );
 }

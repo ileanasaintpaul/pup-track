@@ -1,7 +1,8 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
-import { WeightChart } from '../components/WeightChart';
+import { WeightChart } from './WeightChart';
 import { useBreed } from '../hooks/useBreeds';
 import { useDog } from '../hooks/useDogs';
 import { useGrowthCurves } from '../hooks/useGrowthCurves';
@@ -10,13 +11,8 @@ import { ageInWeeks } from '../lib/age';
 import { formatKg, formatLongDate, formatSignedKg } from '../lib/format';
 import { centileOf, expectedAt, expectedForEntries, formatCentile, rangePosition } from '../lib/growth';
 
-const POSITION_LABELS = {
-  below: 'sous la fourchette',
-  inside: 'dans la fourchette',
-  above: 'au-dessus de la fourchette',
-} as const;
-
-export function WeightLog() {
+export function WeightPanel() {
+  const { t } = useTranslation();
   const { dogId } = useParams();
   const { data: dog } = useDog(dogId);
   const { data: entries, isPending } = useWeights(dogId);
@@ -48,7 +44,7 @@ export function WeightLog() {
 
     const value = Number(weight.replace(',', '.'));
     if (!Number.isFinite(value) || value <= 0) {
-      setError('Entre un poids en kilos, par exemple 5,4');
+      setError(t('growth.weight.invalid'));
       return;
     }
 
@@ -61,32 +57,27 @@ export function WeightLog() {
       setWeight('');
       setNote('');
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Une erreur est survenue');
+      setError(e instanceof Error ? e.message : t('common.error'));
     }
   }
 
   return (
-    <div className="shell">
-      <header className="topbar">
-        <Link to="/" className="link">
-          ← Retour
-        </Link>
-      </header>
-
+    <>
       <section className="card">
-        <h1>Poids de {dog?.name ?? 'ton chien'}</h1>
+        <h2>{t('growth.weight.title')}</h2>
 
         {isPending ? (
-          <p className="muted">Chargement…</p>
+          <p className="muted">{t('common.loading')}</p>
         ) : entries?.length ? (
           <>
             <p className="hero">
-              {formatKg(entries[entries.length - 1].weight_kg)} <span className="hero-unit">kg</span>
+              {formatKg(entries[entries.length - 1].weight_kg)}{' '}
+              <span className="hero-unit">{t('growth.weight.unit')}</span>
             </p>
             {change !== null ? (
-              <p className="muted">{formatSignedKg(change)} kg depuis la pesée précédente</p>
+              <p className="muted">{t('growth.weight.change', { value: formatSignedKg(change) })}</p>
             ) : (
-              <p className="muted">Première pesée enregistrée.</p>
+              <p className="muted">{t('growth.weight.first')}</p>
             )}
 
             <WeightChart entries={entries} expected={expected} />
@@ -94,18 +85,23 @@ export function WeightLog() {
             {todayRange ? (
               <>
                 <p>
-                  À {weeks} semaines, 82 % des chiens de ce gabarit pèsent entre{' '}
-                  <strong>
-                    {formatKg(todayRange.low)} et {formatKg(todayRange.high)} kg
-                  </strong>{' '}
-                  — {position ? POSITION_LABELS[position] : null}
-                  {centile !== null ? `, autour du ${formatCentile(centile)}` : null}.
+                  {t('growth.weight.range', {
+                    weeks,
+                    low: formatKg(todayRange.low),
+                    high: formatKg(todayRange.high),
+                  })}{' '}
+                  — {position ? t(`growth.weight.position.${position}`) : null}
+                  {centile !== null
+                    ? t('growth.weight.centile', { centile: formatCentile(centile) })
+                    : null}
+                  .
                 </p>
                 <p className="muted small-text">
-                  Courbes WALTHAM Petcare Science Institute, catégorie {breed?.adult_min_kg}–
-                  {breed?.adult_max_kg} kg de poids adulte,{' '}
-                  {dog?.sex === 'female' ? 'femelle' : 'mâle'}. Un repère, pas un diagnostic : c'est
-                  la régularité de la courbe qui compte, et le vétérinaire qui tranche.
+                  {t('growth.weight.source', {
+                    min: breed?.adult_min_kg,
+                    max: breed?.adult_max_kg,
+                    sex: t(dog?.sex === 'female' ? 'dogSex.female' : 'dogSex.male'),
+                  })}
                 </p>
               </>
             ) : (
@@ -113,14 +109,14 @@ export function WeightLog() {
             )}
           </>
         ) : (
-          <p className="muted">Aucune pesée pour l'instant. Ajoute la première ci-dessous.</p>
+          <p className="muted">{t('growth.weight.empty')}</p>
         )}
       </section>
 
       <section className="card">
-        <h2>Ajouter une pesée</h2>
+        <h2>{t('growth.weight.addTitle')}</h2>
         <form onSubmit={submit}>
-          <label htmlFor="weight-date">Date</label>
+          <label htmlFor="weight-date">{t('growth.weight.dateLabel')}</label>
           <input
             id="weight-date"
             type="date"
@@ -130,28 +126,28 @@ export function WeightLog() {
             onChange={(e) => setMeasuredOn(e.target.value)}
           />
 
-          <label htmlFor="weight-value">Poids en kilos</label>
+          <label htmlFor="weight-value">{t('growth.weight.valueLabel')}</label>
           <input
             id="weight-value"
             type="text"
             inputMode="decimal"
             required
-            placeholder="5,4"
+            placeholder={t('growth.weight.valuePlaceholder')}
             value={weight}
             onChange={(e) => setWeight(e.target.value)}
           />
 
-          <label htmlFor="weight-note">Note</label>
+          <label htmlFor="weight-note">{t('growth.weight.noteLabel')}</label>
           <input
             id="weight-note"
             type="text"
-            placeholder="Après la visite chez le véto"
+            placeholder={t('growth.weight.notePlaceholder')}
             value={note}
             onChange={(e) => setNote(e.target.value)}
           />
 
           <button type="submit" disabled={saveWeight.isPending || !weight.trim()}>
-            {saveWeight.isPending ? 'Enregistrement…' : 'Enregistrer'}
+            {saveWeight.isPending ? t('common.saving') : t('common.save')}
           </button>
         </form>
         {error ? <p className="error">{error}</p> : null}
@@ -159,12 +155,12 @@ export function WeightLog() {
 
       {history.length ? (
         <section className="card">
-          <h2>Historique</h2>
+          <h2>{t('growth.weight.historyTitle')}</h2>
           <table className="table">
             <thead>
               <tr>
-                <th>Date</th>
-                <th>Poids</th>
+                <th>{t('growth.weight.historyDate')}</th>
+                <th>{t('growth.weight.historyValue')}</th>
                 <th />
               </tr>
             </thead>
@@ -175,7 +171,9 @@ export function WeightLog() {
                     {formatLongDate(entry.measured_on)}
                     {entry.note ? <span className="muted"> · {entry.note}</span> : null}
                   </td>
-                  <td className="numeric">{formatKg(entry.weight_kg)} kg</td>
+                  <td className="numeric">
+                    {formatKg(entry.weight_kg)} {t('growth.weight.unit')}
+                  </td>
                   <td className="numeric">
                     <button
                       type="button"
@@ -183,7 +181,7 @@ export function WeightLog() {
                       disabled={deleteWeight.isPending}
                       onClick={() => deleteWeight.mutate(entry.id)}
                     >
-                      Supprimer
+                      {t('common.delete')}
                     </button>
                   </td>
                 </tr>
@@ -192,7 +190,7 @@ export function WeightLog() {
           </table>
         </section>
       ) : null}
-    </div>
+    </>
   );
 }
 
@@ -205,31 +203,28 @@ function MissingReference({
   breed: { name: string } | null | undefined;
   weeks: number | null;
 }) {
+  const { t } = useTranslation();
+
   if (!dog) return null;
 
   const missing: string[] = [];
-  if (!breed) missing.push('la race');
-  if (!dog.sex) missing.push('le sexe');
-  if (!dog.birth_date) missing.push('la date de naissance');
+  if (!breed) missing.push(t('growth.weight.missingBreed'));
+  if (!dog.sex) missing.push(t('growth.weight.missingSex'));
+  if (!dog.birth_date) missing.push(t('growth.weight.missingBirthDate'));
 
   if (missing.length) {
     return (
       <p className="muted">
-        Renseigne {missing.join(', ')} dans la fiche pour comparer aux courbes de croissance.{' '}
-        <Link to={`/dog/${dog.id}`} className="link">
-          Compléter
+        {t('growth.weight.missing', { fields: missing.join(', ') })}{' '}
+        <Link to={`/dog/${dog.id}/edit`} className="link">
+          {t('growth.weight.missingLink')}
         </Link>
       </p>
     );
   }
 
   if (weeks !== null && weeks < 12) {
-    return (
-      <p className="muted">
-        Les courbes de référence démarrent à 12 semaines. Encore {12 - weeks} semaine
-        {12 - weeks > 1 ? 's' : ''} avant de pouvoir situer la croissance.
-      </p>
-    );
+    return <p className="muted">{t('growth.weight.tooYoung', { count: 12 - weeks })}</p>;
   }
 
   return null;
