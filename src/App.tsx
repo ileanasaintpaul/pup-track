@@ -12,6 +12,7 @@ import { DogLayout } from './components/DogLayout';
 import { Login } from './routes/Login';
 import { Growth } from './routes/Growth';
 import { Health } from './routes/Health';
+import { HealthRecord } from './routes/HealthRecord';
 import { Home } from './routes/Home';
 import { HomeRedirect } from './routes/HomeRedirect';
 import { EditDog, NewDog } from './routes/DogForm';
@@ -111,6 +112,7 @@ export default function App() {
                 <Route index element={<Home />} />
                 <Route path="health" element={<Health />} />
                 <Route path="health/growth" element={<Growth />} />
+                <Route path="health/record" element={<HealthRecord />} />
                 <Route path="training" element={<Training />} />
                 <Route path="map" element={<Placeholder titleKey="nav.map" />} />
                 <Route path="coach" element={<Placeholder titleKey="nav.coach" />} />

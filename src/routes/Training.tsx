@@ -19,7 +19,7 @@ import {
 } from '../hooks/useTraining';
 import { useCollections, useDogLists, useListActions, useToggleFavourite } from '../hooks/useTrainingLists';
 import { ageInWeeks } from '../lib/age';
-import { formatLongDate } from '../lib/format';
+import { formatLongDate, toISODate } from '../lib/format';
 import { buildProgress } from '../lib/progress';
 import { ENVIRONMENTS, FOUNDATION_CATEGORIES, environmentLabelKey, type Key } from '../lib/skills';
 import type { Skill, SkillLevel } from '../types/models';
@@ -65,7 +65,7 @@ export function Training() {
     localStorage.setItem(VIEW_STORAGE_KEY, view);
   }, [view]);
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = toISODate();
   const [skillSlug, setSkillSlug] = useState('');
   const [occurredOn, setOccurredOn] = useState(today);
   const [duration, setDuration] = useState('5');

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import { BackLink } from '../components/BackLink';
 import { useAuth } from '../hooks/useAuth';
 import { useDog, useDogs } from '../hooks/useDogs';
 import { useCreateInvite, useHousehold, useMembers } from '../hooks/useHousehold';
@@ -30,7 +31,10 @@ export function Profile() {
     <>
       <section className="card">
         <div className="card-head">
-          <h1>{dog?.name ?? ''}</h1>
+          <div className="page-title">
+            <BackLink />
+            <h1>{dog?.name ?? ''}</h1>
+          </div>
           <Link to={`/dog/${dogId}/edit`} className="link">
             {t('common.edit')}
           </Link>

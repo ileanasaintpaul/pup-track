@@ -90,8 +90,11 @@ sous `DogLayout`, qui fournit l'en-tête et la barre d'onglets : les pages ne re
 leur propre chrome. Les routes sont en anglais (`/dog/:dogId/health/growth`,
 `/dog/:dogId/training`, `/dog/:dogId/profile`), les anciennes URLs françaises redirigent.
 Santé est une grille de cartes vers des sous-pages, pour absorber les fonctionnalités à
-venir sans devenir un scroll infini ; seule Croissance — poids et taille au garrot réunis
-derrière une bascule — est développée, les autres cartes sont désactivées.
+venir sans devenir un scroll infini. Croissance — poids et taille au garrot réunis derrière
+une bascule — et Carnet de santé — vaccins, vermifuges, antiparasitaires et visites, avec
+leurs rappels — sont développées ; les autres cartes sont désactivées. `BackLink` affiche une flèche à gauche du titre
+de page dès qu'on quitte la racine d'un onglet, en remontant d'un niveau de route plutôt
+qu'en rejouant l'historique.
 
 Tous les textes visibles passent par des clés de traduction : les valeurs françaises sont
 dans `src/locales/fr.json`, servies par react-i18next et typées depuis le JSON, donc une
@@ -135,6 +138,21 @@ npx supabase stop         # arrête les conteneurs
 ```
 
 Les e-mails éventuels ne partent pas : ils s'ouvrent sur http://127.0.0.1:54324.
+
+### Carnet de santé
+
+Une saisie correspond à une visite : on coche dans une modale tous les actes réalisés
+— plusieurs vaccins, un vermifuge, un antiparasitaire — et chacun devient une ligne
+avec sa propre échéance de rappel. Il n'y a pas de champ libre : le libellé et le type
+viennent du catalogue `health_products`.
+
+Les vaccins et leurs intervalles viennent des
+[recommandations de vaccination WSAVA 2024](https://wsava.org/wp-content/uploads/2024/04/WSAVA-Vaccination-guidelines-2024.pdf)
+([Squires et al., Journal of Small Animal Practice](https://doi.org/10.1111/jsap.13718)),
+table 1 pour les chiens. Les vermifuges et antiparasitaires externes suivent les
+recommandations [ESCCAP](https://www.esccap.org/). Le libellé anglais d'origine est
+conservé dans `health_products.source_name`. Les dates proposées sont des repères,
+pas une prescription.
 
 ### Données de croissance
 

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { BackLink } from '../components/BackLink';
 import { HeightPanel } from '../components/HeightPanel';
 import { WeightPanel } from '../components/WeightPanel';
 
@@ -36,7 +37,10 @@ export function Growth() {
 
   return (
     <>
-      <h1>{t('growth.title')}</h1>
+      <div className="page-title">
+        <BackLink />
+        <h1>{t('growth.title')}</h1>
+      </div>
       <div className="chips">
         <button
           type="button"

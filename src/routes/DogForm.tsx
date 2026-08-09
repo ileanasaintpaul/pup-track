@@ -8,6 +8,7 @@ import { useCreateDog, useDog, useUpdateDog } from '../hooks/useDogs';
 import { useAuth } from '../hooks/useAuth';
 import { useHousehold } from '../hooks/useHousehold';
 import type { Breed, Dog, DogInput, DogSex } from '../types/models';
+import { toISODate } from '../lib/format';
 
 export function NewDog() {
   const { t } = useTranslation();
@@ -66,7 +67,7 @@ function DogFields({
   const [adoptionDate, setAdoptionDate] = useState(dog?.adoption_date ?? '');
   const [error, setError] = useState<string | null>(null);
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = toISODate();
   const stored = breeds?.find((item) => item.slug === dog?.breed_slug) ?? null;
   const selected = breedTouched ? breed : stored;
 

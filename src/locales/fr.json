@@ -31,7 +31,10 @@
   },
   "growth": {
     "title": "Croissance",
-    "toggle": { "weight": "Poids", "height": "Taille" },
+    "toggle": {
+      "weight": "Poids",
+      "height": "Taille"
+    },
     "weight": {
       "title": "Poids",
       "unit": "kg",
@@ -86,7 +89,10 @@
       "historyValue": "Taille"
     }
   },
-  "dogSex": { "female": "femelle", "male": "mâle" },
+  "dogSex": {
+    "female": "femelle",
+    "male": "mâle"
+  },
   "health": {
     "title": "Santé & Suivi",
     "cards": {
@@ -95,11 +101,66 @@
       "feeding": "Alimentation",
       "hygiene": "Hygiène",
       "vet": "Vétérinaire & urgence",
-      "teething": "Mue dentaire"
+      "teething": "Mue dentaire",
+      "recordValue": {
+        "none": "Rien de prévu",
+        "next": "Prochain : {{label}}"
+      }
+    },
+    "record": {
+      "title": "Carnet de santé",
+      "types": {
+        "vaccine": "Vaccin",
+        "deworming": "Vermifuge",
+        "fleaTick": "Puces et tiques",
+        "vetVisit": "Visite vétérinaire",
+        "other": "Autre"
+      },
+      "reminders": {
+        "title": "Rappels",
+        "empty": "Aucun rappel dans les 30 jours.",
+        "overdue_one": "en retard d’un jour",
+        "overdue_other": "en retard de {{count}} jours",
+        "today": "aujourd'hui",
+        "inDays_one": "demain",
+        "inDays_other": "dans {{count}} jours",
+        "noPush": "Les rappels s'affichent ici. L'app n'envoie pas encore de notification."
+      },
+      "form": {
+        "title": "Ajouter au carnet",
+        "doneOn": "Fait le",
+        "notes": "Note",
+        "notesPlaceholder": "Lot, vétérinaire, réaction observée",
+        "products": "Actes de la visite",
+        "productsEmpty": "Choisir un ou plusieurs actes",
+        "pickRequired": "Sélectionne au moins un acte.",
+        "dueOn": "rappel le {{date}}",
+        "noDue": "pas de rappel",
+        "submit_one": "Enregistrer l'acte",
+        "submit_other": "Enregistrer les {{count}} actes",
+        "sourceHint": "Vaccins d'après les recommandations WSAVA 2024, vermifuges et antiparasitaires d'après ESCCAP. Des repères, à confirmer avec le vétérinaire."
+      },
+      "history": {
+        "title": "Historique"
+      },
+      "picker": {
+        "title": "Actes de la visite",
+        "search": "Rechercher",
+        "searchPlaceholder": "rage, vermifuge, tiques…",
+        "core": "essentiel",
+        "empty": "Aucun acte ne correspond.",
+        "done_zero": "Fermer",
+        "done_one": "Fermer · 1 sélectionné",
+        "done_other": "Fermer · {{count}} sélectionnés"
+      }
     }
   },
   "home": {
-    "tiles": { "weight": "Poids", "height": "Taille au garrot", "age": "Âge" },
+    "tiles": {
+      "weight": "Poids",
+      "height": "Taille au garrot",
+      "age": "Âge"
+    },
     "socialization": "Période critique de socialisation : chaque nouvelle expérience compte jusqu'à 16 semaines.",
     "quickJournal": {
       "title": "Journal express",
@@ -212,11 +273,26 @@
       "levelGroupLabel": "Palier pour {{name}}"
     },
     "levels": {
-      "notStarted": { "label": "Pas commencé", "hint": "Le travail n'a pas encore démarré." },
-      "discovery": { "label": "Découverte", "hint": "Le geste apparaît, guidé et récompensé." },
-      "calm": { "label": "Compris au calme", "hint": "Répond à la maison, sans distraction." },
-      "distractions": { "label": "Avec distractions", "hint": "Tient malgré le bruit, les gens, les odeurs." },
-      "reliable": { "label": "Fiable dehors", "hint": "Répond en extérieur, même en situation nouvelle." }
+      "notStarted": {
+        "label": "Pas commencé",
+        "hint": "Le travail n'a pas encore démarré."
+      },
+      "discovery": {
+        "label": "Découverte",
+        "hint": "Le geste apparaît, guidé et récompensé."
+      },
+      "calm": {
+        "label": "Compris au calme",
+        "hint": "Répond à la maison, sans distraction."
+      },
+      "distractions": {
+        "label": "Avec distractions",
+        "hint": "Tient malgré le bruit, les gens, les odeurs."
+      },
+      "reliable": {
+        "label": "Fiable dehors",
+        "hint": "Répond en extérieur, même en situation nouvelle."
+      }
     },
     "categories": {
       "base": "Fondations",
@@ -252,7 +328,10 @@
     "signOut": "Se déconnecter"
   },
   "auth": {
-    "tabs": { "signIn": "Se connecter", "signUp": "Créer un compte" },
+    "tabs": {
+      "signIn": "Se connecter",
+      "signUp": "Créer un compte"
+    },
     "forgotIntro": "On t'envoie un lien pour choisir un nouveau mot de passe.",
     "sent": "Si un compte existe pour <1>{{email}}</1>, le lien vient de partir. Ouvre-le depuis ce navigateur.",
     "emailLabel": "Adresse e-mail",
@@ -274,7 +353,10 @@
     "returnToLogin": "Retour à la connexion",
     "resetTitle": "Nouveau mot de passe",
     "resetSubmit": "Changer mon mot de passe",
-    "passwordToggle": { "show": "Afficher le mot de passe", "hide": "Masquer le mot de passe" },
+    "passwordToggle": {
+      "show": "Afficher le mot de passe",
+      "hide": "Masquer le mot de passe"
+    },
     "onboarding": {
       "title": "Un foyer pour deux",
       "intro": "Les données du chien appartiennent au foyer. Tout ce que l'un enregistre, l'autre le voit.",
@@ -284,11 +366,17 @@
       "createTitle": "Créer un foyer",
       "householdNameLabel": "Nom du foyer",
       "householdNameDefault": "Ma maison",
-      "createButton": { "pending": "Création…", "idle": "Créer" },
+      "createButton": {
+        "pending": "Création…",
+        "idle": "Créer"
+      },
       "joinTitle": "Rejoindre un foyer",
       "codeLabel": "Code d'invitation",
       "codePlaceholder": "XXXXXXXX",
-      "joinButton": { "pending": "Connexion…", "idle": "Rejoindre" }
+      "joinButton": {
+        "pending": "Connexion…",
+        "idle": "Rejoindre"
+      }
     },
     "errors": {
       "invalidCredentials": "E-mail ou mot de passe incorrect.",
@@ -305,7 +393,11 @@
     "editTitle": "Modifier {{name}}",
     "notFound": "Fiche introuvable.",
     "nameLabel": "Nom",
-    "sex": { "unspecified": "Non renseigné", "female": "Femelle", "male": "Mâle" },
+    "sex": {
+      "unspecified": "Non renseigné",
+      "female": "Femelle",
+      "male": "Mâle"
+    },
     "birthDateLabel": "Date de naissance",
     "adoptionDateLabel": "Date d'adoption"
   },
@@ -325,13 +417,34 @@
     "withinBand": " sur {{count}} dans ce gabarit",
     "noResults": "Aucune race ne correspond. Essaie un autre mot ou un autre gabarit.",
     "sizeBands": {
-      "toy": { "label": "Très petit", "range": "jusqu’à 6,5 kg" },
-      "small": { "label": "Petit", "range": "6,5 à 9 kg" },
-      "mediumsmall": { "label": "Moyen-petit", "range": "9 à 15 kg" },
-      "mediumlarge": { "label": "Moyen-grand", "range": "15 à 30 kg" },
-      "large": { "label": "Grand", "range": "30 à 40 kg" },
-      "giant": { "label": "Très grand", "range": "40 à 47,5 kg" },
-      "giantplus": { "label": "Géant", "range": "plus de 47,5 kg" }
+      "toy": {
+        "label": "Très petit",
+        "range": "jusqu’à 6,5 kg"
+      },
+      "small": {
+        "label": "Petit",
+        "range": "6,5 à 9 kg"
+      },
+      "mediumsmall": {
+        "label": "Moyen-petit",
+        "range": "9 à 15 kg"
+      },
+      "mediumlarge": {
+        "label": "Moyen-grand",
+        "range": "15 à 30 kg"
+      },
+      "large": {
+        "label": "Grand",
+        "range": "30 à 40 kg"
+      },
+      "giant": {
+        "label": "Très grand",
+        "range": "40 à 47,5 kg"
+      },
+      "giantplus": {
+        "label": "Géant",
+        "range": "plus de 47,5 kg"
+      }
     }
   },
   "setup": {

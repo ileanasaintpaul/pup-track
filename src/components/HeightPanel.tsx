@@ -7,7 +7,7 @@ import { useBreed } from '../hooks/useBreeds';
 import { useDog } from '../hooks/useDogs';
 import { useDeleteHeight, useHeights, useSaveHeight, heightChange } from '../hooks/useHeights';
 import { ageInWeeks } from '../lib/age';
-import { formatCm, formatLongDate, formatSignedCm } from '../lib/format';
+import { formatCm, formatLongDate, formatSignedCm, toISODate } from '../lib/format';
 
 export function HeightPanel() {
   const { t } = useTranslation();
@@ -18,7 +18,7 @@ export function HeightPanel() {
   const saveHeight = useSaveHeight(dogId!);
   const deleteHeight = useDeleteHeight(dogId!);
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = toISODate();
   const [measuredOn, setMeasuredOn] = useState(today);
   const [height, setHeight] = useState('');
   const [note, setNote] = useState('');
