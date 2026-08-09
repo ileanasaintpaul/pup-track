@@ -25,18 +25,33 @@ export type Dog = {
   household_id: string;
   name: string;
   breed: string | null;
-  size_category: SizeCategory | null;
+  breed_slug: string | null;
   sex: DogSex | null;
   birth_date: string | null;
   adoption_date: string | null;
 };
 
-export type SizeCategory = 'toy' | 'small' | 'medium' | 'large' | 'giant';
+export type SizeBand =
+  | 'toy'
+  | 'small'
+  | 'mediumsmall'
+  | 'mediumlarge'
+  | 'large'
+  | 'giant'
+  | 'giantplus';
 
-export type GrowthStandard = {
+export type Breed = {
+  slug: string;
+  name: string;
+  size_band: SizeBand;
+  adult_min_kg: number;
+  adult_max_kg: number;
+};
+
+export type GrowthPoint = {
   age_weeks: number;
-  weight_min_kg: number;
-  weight_max_kg: number;
+  centile: number;
+  weight_kg: number;
 };
 
 export type WeightEntry = {
@@ -50,7 +65,7 @@ export type WeightEntry = {
 export type DogInput = {
   name: string;
   breed: string | null;
-  size_category: SizeCategory | null;
+  breed_slug: string | null;
   sex: DogSex | null;
   birth_date: string | null;
   adoption_date: string | null;

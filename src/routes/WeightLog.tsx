@@ -2,17 +2,26 @@ import { useState, type FormEvent } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { WeightChart } from '../components/WeightChart';
+import { useBreed } from '../hooks/useBreeds';
 import { useDog } from '../hooks/useDogs';
-import { useGrowthStandard } from '../hooks/useGrowthStandard';
+import { useGrowthCurves } from '../hooks/useGrowthCurves';
 import { useDeleteWeight, useSaveWeight, useWeights, weightChange } from '../hooks/useWeights';
 import { ageInWeeks } from '../lib/age';
 import { formatKg, formatLongDate, formatSignedKg } from '../lib/format';
-import { expectedAt, expectedForEntries, rangePosition } from '../lib/growth';
+import { centileOf, expectedAt, expectedForEntries, formatCentile, rangePosition } from '../lib/growth';
+
+const POSITION_LABELS = {
+  below: 'sous la fourchette',
+  inside: 'dans la fourchette',
+  above: 'au-dessus de la fourchette',
+} as const;
 
 export function WeightLog() {
   const { dogId } = useParams();
   const { data: dog } = useDog(dogId);
   const { data: entries, isPending } = useWeights(dogId);
+  const { data: breed } = useBreed(dog?.breed_slug);
+  const { data: curves } = useGrowthCurves(breed?.size_band, dog?.sex);
   const saveWeight = useSaveWeight(dogId!);
   const deleteWeight = useDeleteWeight(dogId!);
 
@@ -25,13 +34,13 @@ export function WeightLog() {
   const change = weightChange(entries);
   const history = entries ? [...entries].reverse() : [];
 
-  const standard = useGrowthStandard(dog?.breed ?? null, dog?.size_category ?? null).data;
-  const expected = entries ? expectedForEntries(entries, standard?.points, dog?.birth_date ?? null) : null;
+  const expected = entries ? expectedForEntries(entries, curves, dog?.birth_date ?? null) : null;
   const weeks = ageInWeeks(dog?.birth_date ?? null);
-  const todayRange = standard && weeks !== null ? expectedAt(standard.points, weeks) : null;
+  const todayRange = curves && weeks !== null ? expectedAt(curves, weeks) : null;
   const lastWeight = entries?.length ? entries[entries.length - 1].weight_kg : null;
   const position = todayRange && lastWeight !== null ? rangePosition(lastWeight, todayRange) : null;
-  const expectedLabel = standard?.source === 'breed' ? `Fourchette ${dog?.breed}` : 'Fourchette du gabarit';
+  const centile =
+    curves && weeks !== null && lastWeight !== null ? centileOf(curves, weeks, lastWeight) : null;
 
   async function submit(event: FormEvent) {
     event.preventDefault();
@@ -79,17 +88,29 @@ export function WeightLog() {
             ) : (
               <p className="muted">Première pesée enregistrée.</p>
             )}
-            <WeightChart entries={entries} expected={expected} expectedLabel={expectedLabel} />
+
+            <WeightChart entries={entries} expected={expected} />
+
             {todayRange ? (
-              <p className="muted">
-                À {weeks} semaines, fourchette indicative : {formatKg(todayRange.min)}–
-                {formatKg(todayRange.max)} kg
-                {position === 'inside' ? ' · dans la fourchette' : null}
-                {position === 'below' ? ' · en dessous' : null}
-                {position === 'above' ? ' · au-dessus' : null}
-                . Ces repères ne remplacent pas l'avis du vétérinaire.
-              </p>
-            ) : null}
+              <>
+                <p>
+                  À {weeks} semaines, 82 % des chiens de ce gabarit pèsent entre{' '}
+                  <strong>
+                    {formatKg(todayRange.low)} et {formatKg(todayRange.high)} kg
+                  </strong>{' '}
+                  — {position ? POSITION_LABELS[position] : null}
+                  {centile !== null ? `, autour du ${formatCentile(centile)}` : null}.
+                </p>
+                <p className="muted small-text">
+                  Courbes WALTHAM Petcare Science Institute, catégorie {breed?.adult_min_kg}–
+                  {breed?.adult_max_kg} kg de poids adulte,{' '}
+                  {dog?.sex === 'female' ? 'femelle' : 'mâle'}. Un repère, pas un diagnostic : c'est
+                  la régularité de la courbe qui compte, et le vétérinaire qui tranche.
+                </p>
+              </>
+            ) : (
+              <MissingReference dog={dog} breed={breed} weeks={weeks} />
+            )}
           </>
         ) : (
           <p className="muted">Aucune pesée pour l'instant. Ajoute la première ci-dessous.</p>
@@ -173,4 +194,43 @@ export function WeightLog() {
       ) : null}
     </div>
   );
+}
+
+function MissingReference({
+  dog,
+  breed,
+  weeks,
+}: {
+  dog: { id: string; sex: string | null; birth_date: string | null } | null | undefined;
+  breed: { name: string } | null | undefined;
+  weeks: number | null;
+}) {
+  if (!dog) return null;
+
+  const missing: string[] = [];
+  if (!breed) missing.push('la race');
+  if (!dog.sex) missing.push('le sexe');
+  if (!dog.birth_date) missing.push('la date de naissance');
+
+  if (missing.length) {
+    return (
+      <p className="muted">
+        Renseigne {missing.join(', ')} dans la fiche pour comparer aux courbes de croissance.{' '}
+        <Link to={`/dog/${dog.id}`} className="link">
+          Compléter
+        </Link>
+      </p>
+    );
+  }
+
+  if (weeks !== null && weeks < 12) {
+    return (
+      <p className="muted">
+        Les courbes de référence démarrent à 12 semaines. Encore {12 - weeks} semaine
+        {12 - weeks > 1 ? 's' : ''} avant de pouvoir situer la croissance.
+      </p>
+    );
+  }
+
+  return null;
 }
