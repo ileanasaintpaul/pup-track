@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
 
+import { PasswordInput } from '../components/PasswordInput';
 import { useAuth } from '../hooks/useAuth';
 import { authErrorMessage } from '../lib/authErrors';
 
@@ -101,14 +102,13 @@ export function Login() {
             {forgot ? null : (
               <>
                 <label htmlFor="password">Mot de passe</label>
-                <input
+                <PasswordInput
+                  key={mode}
                   id="password"
-                  type="password"
-                  required
-                  minLength={creating ? MIN_PASSWORD_LENGTH : undefined}
-                  autoComplete={creating ? 'new-password' : 'current-password'}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={setPassword}
+                  autoComplete={creating ? 'new-password' : 'current-password'}
+                  minLength={creating ? MIN_PASSWORD_LENGTH : undefined}
                 />
                 {creating ? (
                   <p className="muted small-text">
@@ -132,9 +132,11 @@ export function Login() {
 
         {error ? <p className="error">{error}</p> : null}
 
-        <button type="button" className="linkish" onClick={() => switchMode(forgot ? 'signin' : 'forgot')}>
-          {forgot ? 'Revenir à la connexion' : 'Mot de passe oublié ?'}
-        </button>
+        {creating ? null : (
+          <button type="button" className="linkish" onClick={() => switchMode(forgot ? 'signin' : 'forgot')}>
+            {forgot ? 'Revenir à la connexion' : 'Mot de passe oublié ?'}
+          </button>
+        )}
       </div>
     </main>
   );

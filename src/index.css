@@ -422,6 +422,32 @@ code {
   font-size: 13px;
 }
 
+.field {
+  position: relative;
+  display: flex;
+}
+
+.field input {
+  flex: 1;
+  padding-right: 46px;
+}
+
+.field-toggle {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  background: transparent;
+  color: var(--muted);
+  padding: 6px 8px;
+}
+
+.field-toggle:hover {
+  color: var(--primary);
+}
+
 .linkish {
   align-self: center;
   background: transparent;
