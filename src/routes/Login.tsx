@@ -1,14 +1,17 @@
 import { useState, type FormEvent } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
+import type { ParseKeys } from 'i18next';
 
 import { PasswordInput } from '../components/PasswordInput';
 import { useAuth } from '../hooks/useAuth';
-import { authErrorMessage } from '../lib/authErrors';
+import { authErrorKey } from '../lib/authErrors';
 
 const MIN_PASSWORD_LENGTH = 8;
 
 type Mode = 'signin' | 'signup' | 'forgot';
 
 export function Login() {
+  const { t } = useTranslation();
   const { signIn, signUp, requestPasswordReset } = useAuth();
   const [mode, setMode] = useState<Mode>('signin');
   const [email, setEmail] = useState('');
@@ -42,7 +45,7 @@ export function Login() {
         await signIn(email, password);
       }
     } catch (e) {
-      setError(authErrorMessage(e));
+      setError(t(authErrorKey(e) as ParseKeys));
     } finally {
       setBusy(false);
     }
@@ -55,9 +58,7 @@ export function Login() {
         <h1>PupTrack</h1>
 
         {forgot ? (
-          <p className="muted">
-            On t'envoie un lien pour choisir un nouveau mot de passe.
-          </p>
+          <p className="muted">{t('auth.forgotIntro')}</p>
         ) : (
           <div className="tabs" role="tablist">
             <button
@@ -67,7 +68,7 @@ export function Login() {
               className={creating ? 'tab' : 'tab tab-active'}
               onClick={() => switchMode('signin')}
             >
-              Se connecter
+              {t('auth.tabs.signIn')}
             </button>
             <button
               type="button"
@@ -76,32 +77,31 @@ export function Login() {
               className={creating ? 'tab tab-active' : 'tab'}
               onClick={() => switchMode('signup')}
             >
-              Créer un compte
+              {t('auth.tabs.signUp')}
             </button>
           </div>
         )}
 
         {sent ? (
           <p className="muted">
-            Si un compte existe pour <strong>{email}</strong>, le lien vient de partir. Ouvre-le
-            depuis ce navigateur.
+            <Trans i18nKey="auth.sent" values={{ email }} components={{ 1: <strong /> }} />
           </p>
         ) : (
           <form onSubmit={onSubmit}>
-            <label htmlFor="email">Adresse e-mail</label>
+            <label htmlFor="email">{t('auth.emailLabel')}</label>
             <input
               id="email"
               type="email"
               required
               autoComplete="email"
-              placeholder="ton@email.fr"
+              placeholder={t('auth.emailPlaceholder')}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
 
             {forgot ? null : (
               <>
-                <label htmlFor="password">Mot de passe</label>
+                <label htmlFor="password">{t('auth.passwordLabel')}</label>
                 <PasswordInput
                   key={mode}
                   id="password"
@@ -112,7 +112,7 @@ export function Login() {
                 />
                 {creating ? (
                   <p className="muted small-text">
-                    Au moins {MIN_PASSWORD_LENGTH} caractères, avec des lettres et des chiffres.
+                    {t('auth.passwordHint', { count: MIN_PASSWORD_LENGTH })}
                   </p>
                 ) : null}
               </>
@@ -120,12 +120,12 @@ export function Login() {
 
             <button type="submit" disabled={busy || !email || (!forgot && !password) || tooShort}>
               {busy
-                ? 'Un instant…'
+                ? t('auth.submit.busy')
                 : forgot
-                  ? 'Envoyer le lien'
+                  ? t('auth.submit.forgot')
                   : creating
-                    ? 'Créer mon compte'
-                    : 'Se connecter'}
+                    ? t('auth.submit.create')
+                    : t('auth.submit.signIn')}
             </button>
           </form>
         )}
@@ -134,7 +134,7 @@ export function Login() {
 
         {creating ? null : (
           <button type="button" className="linkish" onClick={() => switchMode(forgot ? 'signin' : 'forgot')}>
-            {forgot ? 'Revenir à la connexion' : 'Mot de passe oublié ?'}
+            {forgot ? t('auth.backToSignIn') : t('auth.forgotLink')}
           </button>
         )}
       </div>

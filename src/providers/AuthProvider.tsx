@@ -36,9 +36,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         });
         if (error) throw error;
         if (!data.session) {
-          throw new Error(
-            "Compte créé. Confirme ton adresse e-mail depuis le message qu'on vient de t'envoyer, puis connecte-toi.",
-          );
+          throw new Error('auth.errors.confirmEmail');
         }
       },
       async signOut() {

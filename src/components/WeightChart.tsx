@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { niceScale } from '../lib/chartScale';
 import { formatKg, formatShortDate } from '../lib/format';
@@ -15,6 +16,7 @@ export function WeightChart({
   entries: WeightEntry[];
   expected?: (ExpectedRange | null)[] | null;
 }) {
+  const { t } = useTranslation();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(320);
   const [hovered, setHovered] = useState<number | null>(null);
@@ -79,7 +81,11 @@ export function WeightChart({
     setHovered(nearest);
   }
 
-  const summary = `Courbe de poids, de ${formatKg(minWeight)} à ${formatKg(maxWeight)} kilos sur ${entries.length} pesées.`;
+  const summary = t('charts.weight.summary', {
+    min: formatKg(minWeight),
+    max: formatKg(maxWeight),
+    count: entries.length,
+  });
 
   return (
     <div className="chart" ref={wrapperRef}>
@@ -129,7 +135,7 @@ export function WeightChart({
 
         {!active && entries.length > 1 ? (
           <text className="chart-value" x={last.cx} y={last.cy - 12} textAnchor="end">
-            {formatKg(last.entry.weight_kg)} kg
+            {formatKg(last.entry.weight_kg)} {t('growth.weight.unit')}
           </text>
         ) : null}
       </svg>
@@ -142,11 +148,16 @@ export function WeightChart({
             top: active.cy < 74 ? active.cy + 16 : active.cy - (active.range ? 76 : 62),
           }}
         >
-          <strong>{formatKg(active.entry.weight_kg)} kg</strong>
+          <strong>
+            {formatKg(active.entry.weight_kg)} {t('growth.weight.unit')}
+          </strong>
           <span className="muted">{formatShortDate(active.entry.measured_on)}</span>
           {active.range ? (
             <span className="muted">
-              attendu {formatKg(active.range.low)}–{formatKg(active.range.high)} kg
+              {t('charts.weight.expectedRange', {
+                low: formatKg(active.range.low),
+                high: formatKg(active.range.high),
+              })}
             </span>
           ) : null}
         </div>
@@ -156,15 +167,15 @@ export function WeightChart({
         <ul className="legend">
           <li>
             <span className="legend-line" />
-            Poids mesuré
+            {t('charts.weight.legendMeasured')}
           </li>
           <li>
             <span className="legend-median" />
-            Médiane
+            {t('charts.weight.legendMedian')}
           </li>
           <li>
             <span className="legend-band" />
-            9ᵉ–91ᵉ centile
+            {t('charts.weight.legendBand')}
           </li>
         </ul>
       ) : null}

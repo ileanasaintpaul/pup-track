@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { niceScale } from '../lib/chartScale';
 import { formatCm, formatShortDate } from '../lib/format';
@@ -8,6 +9,7 @@ const HEIGHT = 170;
 const PADDING = { top: 14, right: 18, bottom: 26, left: 42 };
 
 export function HeightChart({ entries }: { entries: HeightEntry[] }) {
+  const { t } = useTranslation();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(320);
   const [hovered, setHovered] = useState<number | null>(null);
@@ -70,7 +72,11 @@ export function HeightChart({ entries }: { entries: HeightEntry[] }) {
         width={width}
         height={HEIGHT}
         role="img"
-        aria-label={`Taille au garrot, de ${formatCm(Math.min(...values))} à ${formatCm(Math.max(...values))} centimètres sur ${entries.length} mesures.`}
+        aria-label={t('charts.height.summary', {
+          min: formatCm(Math.min(...values)),
+          max: formatCm(Math.max(...values)),
+          count: entries.length,
+        })}
         onPointerMove={onPointerMove}
         onPointerLeave={() => setHovered(null)}
       >
@@ -121,7 +127,7 @@ export function HeightChart({ entries }: { entries: HeightEntry[] }) {
 
         {!active && entries.length > 1 ? (
           <text className="chart-value" x={last.cx} y={last.cy - 12} textAnchor="end">
-            {formatCm(last.entry.withers_cm)} cm
+            {formatCm(last.entry.withers_cm)} {t('growth.height.cmUnit')}
           </text>
         ) : null}
       </svg>
@@ -134,7 +140,9 @@ export function HeightChart({ entries }: { entries: HeightEntry[] }) {
             top: active.cy < 60 ? active.cy + 16 : active.cy - 62,
           }}
         >
-          <strong>{formatCm(active.entry.withers_cm)} cm</strong>
+          <strong>
+            {formatCm(active.entry.withers_cm)} {t('growth.height.cmUnit')}
+          </strong>
           <span className="muted">{formatShortDate(active.entry.measured_on)}</span>
         </div>
       ) : null}

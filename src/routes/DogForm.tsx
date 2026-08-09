@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { BreedPicker } from '../components/BreedPicker';
 import { useBreeds } from '../hooks/useBreeds';
@@ -9,13 +10,14 @@ import { useHousehold } from '../hooks/useHousehold';
 import type { Breed, Dog, DogInput, DogSex } from '../types/models';
 
 export function NewDog() {
+  const { t } = useTranslation();
   const { session } = useAuth();
   const { data: household } = useHousehold(session?.user.id);
   const createDog = useCreateDog(household?.id);
 
   return (
     <DogFields
-      title="La fiche du chien"
+      title={t('dogForm.newTitle')}
       pending={createDog.isPending}
       onSubmit={(input) => createDog.mutateAsync(input)}
     />
@@ -23,16 +25,17 @@ export function NewDog() {
 }
 
 export function EditDog() {
+  const { t } = useTranslation();
   const { dogId } = useParams();
   const { data: dog, isPending } = useDog(dogId);
   const updateDog = useUpdateDog(dogId!);
 
-  if (isPending) return <p className="centered muted">Chargement…</p>;
-  if (!dog) return <p className="centered muted">Fiche introuvable.</p>;
+  if (isPending) return <p className="centered muted">{t('common.loading')}</p>;
+  if (!dog) return <p className="centered muted">{t('dogForm.notFound')}</p>;
 
   return (
     <DogFields
-      title={`Modifier ${dog.name}`}
+      title={t('dogForm.editTitle', { name: dog.name })}
       dog={dog}
       pending={updateDog.isPending}
       onSubmit={(input) => updateDog.mutateAsync(input)}
@@ -51,6 +54,7 @@ function DogFields({
   pending: boolean;
   onSubmit: (input: DogInput) => Promise<unknown>;
 }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { data: breeds } = useBreeds();
 
@@ -80,7 +84,7 @@ function DogFields({
       });
       navigate('/');
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Une erreur est survenue');
+      setError(e instanceof Error ? e.message : t('common.error'));
     }
   }
 
@@ -88,14 +92,14 @@ function DogFields({
     <div className="shell">
       <header className="topbar">
         <Link to="/" className="link">
-          ← Retour
+          {t('common.back')}
         </Link>
       </header>
 
       <section className="card">
         <h1>{title}</h1>
         <form onSubmit={submit}>
-          <label htmlFor="dog-name">Nom</label>
+          <label htmlFor="dog-name">{t('dogForm.nameLabel')}</label>
           <input
             id="dog-name"
             type="text"
@@ -104,7 +108,7 @@ function DogFields({
             onChange={(e) => setName(e.target.value)}
           />
 
-          <span className="field-label">Race</span>
+          <span className="field-label">{t('dog.breed')}</span>
           <BreedPicker
             selected={selected}
             onSelect={(next) => {
@@ -113,14 +117,14 @@ function DogFields({
             }}
           />
 
-          <label htmlFor="dog-sex">Sexe</label>
+          <label htmlFor="dog-sex">{t('dog.sex')}</label>
           <select id="dog-sex" value={sex} onChange={(e) => setSex(e.target.value as DogSex | '')}>
-            <option value="">Non renseigné</option>
-            <option value="female">Femelle</option>
-            <option value="male">Mâle</option>
+            <option value="">{t('dogForm.sex.unspecified')}</option>
+            <option value="female">{t('dogForm.sex.female')}</option>
+            <option value="male">{t('dogForm.sex.male')}</option>
           </select>
 
-          <label htmlFor="dog-birth">Date de naissance</label>
+          <label htmlFor="dog-birth">{t('dogForm.birthDateLabel')}</label>
           <input
             id="dog-birth"
             type="date"
@@ -129,7 +133,7 @@ function DogFields({
             onChange={(e) => setBirthDate(e.target.value)}
           />
 
-          <label htmlFor="dog-adoption">Date d'adoption</label>
+          <label htmlFor="dog-adoption">{t('dogForm.adoptionDateLabel')}</label>
           <input
             id="dog-adoption"
             type="date"
@@ -139,7 +143,7 @@ function DogFields({
           />
 
           <button type="submit" disabled={pending || !name.trim()}>
-            {pending ? 'Enregistrement…' : 'Enregistrer'}
+            {pending ? t('common.saving') : t('common.save')}
           </button>
         </form>
         {error ? <p className="error">{error}</p> : null}

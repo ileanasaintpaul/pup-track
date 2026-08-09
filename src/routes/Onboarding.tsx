@@ -1,13 +1,15 @@
 import { useState, type FormEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useCreateHousehold, useJoinHousehold } from '../hooks/useHousehold';
 
 export function Onboarding() {
+  const { t } = useTranslation();
   const createHousehold = useCreateHousehold();
   const joinHousehold = useJoinHousehold();
 
   const [displayName, setDisplayName] = useState('');
-  const [householdName, setHouseholdName] = useState('Ma maison');
+  const [householdName, setHouseholdName] = useState(t('auth.onboarding.householdNameDefault'));
   const [code, setCode] = useState('');
   const [error, setError] = useState<string | null>(null);
 
@@ -19,7 +21,7 @@ export function Onboarding() {
     try {
       await action();
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Une erreur est survenue');
+      setError(e instanceof Error ? e.message : t('common.error'));
     }
   }
 
@@ -27,29 +29,27 @@ export function Onboarding() {
     <div className="shell">
       <header className="page-head">
         <p className="logo">🏡</p>
-        <h1>Un foyer pour deux</h1>
-        <p className="muted">
-          Les données du chien appartiennent au foyer. Tout ce que l'un enregistre, l'autre le voit.
-        </p>
+        <h1>{t('auth.onboarding.title')}</h1>
+        <p className="muted">{t('auth.onboarding.intro')}</p>
       </header>
 
       <section className="card">
-        <h2>Ton prénom</h2>
-        <p className="muted">Pour que l'autre maître sache qui a enregistré quoi.</p>
+        <h2>{t('auth.onboarding.nameTitle')}</h2>
+        <p className="muted">{t('auth.onboarding.nameHint')}</p>
         <input
           id="display-name"
           type="text"
           autoComplete="given-name"
-          placeholder="Ileana"
+          placeholder={t('auth.onboarding.namePlaceholder')}
           value={displayName}
           onChange={(e) => setDisplayName(e.target.value)}
         />
       </section>
 
       <section className="card">
-        <h2>Créer un foyer</h2>
+        <h2>{t('auth.onboarding.createTitle')}</h2>
         <form onSubmit={(e) => submit(e, () => createHousehold.mutateAsync({ name: householdName, displayName }))}>
-          <label htmlFor="household-name">Nom du foyer</label>
+          <label htmlFor="household-name">{t('auth.onboarding.householdNameLabel')}</label>
           <input
             id="household-name"
             type="text"
@@ -58,21 +58,23 @@ export function Onboarding() {
             onChange={(e) => setHouseholdName(e.target.value)}
           />
           <button type="submit" disabled={busy || !householdName.trim()}>
-            {createHousehold.isPending ? 'Création…' : 'Créer'}
+            {createHousehold.isPending
+              ? t('auth.onboarding.createButton.pending')
+              : t('auth.onboarding.createButton.idle')}
           </button>
         </form>
       </section>
 
       <section className="card">
-        <h2>Rejoindre un foyer</h2>
+        <h2>{t('auth.onboarding.joinTitle')}</h2>
         <form onSubmit={(e) => submit(e, () => joinHousehold.mutateAsync({ code, displayName }))}>
-          <label htmlFor="invite-code">Code d'invitation</label>
+          <label htmlFor="invite-code">{t('auth.onboarding.codeLabel')}</label>
           <input
             id="invite-code"
             type="text"
             required
             className="code-input"
-            placeholder="XXXXXXXX"
+            placeholder={t('auth.onboarding.codePlaceholder')}
             maxLength={8}
             autoCapitalize="characters"
             autoCorrect="off"
@@ -80,7 +82,9 @@ export function Onboarding() {
             onChange={(e) => setCode(e.target.value.toUpperCase())}
           />
           <button type="submit" className="ghost" disabled={busy || code.length < 8}>
-            {joinHousehold.isPending ? 'Connexion…' : 'Rejoindre'}
+            {joinHousehold.isPending
+              ? t('auth.onboarding.joinButton.pending')
+              : t('auth.onboarding.joinButton.idle')}
           </button>
         </form>
       </section>

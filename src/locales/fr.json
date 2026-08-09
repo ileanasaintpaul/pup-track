@@ -7,7 +7,10 @@
     "delete": "Supprimer",
     "edit": "Modifier",
     "empty": "—",
-    "error": "Une erreur est survenue"
+    "error": "Une erreur est survenue",
+    "errors": {
+      "useAuthOutsideProvider": "useAuth doit être utilisé dans <AuthProvider>"
+    }
   },
   "nav": {
     "home": "Accueil",
@@ -250,5 +253,107 @@
     "invite": "Inviter l'autre maître",
     "generating": "Génération…",
     "signOut": "Se déconnecter"
+  },
+  "auth": {
+    "tabs": { "signIn": "Se connecter", "signUp": "Créer un compte" },
+    "forgotIntro": "On t'envoie un lien pour choisir un nouveau mot de passe.",
+    "sent": "Si un compte existe pour <1>{{email}}</1>, le lien vient de partir. Ouvre-le depuis ce navigateur.",
+    "emailLabel": "Adresse e-mail",
+    "emailPlaceholder": "ton@email.fr",
+    "passwordLabel": "Mot de passe",
+    "passwordHint": "Au moins {{count}} caractères, avec des lettres et des chiffres.",
+    "confirmLabel": "Confirmation",
+    "mismatch": "Les deux mots de passe diffèrent.",
+    "submit": {
+      "busy": "Un instant…",
+      "forgot": "Envoyer le lien",
+      "create": "Créer mon compte",
+      "signIn": "Se connecter"
+    },
+    "forgotLink": "Mot de passe oublié ?",
+    "backToSignIn": "Revenir à la connexion",
+    "expiredTitle": "Lien expiré",
+    "expiredBody": "Ce lien de récupération n'est plus valable. Demande-en un nouveau depuis l'écran de connexion.",
+    "returnToLogin": "Retour à la connexion",
+    "resetTitle": "Nouveau mot de passe",
+    "resetSubmit": "Changer mon mot de passe",
+    "passwordToggle": { "show": "Afficher le mot de passe", "hide": "Masquer le mot de passe" },
+    "onboarding": {
+      "title": "Un foyer pour deux",
+      "intro": "Les données du chien appartiennent au foyer. Tout ce que l'un enregistre, l'autre le voit.",
+      "nameTitle": "Ton prénom",
+      "nameHint": "Pour que l'autre maître sache qui a enregistré quoi.",
+      "namePlaceholder": "Ileana",
+      "createTitle": "Créer un foyer",
+      "householdNameLabel": "Nom du foyer",
+      "householdNameDefault": "Ma maison",
+      "createButton": { "pending": "Création…", "idle": "Créer" },
+      "joinTitle": "Rejoindre un foyer",
+      "codeLabel": "Code d'invitation",
+      "codePlaceholder": "XXXXXXXX",
+      "joinButton": { "pending": "Connexion…", "idle": "Rejoindre" }
+    },
+    "errors": {
+      "invalidCredentials": "E-mail ou mot de passe incorrect.",
+      "accountExists": "Un compte existe déjà avec cet e-mail. Connecte-toi.",
+      "weakPassword": "Mot de passe trop faible : au moins 8 caractères, avec des lettres et des chiffres.",
+      "rateLimited": "Trop de tentatives. Réessaie dans quelques minutes.",
+      "emailNotConfirmed": "Confirme d'abord ton adresse e-mail.",
+      "signupDisabled": "Les inscriptions sont fermées sur ce projet.",
+      "confirmEmail": "Compte créé. Confirme ton adresse e-mail depuis le message qu'on vient de t'envoyer, puis connecte-toi."
+    }
+  },
+  "dogForm": {
+    "newTitle": "La fiche du chien",
+    "editTitle": "Modifier {{name}}",
+    "notFound": "Fiche introuvable.",
+    "nameLabel": "Nom",
+    "sex": { "unspecified": "Non renseigné", "female": "Femelle", "male": "Mâle" },
+    "birthDateLabel": "Date de naissance",
+    "adoptionDateLabel": "Date d'adoption"
+  },
+  "breedPicker": {
+    "adultRange": " · {{min}}–{{max}} kg adulte",
+    "weightRange": "{{min}}–{{max}} kg",
+    "choose": "Choisir une race",
+    "title": "Choisir la race",
+    "remove": "Retirer la race",
+    "close": "Fermer",
+    "filterLabel": "Filtrer par gabarit adulte",
+    "allSizes": "Tous les gabarits",
+    "searchLabel": "Rechercher",
+    "searchPlaceholder": "corgi, berger, retriever…",
+    "results_one": "{{count}} race",
+    "results_other": "{{count}} races",
+    "withinBand": " sur {{count}} dans ce gabarit",
+    "noResults": "Aucune race ne correspond. Essaie un autre mot ou un autre gabarit.",
+    "sizeBands": {
+      "toy": { "label": "Très petit", "range": "jusqu’à 6,5 kg" },
+      "small": { "label": "Petit", "range": "6,5 à 9 kg" },
+      "mediumsmall": { "label": "Moyen-petit", "range": "9 à 15 kg" },
+      "mediumlarge": { "label": "Moyen-grand", "range": "15 à 30 kg" },
+      "large": { "label": "Grand", "range": "30 à 40 kg" },
+      "giant": { "label": "Très grand", "range": "40 à 47,5 kg" },
+      "giantplus": { "label": "Géant", "range": "plus de 47,5 kg" }
+    }
+  },
+  "setup": {
+    "title": "Configuration requise",
+    "body": "Copie <1>.env.example</1> vers <2>.env</2>, renseigne l'URL et la clé anon de ton projet Supabase, puis relance <3>npm run dev</3>."
+  },
+  "charts": {
+    "weight": {
+      "summary": "Courbe de poids, de {{min}} à {{max}} kilos sur {{count}} pesées.",
+      "legendMeasured": "Poids mesuré",
+      "legendMedian": "Médiane",
+      "legendBand": "9ᵉ–91ᵉ centile",
+      "expectedRange": "attendu {{low}}–{{high}} kg"
+    },
+    "height": {
+      "summary": "Taille au garrot, de {{min}} à {{max}} centimètres sur {{count}} mesures."
+    },
+    "rate": {
+      "summary": "Taux de réussite sur {{count}} séances, de {{from}} à {{to}} pour cent."
+    }
   }
 }

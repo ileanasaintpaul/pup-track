@@ -1,17 +1,20 @@
 import { AuthError } from '@supabase/supabase-js';
+import type { ParseKeys } from 'i18next';
 
-const MESSAGES: Record<string, string> = {
-  invalid_credentials: 'E-mail ou mot de passe incorrect.',
-  user_already_exists: 'Un compte existe déjà avec cet e-mail. Connecte-toi.',
-  email_exists: 'Un compte existe déjà avec cet e-mail. Connecte-toi.',
-  weak_password: 'Mot de passe trop faible : au moins 8 caractères, avec des lettres et des chiffres.',
-  over_request_rate_limit: 'Trop de tentatives. Réessaie dans quelques minutes.',
-  email_not_confirmed: "Confirme d'abord ton adresse e-mail.",
-  signup_disabled: 'Les inscriptions sont fermées sur ce projet.',
+type Key = ParseKeys;
+
+const MESSAGES: Record<string, Key> = {
+  invalid_credentials: 'auth.errors.invalidCredentials',
+  user_already_exists: 'auth.errors.accountExists',
+  email_exists: 'auth.errors.accountExists',
+  weak_password: 'auth.errors.weakPassword',
+  over_request_rate_limit: 'auth.errors.rateLimited',
+  email_not_confirmed: 'auth.errors.emailNotConfirmed',
+  signup_disabled: 'auth.errors.signupDisabled',
 };
 
-export function authErrorMessage(error: unknown): string {
+export function authErrorKey(error: unknown): Key | string {
   if (error instanceof AuthError && error.code && MESSAGES[error.code]) return MESSAGES[error.code];
   if (error instanceof Error) return error.message;
-  return 'Une erreur est survenue';
+  return 'common.error';
 }

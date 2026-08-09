@@ -1,13 +1,16 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import type { ParseKeys } from 'i18next';
 
 import { PasswordInput } from '../components/PasswordInput';
 import { useAuth } from '../hooks/useAuth';
-import { authErrorMessage } from '../lib/authErrors';
+import { authErrorKey } from '../lib/authErrors';
 
 const MIN_PASSWORD_LENGTH = 8;
 
 export function ResetPassword() {
+  const { t } = useTranslation();
   const { session, loading, updatePassword } = useAuth();
   const navigate = useNavigate();
 
@@ -33,25 +36,22 @@ export function ResetPassword() {
       await updatePassword(password);
       navigate('/');
     } catch (e) {
-      setError(authErrorMessage(e));
+      setError(t(authErrorKey(e) as ParseKeys));
     } finally {
       setBusy(false);
     }
   }
 
-  if (loading || (!session && !graceElapsed)) return <p className="centered muted">Chargement…</p>;
+  if (loading || (!session && !graceElapsed)) return <p className="centered muted">{t('common.loading')}</p>;
 
   if (!session) {
     return (
       <main className="shell centered">
         <div className="card">
-          <h1>Lien expiré</h1>
-          <p className="muted">
-            Ce lien de récupération n'est plus valable. Demande-en un nouveau depuis l'écran de
-            connexion.
-          </p>
+          <h1>{t('auth.expiredTitle')}</h1>
+          <p className="muted">{t('auth.expiredBody')}</p>
           <button type="button" onClick={() => navigate('/login')}>
-            Retour à la connexion
+            {t('auth.returnToLogin')}
           </button>
         </div>
       </main>
@@ -62,10 +62,10 @@ export function ResetPassword() {
     <main className="shell centered">
       <div className="card">
         <p className="logo">🔑</p>
-        <h1>Nouveau mot de passe</h1>
+        <h1>{t('auth.resetTitle')}</h1>
 
         <form onSubmit={onSubmit}>
-          <label htmlFor="new-password">Mot de passe</label>
+          <label htmlFor="new-password">{t('auth.passwordLabel')}</label>
           <PasswordInput
             id="new-password"
             value={password}
@@ -74,20 +74,20 @@ export function ResetPassword() {
             minLength={MIN_PASSWORD_LENGTH}
           />
           <p className="muted small-text">
-            Au moins {MIN_PASSWORD_LENGTH} caractères, avec des lettres et des chiffres.
+            {t('auth.passwordHint', { count: MIN_PASSWORD_LENGTH })}
           </p>
 
-          <label htmlFor="confirm-password">Confirmation</label>
+          <label htmlFor="confirm-password">{t('auth.confirmLabel')}</label>
           <PasswordInput
             id="confirm-password"
             value={confirmation}
             onChange={setConfirmation}
             autoComplete="new-password"
           />
-          {mismatch ? <p className="error">Les deux mots de passe diffèrent.</p> : null}
+          {mismatch ? <p className="error">{t('auth.mismatch')}</p> : null}
 
           <button type="submit" disabled={busy || tooShort || mismatch || !confirmation}>
-            {busy ? 'Enregistrement…' : 'Changer mon mot de passe'}
+            {busy ? t('common.saving') : t('auth.resetSubmit')}
           </button>
         </form>
 

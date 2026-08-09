@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { formatShortDate } from '../lib/format';
 
@@ -9,6 +10,7 @@ const TICKS = [0, 25, 50, 75, 100];
 export type RatePoint = { date: string; rate: number; environment: string | null };
 
 export function RateChart({ points }: { points: RatePoint[] }) {
+  const { t } = useTranslation();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(320);
   const [hovered, setHovered] = useState<number | null>(null);
@@ -67,7 +69,11 @@ export function RateChart({ points }: { points: RatePoint[] }) {
         width={width}
         height={HEIGHT}
         role="img"
-        aria-label={`Taux de réussite sur ${points.length} séances, de ${points[0].rate} à ${last.point.rate} pour cent.`}
+        aria-label={t('charts.rate.summary', {
+          count: points.length,
+          from: points[0].rate,
+          to: last.point.rate,
+        })}
         onPointerMove={onPointerMove}
         onPointerLeave={() => setHovered(null)}
       >

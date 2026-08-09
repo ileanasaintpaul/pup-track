@@ -1,17 +1,45 @@
+import type { ParseKeys } from 'i18next';
+
 import type { SizeBand } from '../types/models';
 
-export const SIZE_BANDS: { band: SizeBand; label: string; range: string }[] = [
-  { band: 'toy', label: 'Très petit', range: 'jusqu’à 6,5 kg' },
-  { band: 'small', label: 'Petit', range: '6,5 à 9 kg' },
-  { band: 'mediumsmall', label: 'Moyen-petit', range: '9 à 15 kg' },
-  { band: 'mediumlarge', label: 'Moyen-grand', range: '15 à 30 kg' },
-  { band: 'large', label: 'Grand', range: '30 à 40 kg' },
-  { band: 'giant', label: 'Très grand', range: '40 à 47,5 kg' },
-  { band: 'giantplus', label: 'Géant', range: 'plus de 47,5 kg' },
+type Key = ParseKeys;
+
+export const SIZE_BANDS: SizeBand[] = [
+  'toy',
+  'small',
+  'mediumsmall',
+  'mediumlarge',
+  'large',
+  'giant',
+  'giantplus',
 ];
 
-export function bandLabel(band: SizeBand): string {
-  return SIZE_BANDS.find((item) => item.band === band)?.label ?? band;
+const SIZE_BAND_LABEL_KEYS = {
+  toy: 'breedPicker.sizeBands.toy.label',
+  small: 'breedPicker.sizeBands.small.label',
+  mediumsmall: 'breedPicker.sizeBands.mediumsmall.label',
+  mediumlarge: 'breedPicker.sizeBands.mediumlarge.label',
+  large: 'breedPicker.sizeBands.large.label',
+  giant: 'breedPicker.sizeBands.giant.label',
+  giantplus: 'breedPicker.sizeBands.giantplus.label',
+} as const satisfies Record<SizeBand, Key>;
+
+const SIZE_BAND_RANGE_KEYS = {
+  toy: 'breedPicker.sizeBands.toy.range',
+  small: 'breedPicker.sizeBands.small.range',
+  mediumsmall: 'breedPicker.sizeBands.mediumsmall.range',
+  mediumlarge: 'breedPicker.sizeBands.mediumlarge.range',
+  large: 'breedPicker.sizeBands.large.range',
+  giant: 'breedPicker.sizeBands.giant.range',
+  giantplus: 'breedPicker.sizeBands.giantplus.range',
+} as const satisfies Record<SizeBand, Key>;
+
+export function sizeBandLabelKey(band: SizeBand): Key {
+  return SIZE_BAND_LABEL_KEYS[band];
+}
+
+export function sizeBandRangeKey(band: SizeBand): Key {
+  return SIZE_BAND_RANGE_KEYS[band];
 }
 
 export function normalize(value: string): string {
