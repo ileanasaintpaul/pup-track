@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import { BackLink } from '../components/BackLink';
 import { HubCard } from '../components/HubCard';
 import { useHealthEvents } from '../hooks/useHealthEvents';
 import { latestHeight, useHeights } from '../hooks/useHeights';
@@ -31,7 +32,10 @@ export function Health() {
 
   return (
     <>
-      <h1>{t('health.title')}</h1>
+      <div className="page-title">
+        <BackLink />
+        <h1>{t('health.title')}</h1>
+      </div>
 
       <div className="hub-grid">
         <HubCard

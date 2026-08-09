@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
+import { BackLink } from '../components/BackLink';
 import {
   useDeleteHealthEvent,
   useHealthEvents,
@@ -66,7 +67,10 @@ export function HealthRecord() {
 
   return (
     <>
-      <h1>{t('health.record.title')}</h1>
+      <div className="page-title">
+        <BackLink />
+        <h1>{t('health.record.title')}</h1>
+      </div>
 
       <section className="card">
         <h2>{t('health.record.reminders.title')}</h2>

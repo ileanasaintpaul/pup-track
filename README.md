@@ -92,9 +92,9 @@ leur propre chrome. Les routes sont en anglais (`/dog/:dogId/health/growth`,
 Santé est une grille de cartes vers des sous-pages, pour absorber les fonctionnalités à
 venir sans devenir un scroll infini. Croissance — poids et taille au garrot réunis derrière
 une bascule — et Carnet de santé — vaccins, vermifuges, antiparasitaires et visites, avec
-leurs rappels — sont développées ; les autres cartes sont désactivées. `DogLayout` affiche
-un bouton retour dès qu'on quitte la racine d'un onglet, en remontant d'un niveau de route
-plutôt qu'en rejouant l'historique.
+leurs rappels — sont développées ; les autres cartes sont désactivées. `BackLink` affiche une flèche à gauche du titre
+de page dès qu'on quitte la racine d'un onglet, en remontant d'un niveau de route plutôt
+qu'en rejouant l'historique.
 
 Tous les textes visibles passent par des clés de traduction : les valeurs françaises sont
 dans `src/locales/fr.json`, servies par react-i18next et typées depuis le JSON, donc une
