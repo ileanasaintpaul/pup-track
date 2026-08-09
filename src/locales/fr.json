@@ -1,0 +1,20 @@
+{
+  "common": {
+    "loading": "Chargement…",
+    "back": "← Retour",
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "empty": "—",
+    "error": "Une erreur est survenue"
+  },
+  "nav": {
+    "home": "Accueil",
+    "health": "Santé",
+    "training": "Éducation",
+    "map": "Carte",
+    "coach": "IA Chat",
+    "soon": "bientôt"
+  }
+}

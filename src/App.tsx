@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { useHousehold } from './hooks/useHousehold';
 import { isSupabaseConfigured } from './lib/env';
+import './lib/i18n';
 import { queryClient } from './lib/queryClient';
 import { useAuth } from './hooks/useAuth';
 import { AuthProvider } from './providers/AuthProvider';
