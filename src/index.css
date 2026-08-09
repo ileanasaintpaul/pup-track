@@ -898,3 +898,21 @@ code {
 .card-disabled {
   opacity: 0.5;
 }
+
+.dogbar-back {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 17px;
+  line-height: 1;
+}
+
+.dogbar-back:hover {
+  background: var(--primary-soft);
+}
