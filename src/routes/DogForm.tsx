@@ -1,11 +1,12 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
+import { BreedPicker } from '../components/BreedPicker';
 import { useBreeds } from '../hooks/useBreeds';
 import { useCreateDog, useDog, useUpdateDog } from '../hooks/useDogs';
 import { useAuth } from '../hooks/useAuth';
 import { useHousehold } from '../hooks/useHousehold';
-import type { Dog, DogInput, DogSex } from '../types/models';
+import type { Breed, Dog, DogInput, DogSex } from '../types/models';
 
 export function NewDog() {
   const { session } = useAuth();
@@ -54,16 +55,16 @@ function DogFields({
   const { data: breeds } = useBreeds();
 
   const [name, setName] = useState(dog?.name ?? '');
-  const [breedName, setBreedName] = useState(dog?.breed ?? '');
+  const [breed, setBreed] = useState<Breed | null>(null);
+  const [breedTouched, setBreedTouched] = useState(false);
   const [sex, setSex] = useState<DogSex | ''>(dog?.sex ?? '');
   const [birthDate, setBirthDate] = useState(dog?.birth_date ?? '');
   const [adoptionDate, setAdoptionDate] = useState(dog?.adoption_date ?? '');
   const [error, setError] = useState<string | null>(null);
 
   const today = new Date().toISOString().slice(0, 10);
-  const trimmedBreed = breedName.trim();
-  const matched = breeds?.find((breed) => breed.name.toLowerCase() === trimmedBreed.toLowerCase());
-  const unknownBreed = trimmedBreed !== '' && breeds !== undefined && !matched;
+  const stored = breeds?.find((item) => item.slug === dog?.breed_slug) ?? null;
+  const selected = breedTouched ? breed : stored;
 
   async function submit(event: FormEvent) {
     event.preventDefault();
@@ -71,8 +72,8 @@ function DogFields({
     try {
       await onSubmit({
         name: name.trim(),
-        breed: matched?.name ?? null,
-        breed_slug: matched?.slug ?? null,
+        breed: selected?.name ?? null,
+        breed_slug: selected?.slug ?? null,
         sex: sex || null,
         birth_date: birthDate || null,
         adoption_date: adoptionDate || null,
@@ -103,31 +104,14 @@ function DogFields({
             onChange={(e) => setName(e.target.value)}
           />
 
-          <label htmlFor="dog-breed">Race</label>
-          <input
-            id="dog-breed"
-            type="text"
-            list="breed-list"
-            autoComplete="off"
-            placeholder="Commence à taper : Pembroke…"
-            value={breedName}
-            onChange={(e) => setBreedName(e.target.value)}
+          <span className="field-label">Race</span>
+          <BreedPicker
+            selected={selected}
+            onSelect={(next) => {
+              setBreedTouched(true);
+              setBreed(next);
+            }}
           />
-          <datalist id="breed-list">
-            {breeds?.map((breed) => (
-              <option key={breed.slug} value={breed.name} />
-            ))}
-          </datalist>
-          {unknownBreed ? (
-            <p className="error small-text">
-              Race inconnue du catalogue. Choisis-en une dans la liste pour avoir les courbes de
-              croissance.
-            </p>
-          ) : matched ? (
-            <p className="muted small-text">
-              Poids adulte attendu : {matched.adult_min_kg}–{matched.adult_max_kg} kg
-            </p>
-          ) : null}
 
           <label htmlFor="dog-sex">Sexe</label>
           <select id="dog-sex" value={sex} onChange={(e) => setSex(e.target.value as DogSex | '')}>
@@ -154,7 +138,7 @@ function DogFields({
             onChange={(e) => setAdoptionDate(e.target.value)}
           />
 
-          <button type="submit" disabled={pending || !name.trim() || unknownBreed}>
+          <button type="submit" disabled={pending || !name.trim()}>
             {pending ? 'Enregistrement…' : 'Enregistrer'}
           </button>
         </form>
