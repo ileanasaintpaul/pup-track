@@ -1,5 +1,6 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Navigate, Outlet, Route, Routes, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { useHousehold } from './hooks/useHousehold';
 import { isSupabaseConfigured } from './lib/env';
@@ -22,7 +23,8 @@ import { Setup } from './routes/Setup';
 import { Training } from './routes/Training';
 
 function Loading() {
-  return <p className="centered muted">Chargement…</p>;
+  const { t } = useTranslation();
+  return <p className="centered muted">{t('common.loading')}</p>;
 }
 
 function RequireAuth({ children }: { children: React.ReactNode }) {

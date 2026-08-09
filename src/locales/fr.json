@@ -7,10 +7,7 @@
     "delete": "Supprimer",
     "edit": "Modifier",
     "empty": "—",
-    "error": "Une erreur est survenue",
-    "errors": {
-      "useAuthOutsideProvider": "useAuth doit être utilisé dans <AuthProvider>"
-    }
+    "error": "Une erreur est survenue"
   },
   "nav": {
     "home": "Accueil",
