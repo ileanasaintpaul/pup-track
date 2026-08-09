@@ -2,7 +2,11 @@ import i18next from './i18n';
 
 const cache = new Map<string, Intl.NumberFormat | Intl.DateTimeFormat>();
 
-function get<T extends Intl.NumberFormat | Intl.DateTimeFormat>(kind: string, build: (locale: string) => T): T {
+i18next.on('languageChanged', () => cache.clear());
+
+type Kind = 'kg' | 'cm' | 'shortDate' | 'longDate';
+
+function get<T extends Intl.NumberFormat | Intl.DateTimeFormat>(kind: Kind, build: (locale: string) => T): T {
   const locale = i18next.language || 'fr';
   const key = `${kind}:${locale}`;
   const hit = cache.get(key);
