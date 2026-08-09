@@ -22,7 +22,9 @@
       "weeks_one": "{{count}} semaine",
       "weeks_other": "{{count}} semaines",
       "withMonths": "{{weeks}} · {{months}} mois"
-    }
+    },
+    "breed": "Race",
+    "sex": "Sexe"
   },
   "placeholder": {
     "body": "Cette partie arrive bientôt. Elle est déjà prévue dans la feuille de route."
@@ -95,5 +97,33 @@
       "vet": "Vétérinaire & urgence",
       "teething": "Mue dentaire"
     }
+  },
+  "home": {
+    "tiles": { "weight": "Poids", "height": "Taille au garrot", "age": "Âge" },
+    "socialization": "Période critique de socialisation : chaque nouvelle expérience compte jusqu'à 16 semaines.",
+    "quickJournal": {
+      "title": "Journal express",
+      "body": "Repas, sortie, pipi, caca en un tap. Bientôt disponible."
+    },
+    "dailyJournal": {
+      "title": "Journal quotidien",
+      "body": "Le résumé de la journée arrive bientôt."
+    },
+    "reminders": {
+      "title": "Rappels de santé",
+      "body": "Vaccins et antiparasitaires arriveront avec le carnet de santé."
+    }
+  },
+  "profile": {
+    "otherDogs": "Les autres chiens",
+    "you": "Toi",
+    "member": "membre",
+    "owner": "propriétaire",
+    "codeHint": "Valable 7 jours, utilisable une fois.",
+    "copy": "Copier le code",
+    "copied": "Copié",
+    "invite": "Inviter l'autre maître",
+    "generating": "Génération…",
+    "signOut": "Se déconnecter"
   }
 }
