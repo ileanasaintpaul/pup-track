@@ -160,7 +160,7 @@ Les features arrivent une par une, chacune avec sa migration SQL.
 - [x] Suivi du poids : pesées, courbe et historique
 - [x] Courbes de référence WALTHAM par catégorie de poids adulte et sexe
 - [ ] Taille au garrot
-- [x] Module éducation : paliers, journal de séances, favoris, listes ordonnées et listes toutes faites
+- [x] Module éducation : paliers, séances, favoris, listes ordonnées, listes toutes faites et courbe de progression par tour
 - [ ] Arbre de progression des tours par niveaux (débutant/intermédiaire/avancé)
 - [ ] Analyse de récurrence (taux de réussite par lieu)
 - [ ] Tracker de socialisation
