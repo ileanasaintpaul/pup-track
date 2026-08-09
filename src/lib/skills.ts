@@ -16,7 +16,13 @@ export const SKILL_CATEGORIES: Record<string, string> = {
   obeissance: 'Obéissance',
   exterieur: 'Extérieur',
   securite: 'Sécurité',
+  novice: 'Débutant',
+  intermediate: 'Intermédiaire',
+  advanced: 'Avancé',
+  performer: 'Expert',
 };
+
+export const FOUNDATION_CATEGORIES = ['base', 'quotidien', 'obeissance', 'exterieur', 'securite'];
 
 export function levelLabel(level: SkillLevel): string {
   return SKILL_LEVELS[level].label;

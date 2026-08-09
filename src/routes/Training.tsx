@@ -17,7 +17,7 @@ import {
 import { useCollections, useDogLists, useListActions, useToggleFavourite } from '../hooks/useTrainingLists';
 import { ageInWeeks } from '../lib/age';
 import { formatLongDate } from '../lib/format';
-import { ENVIRONMENTS } from '../lib/skills';
+import { ENVIRONMENTS, FOUNDATION_CATEGORIES } from '../lib/skills';
 import type { Skill, SkillLevel } from '../types/models';
 
 type View = 'age' | 'favourites' | 'lists' | 'collections' | 'all';
@@ -318,5 +318,9 @@ function pickVisible(
   if (!skills) return [];
   if (view === 'all') return skills;
   if (view === 'favourites') return skills.filter((skill) => levels?.get(skill.slug)?.favourite);
-  return skills.filter((skill) => weeks === null || skill.min_age_weeks <= weeks);
+  return skills.filter(
+    (skill) =>
+      FOUNDATION_CATEGORIES.includes(skill.category) &&
+      (weeks === null || skill.min_age_weeks <= weeks),
+  );
 }
