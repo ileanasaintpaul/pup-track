@@ -1,9 +1,19 @@
 const kg = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 2 });
+const cm = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 0, maximumFractionDigits: 1 });
 const shortDate = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short' });
 const longDate = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 
 export function formatKg(value: number): string {
   return kg.format(value);
+}
+
+export function formatCm(value: number): string {
+  return cm.format(value);
+}
+
+export function formatSignedCm(value: number): string {
+  const sign = value > 0 ? '+' : value < 0 ? '−' : '';
+  return `${sign}${cm.format(Math.abs(value))}`;
 }
 
 export function formatSignedKg(value: number): string {

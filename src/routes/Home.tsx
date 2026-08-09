@@ -4,9 +4,10 @@ import { Link } from 'react-router-dom';
 import { useDogs } from '../hooks/useDogs';
 import { useCreateInvite, useHousehold, useMembers } from '../hooks/useHousehold';
 import { useAuth } from '../hooks/useAuth';
+import { latestHeight, useHeights } from '../hooks/useHeights';
 import { latestWeight, useWeights, weightChange } from '../hooks/useWeights';
 import { formatAge, isInSocializationWindow } from '../lib/age';
-import { formatKg, formatSignedKg } from '../lib/format';
+import { formatCm, formatKg, formatSignedKg } from '../lib/format';
 import type { Dog } from '../types/models';
 
 export function Home() {
@@ -93,7 +94,9 @@ export function Home() {
 function DogCard({ dog }: { dog: Dog }) {
   const age = formatAge(dog.birth_date);
   const { data: weights } = useWeights(dog.id);
+  const { data: heights } = useHeights(dog.id);
   const last = latestWeight(weights);
+  const lastHeight = latestHeight(heights);
   const change = weightChange(weights);
 
   return (
@@ -119,6 +122,10 @@ function DogCard({ dog }: { dog: Dog }) {
           <span>{dog.sex === 'female' ? 'Femelle' : dog.sex === 'male' ? 'Mâle' : '—'}</span>
         </li>
         <li>
+          <span className="muted">Taille au garrot</span>
+          <span>{lastHeight ? `${formatCm(lastHeight.withers_cm)} cm` : '—'}</span>
+        </li>
+        <li>
           <span className="muted">Poids</span>
           <span>
             {last ? `${formatKg(last.weight_kg)} kg` : '—'}
@@ -138,6 +145,9 @@ function DogCard({ dog }: { dog: Dog }) {
       <div className="actions">
         <Link to={`/dog/${dog.id}/poids`} className="button ghost-button">
           Suivi du poids
+        </Link>
+        <Link to={`/dog/${dog.id}/taille`} className="button ghost-button">
+          Taille
         </Link>
         <Link to={`/dog/${dog.id}/education`} className="button ghost-button">
           Éducation

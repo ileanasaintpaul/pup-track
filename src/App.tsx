@@ -7,6 +7,7 @@ import { queryClient } from './lib/queryClient';
 import { useAuth } from './hooks/useAuth';
 import { AuthProvider } from './providers/AuthProvider';
 import { Login } from './routes/Login';
+import { HeightLog } from './routes/HeightLog';
 import { Home } from './routes/Home';
 import { EditDog, NewDog } from './routes/DogForm';
 import { Onboarding } from './routes/Onboarding';
@@ -115,6 +116,16 @@ export default function App() {
                 <RequireAuth>
                   <RequireHousehold>
                     <WeightLog />
+                  </RequireHousehold>
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/dog/:dogId/taille"
+              element={
+                <RequireAuth>
+                  <RequireHousehold>
+                    <HeightLog />
                   </RequireHousehold>
                 </RequireAuth>
               }
