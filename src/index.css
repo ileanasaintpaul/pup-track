@@ -822,3 +822,41 @@ code {
   border-radius: 6px;
   padding: 1px 4px;
 }
+
+.hub-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.hub-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.hub-card-disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.hub-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.hub-title {
+  font-weight: 600;
+}
+
+.hub-value {
+  font-size: 13px;
+  color: var(--muted);
+}

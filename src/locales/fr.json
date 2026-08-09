@@ -84,5 +84,16 @@
       "historyValue": "Taille"
     }
   },
-  "dogSex": { "female": "femelle", "male": "mâle" }
+  "dogSex": { "female": "femelle", "male": "mâle" },
+  "health": {
+    "title": "Santé & Suivi",
+    "cards": {
+      "growth": "Croissance",
+      "record": "Carnet de santé",
+      "feeding": "Alimentation",
+      "hygiene": "Hygiène",
+      "vet": "Vétérinaire & urgence",
+      "teething": "Mue dentaire"
+    }
+  }
 }
