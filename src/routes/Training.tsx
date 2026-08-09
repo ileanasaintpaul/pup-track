@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import { Collections } from '../components/Collections';
 import { DogLists } from '../components/DogLists';
 import { SkillPickerDialog } from '../components/SkillPickerDialog';
+import { SkillProgress } from '../components/SkillProgress';
 import { SkillRow } from '../components/SkillRow';
 import { useDog } from '../hooks/useDogs';
 import {
@@ -17,14 +18,16 @@ import {
 import { useCollections, useDogLists, useListActions, useToggleFavourite } from '../hooks/useTrainingLists';
 import { ageInWeeks } from '../lib/age';
 import { formatLongDate } from '../lib/format';
+import { buildProgress } from '../lib/progress';
 import { ENVIRONMENTS, FOUNDATION_CATEGORIES } from '../lib/skills';
 import type { Skill, SkillLevel } from '../types/models';
 
-type View = 'age' | 'favourites' | 'lists' | 'collections' | 'all';
+type View = 'age' | 'favourites' | 'progress' | 'lists' | 'collections' | 'all';
 
 const VIEWS: { view: View; label: string }[] = [
   { view: 'age', label: 'Pour son âge' },
   { view: 'favourites', label: 'Favoris' },
+  { view: 'progress', label: 'Progression' },
   { view: 'lists', label: 'Mes listes' },
   { view: 'collections', label: 'Listes toutes faites' },
   { view: 'all', label: 'Tout le catalogue' },
@@ -74,6 +77,7 @@ export function Training() {
   const favourites = [...(levels?.values() ?? [])].filter((entry) => entry.favourite).length;
 
   const visible = pickVisible(skills, view, weeks, levels);
+  const progress = buildProgress(skills, sessions, levels);
   const activeList = lists?.find((list) => list.id === pickerList) ?? null;
 
   async function submit(event: FormEvent) {
@@ -132,7 +136,18 @@ export function Training() {
         </div>
       </section>
 
-      {view === 'lists' ? (
+      {view === 'progress' ? (
+        progress.length ? (
+          progress.map((entry) => <SkillProgress key={entry.skill.slug} entry={entry} />)
+        ) : (
+          <section className="card">
+            <p className="muted">
+              Aucune séance rattachée à un tour pour l'instant. Choisis un tour au moment
+              d'enregistrer une séance, et note le taux de réussite.
+            </p>
+          </section>
+        )
+      ) : view === 'lists' ? (
         <DogLists dogId={dogId!} lists={lists} skills={skills} onOpenPicker={setPickerList} />
       ) : view === 'collections' ? (
         <Collections dogId={dogId!} collections={collections} skills={skills} weeks={weeks} />
