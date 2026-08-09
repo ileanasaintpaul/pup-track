@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { SKILL_LEVELS, categoryLabelKey } from '../lib/skills';
+import { SKILL_LEVELS, categoryLabelKey, type Key } from '../lib/skills';
 import type { Skill, SkillLevel } from '../types/models';
 
 export function SkillRow({
@@ -58,7 +58,7 @@ export function SkillRow({
       </div>
 
       <p className="muted small-text">
-        {t(categoryLabelKey(skill.category) as never)}
+        {t(categoryLabelKey(skill.category) as Key)}
         {startAgeWeeks ? ` · ${t('training.skills.startsAt', { weeks: startAgeWeeks })}` : ''}
       </p>
       {note ? <p className="muted small-text">{note}</p> : null}

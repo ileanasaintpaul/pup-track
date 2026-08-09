@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { normalize } from '../lib/breeds';
-import { SKILL_CATEGORIES, categoryLabelKey } from '../lib/skills';
+import { categoryLabelKey, type Key } from '../lib/skills';
 import type { Skill } from '../types/models';
 
 export function SkillPickerDialog({
@@ -86,7 +86,7 @@ export function SkillPickerDialog({
             aria-pressed={category === item}
             onClick={() => setCategory(category === item ? null : item)}
           >
-            {t((SKILL_CATEGORIES[item] ?? item) as never)}
+            {t(categoryLabelKey(item) as Key)}
           </button>
         ))}
       </div>
@@ -119,7 +119,7 @@ export function SkillPickerDialog({
                 <span className="muted small-text">
                   {inList
                     ? t('training.picker.alreadyInList')
-                    : t(categoryLabelKey(skill.category) as never)}
+                    : t(categoryLabelKey(skill.category) as Key)}
                 </span>
               </button>
             </li>

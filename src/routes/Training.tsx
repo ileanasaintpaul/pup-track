@@ -21,7 +21,7 @@ import { useCollections, useDogLists, useListActions, useToggleFavourite } from 
 import { ageInWeeks } from '../lib/age';
 import { formatLongDate } from '../lib/format';
 import { buildProgress } from '../lib/progress';
-import { ENVIRONMENTS, FOUNDATION_CATEGORIES, environmentLabelKey } from '../lib/skills';
+import { ENVIRONMENTS, FOUNDATION_CATEGORIES, environmentLabelKey, type Key } from '../lib/skills';
 import type { Skill, SkillLevel } from '../types/models';
 
 type View = 'age' | 'favourites' | 'progress' | 'lists' | 'collections' | 'all';
@@ -226,7 +226,7 @@ export function Training() {
           >
             {ENVIRONMENTS.map((item) => (
               <option key={item} value={item}>
-                {t(environmentLabelKey(item) as never)}
+                {t(environmentLabelKey(item) as Key)}
               </option>
             ))}
           </select>
@@ -273,7 +273,7 @@ export function Training() {
                     {session.environment ? (
                       <span className="muted">
                         {' '}
-                        · {t(environmentLabelKey(session.environment) as never)}
+                        · {t(environmentLabelKey(session.environment) as Key)}
                       </span>
                     ) : null}
                   </td>
