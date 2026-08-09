@@ -6,9 +6,17 @@ import fr from '../locales/fr.json';
 export const LANGUAGE_STORAGE_KEY = 'puptrack.language';
 export const FALLBACK_LANGUAGE = 'fr';
 
+function readStoredLanguage(): string {
+  try {
+    return localStorage.getItem(LANGUAGE_STORAGE_KEY) ?? FALLBACK_LANGUAGE;
+  } catch {
+    return FALLBACK_LANGUAGE;
+  }
+}
+
 void i18next.use(initReactI18next).init({
   resources: { fr: { translation: fr } },
-  lng: localStorage.getItem(LANGUAGE_STORAGE_KEY) ?? FALLBACK_LANGUAGE,
+  lng: readStoredLanguage(),
   fallbackLng: FALLBACK_LANGUAGE,
   interpolation: { escapeValue: false },
 });
