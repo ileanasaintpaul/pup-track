@@ -1,5 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import type { TFunction } from 'i18next';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 import { Collections } from '../components/Collections';
 import { DogLists } from '../components/DogLists';
@@ -19,23 +21,24 @@ import { useCollections, useDogLists, useListActions, useToggleFavourite } from 
 import { ageInWeeks } from '../lib/age';
 import { formatLongDate } from '../lib/format';
 import { buildProgress } from '../lib/progress';
-import { ENVIRONMENTS, FOUNDATION_CATEGORIES } from '../lib/skills';
+import { ENVIRONMENTS, FOUNDATION_CATEGORIES, environmentLabelKey } from '../lib/skills';
 import type { Skill, SkillLevel } from '../types/models';
 
 type View = 'age' | 'favourites' | 'progress' | 'lists' | 'collections' | 'all';
 
-const VIEWS: { view: View; label: string }[] = [
-  { view: 'age', label: 'Pour son âge' },
-  { view: 'favourites', label: 'Favoris' },
-  { view: 'progress', label: 'Progression' },
-  { view: 'lists', label: 'Mes listes' },
-  { view: 'collections', label: 'Listes toutes faites' },
-  { view: 'all', label: 'Tout le catalogue' },
-];
+const VIEWS = [
+  { view: 'age', key: 'training.views.age' },
+  { view: 'favourites', key: 'training.views.favourites' },
+  { view: 'progress', key: 'training.views.progress' },
+  { view: 'lists', key: 'training.views.lists' },
+  { view: 'collections', key: 'training.views.collections' },
+  { view: 'all', key: 'training.views.all' },
+] as const satisfies { view: View; key: string }[];
 
 const VIEW_STORAGE_KEY = 'puptrack.training-view';
 
 export function Training() {
+  const { t } = useTranslation();
   const { dogId } = useParams();
   const { data: dog } = useDog(dogId);
   const { data: skills } = useSkills();
@@ -99,29 +102,24 @@ export function Training() {
       setSuccessRate('');
       setNotes('');
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Une erreur est survenue');
+      setError(e instanceof Error ? e.message : t('common.error'));
     }
   }
 
   const skillName = (slug: string | null) =>
-    skills?.find((skill) => skill.slug === slug)?.name ?? 'Séance libre';
+    skills?.find((skill) => skill.slug === slug)?.name ?? t('training.sessions.freeSession');
 
   return (
-    <div className="shell">
-      <header className="topbar">
-        <Link to="/" className="link">
-          ← Retour
-        </Link>
-      </header>
-
+    <>
       <section className="card">
-        <h1>Éducation de {dog?.name ?? 'ton chien'}</h1>
+        <h1>{t('training.summary.title', { name: dog?.name ?? t('training.summary.dogFallback') })}</h1>
         <p className="muted">
-          {started} en cours, {reliable} fiable{reliable > 1 ? 's' : ''} dehors, {favourites} favori
-          {favourites > 1 ? 's' : ''}, {sessions?.length ?? 0} séance
-          {(sessions?.length ?? 0) > 1 ? 's' : ''}.
+          {t('training.summary.started', { count: started })},{' '}
+          {t('training.summary.reliable', { count: reliable })},{' '}
+          {t('training.summary.favourites', { count: favourites })},{' '}
+          {t('training.summary.sessions', { count: sessions?.length ?? 0 })}.
         </p>
-        <div className="chips" role="group" aria-label="Affichage">
+        <div className="chips" role="group" aria-label={t('training.views.groupLabel')}>
           {VIEWS.map((item) => (
             <button
               key={item.view}
@@ -130,7 +128,7 @@ export function Training() {
               aria-pressed={view === item.view}
               onClick={() => setView(item.view)}
             >
-              {item.label}
+              {t(item.key)}
             </button>
           ))}
         </div>
@@ -141,10 +139,7 @@ export function Training() {
           progress.map((entry) => <SkillProgress key={entry.skill.slug} entry={entry} />)
         ) : (
           <section className="card">
-            <p className="muted">
-              Aucune séance rattachée à un tour pour l'instant. Choisis un tour au moment
-              d'enregistrer une séance, et note le taux de réussite.
-            </p>
+            <p className="muted">{t('training.progress.empty')}</p>
           </section>
         )
       ) : view === 'lists' ? (
@@ -153,7 +148,7 @@ export function Training() {
         <Collections dogId={dogId!} collections={collections} skills={skills} weeks={weeks} />
       ) : (
         <section className="card">
-          <h2>{viewTitle(view, weeks)}</h2>
+          <h2>{viewTitle(t, view, weeks)}</h2>
           {visible.length ? (
             visible.map((skill) => (
               <SkillRow
@@ -173,20 +168,18 @@ export function Training() {
             ))
           ) : (
             <p className="muted">
-              {view === 'favourites'
-                ? 'Aucun favori. Touche l’étoile sur un tour pour le retrouver ici.'
-                : 'Rien à afficher.'}
+              {t(view === 'favourites' ? 'training.catalog.emptyFavourites' : 'training.catalog.emptyGeneric')}
             </p>
           )}
         </section>
       )}
 
       <section className="card">
-        <h2>Enregistrer une séance</h2>
+        <h2>{t('training.sessions.formTitle')}</h2>
         <form onSubmit={submit}>
-          <label htmlFor="session-skill">Tour travaillé</label>
+          <label htmlFor="session-skill">{t('training.sessions.skillLabel')}</label>
           <select id="session-skill" value={skillSlug} onChange={(e) => setSkillSlug(e.target.value)}>
-            <option value="">Séance libre</option>
+            <option value="">{t('training.sessions.freeSession')}</option>
             {skills?.map((skill) => (
               <option key={skill.slug} value={skill.slug}>
                 {skill.name}
@@ -194,7 +187,7 @@ export function Training() {
             ))}
           </select>
 
-          <label htmlFor="session-date">Date</label>
+          <label htmlFor="session-date">{t('training.sessions.dateLabel')}</label>
           <input
             id="session-date"
             type="date"
@@ -204,7 +197,7 @@ export function Training() {
             onChange={(e) => setOccurredOn(e.target.value)}
           />
 
-          <label htmlFor="session-duration">Durée en minutes</label>
+          <label htmlFor="session-duration">{t('training.sessions.durationLabel')}</label>
           <input
             id="session-duration"
             type="number"
@@ -214,18 +207,18 @@ export function Training() {
             onChange={(e) => setDuration(e.target.value)}
           />
 
-          <label htmlFor="session-rate">Taux de réussite en pourcentage</label>
+          <label htmlFor="session-rate">{t('training.sessions.rateLabel')}</label>
           <input
             id="session-rate"
             type="number"
             min={0}
             max={100}
-            placeholder="8 réussites sur 10 → 80"
+            placeholder={t('training.sessions.ratePlaceholder')}
             value={successRate}
             onChange={(e) => setSuccessRate(e.target.value)}
           />
 
-          <label htmlFor="session-environment">Environnement</label>
+          <label htmlFor="session-environment">{t('training.sessions.environmentLabel')}</label>
           <select
             id="session-environment"
             value={environment}
@@ -233,22 +226,22 @@ export function Training() {
           >
             {ENVIRONMENTS.map((item) => (
               <option key={item} value={item}>
-                {item}
+                {t(environmentLabelKey(item) as never)}
               </option>
             ))}
           </select>
 
-          <label htmlFor="session-notes">Note</label>
+          <label htmlFor="session-notes">{t('training.sessions.notesLabel')}</label>
           <input
             id="session-notes"
             type="text"
-            placeholder="Fatiguée après 3 minutes"
+            placeholder={t('training.sessions.notesPlaceholder')}
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
           />
 
           <button type="submit" disabled={addSession.isPending}>
-            {addSession.isPending ? 'Enregistrement…' : 'Enregistrer la séance'}
+            {addSession.isPending ? t('common.saving') : t('training.sessions.submit')}
           </button>
         </form>
         {error ? <p className="error">{error}</p> : null}
@@ -256,13 +249,13 @@ export function Training() {
 
       {sessions?.length ? (
         <section className="card">
-          <h2>Séances</h2>
+          <h2>{t('training.sessions.listTitle')}</h2>
           <table className="table">
             <thead>
               <tr>
-                <th>Date</th>
-                <th>Tour</th>
-                <th className="numeric">Réussite</th>
+                <th>{t('training.sessions.dateLabel')}</th>
+                <th>{t('training.sessions.skillColumn')}</th>
+                <th className="numeric">{t('training.sessions.rateColumn')}</th>
                 <th />
               </tr>
             </thead>
@@ -272,15 +265,23 @@ export function Training() {
                   <td>
                     {formatLongDate(session.occurred_on)}
                     {session.duration_min ? (
-                      <span className="muted"> · {session.duration_min} min</span>
+                      <span className="muted">
+                        {' '}
+                        · {t('training.sessions.durationValue', { value: session.duration_min })}
+                      </span>
                     ) : null}
                     {session.environment ? (
-                      <span className="muted"> · {session.environment}</span>
+                      <span className="muted">
+                        {' '}
+                        · {t(environmentLabelKey(session.environment) as never)}
+                      </span>
                     ) : null}
                   </td>
                   <td>{skillName(session.skill_slug)}</td>
                   <td className="numeric">
-                    {session.success_rate === null ? '—' : `${session.success_rate} %`}
+                    {session.success_rate === null
+                      ? t('common.empty')
+                      : t('training.sessions.rateValue', { value: session.success_rate })}
                   </td>
                   <td className="numeric">
                     <button
@@ -289,7 +290,7 @@ export function Training() {
                       disabled={deleteSession.isPending}
                       onClick={() => deleteSession.mutate(session.id)}
                     >
-                      Supprimer
+                      {t('common.delete')}
                     </button>
                   </td>
                 </tr>
@@ -302,7 +303,11 @@ export function Training() {
       <SkillPickerDialog
         open={pickerList !== null}
         skills={skills}
-        title={activeList ? `Ajouter à « ${activeList.name} »` : 'Ajouter un tour'}
+        title={
+          activeList
+            ? t('training.picker.addToListTitle', { name: activeList.name })
+            : t('training.picker.addTitle')
+        }
         alreadyIn={new Set(activeList?.items.map((item) => item.skill_slug) ?? [])}
         onClose={() => setPickerList(null)}
         onPick={(skill) => {
@@ -314,14 +319,14 @@ export function Training() {
           });
         }}
       />
-    </div>
+    </>
   );
 }
 
-function viewTitle(view: View, weeks: number | null): string {
-  if (view === 'favourites') return 'Favoris';
-  if (view === 'all') return 'Tout le catalogue';
-  return weeks === null ? 'Tours' : `Pour ses ${weeks} semaines`;
+function viewTitle(t: TFunction, view: View, weeks: number | null): string {
+  if (view === 'favourites') return t('training.views.favourites');
+  if (view === 'all') return t('training.views.all');
+  return weeks === null ? t('training.catalog.titleDefault') : t('training.catalog.titleForAge', { weeks });
 }
 
 function pickVisible(

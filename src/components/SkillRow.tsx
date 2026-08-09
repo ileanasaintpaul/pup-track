@@ -1,4 +1,6 @@
-import { SKILL_LEVELS, categoryLabel } from '../lib/skills';
+import { useTranslation } from 'react-i18next';
+
+import { SKILL_LEVELS, categoryLabelKey } from '../lib/skills';
 import type { Skill, SkillLevel } from '../types/models';
 
 export function SkillRow({
@@ -22,6 +24,8 @@ export function SkillRow({
   onToggleFavourite: () => void;
   onAddToList?: () => void;
 }) {
+  const { t } = useTranslation();
+
   return (
     <div className="skill">
       <div className="skill-head">
@@ -31,7 +35,11 @@ export function SkillRow({
             type="button"
             className={favourite ? 'icon-button icon-active' : 'icon-button'}
             aria-pressed={favourite}
-            aria-label={favourite ? `Retirer ${skill.name} des favoris` : `Mettre ${skill.name} en favori`}
+            aria-label={
+              favourite
+                ? t('training.skills.removeFavourite', { name: skill.name })
+                : t('training.skills.addFavourite', { name: skill.name })
+            }
             onClick={onToggleFavourite}
           >
             {favourite ? '★' : '☆'}
@@ -40,7 +48,7 @@ export function SkillRow({
             <button
               type="button"
               className="icon-button"
-              aria-label={`Ajouter ${skill.name} à une liste`}
+              aria-label={t('training.skills.addToList', { name: skill.name })}
               onClick={onAddToList}
             >
               +
@@ -50,24 +58,24 @@ export function SkillRow({
       </div>
 
       <p className="muted small-text">
-        {categoryLabel(skill.category)}
-        {startAgeWeeks ? ` · dès ${startAgeWeeks} semaines` : ''}
+        {t(categoryLabelKey(skill.category) as never)}
+        {startAgeWeeks ? ` · ${t('training.skills.startsAt', { weeks: startAgeWeeks })}` : ''}
       </p>
       {note ? <p className="muted small-text">{note}</p> : null}
       {!note && skill.description ? <p className="muted small-text">{skill.description}</p> : null}
 
-      <div className="steps" role="group" aria-label={`Palier pour ${skill.name}`}>
+      <div className="steps" role="group" aria-label={t('training.skills.levelGroupLabel', { name: skill.name })}>
         {SKILL_LEVELS.map((step) => (
           <button
             key={step.level}
             type="button"
             className={step.level > 0 && step.level <= level ? 'step step-reached' : 'step'}
             aria-pressed={step.level === level}
-            title={step.hint}
+            title={t(step.hintKey)}
             disabled={pending}
             onClick={() => onLevelChange(step.level === level ? 0 : step.level)}
           >
-            {step.label}
+            {t(step.labelKey)}
           </button>
         ))}
       </div>

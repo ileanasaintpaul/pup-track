@@ -114,6 +114,130 @@
       "body": "Vaccins et antiparasitaires arriveront avec le carnet de santé."
     }
   },
+  "training": {
+    "views": {
+      "age": "Pour son âge",
+      "favourites": "Favoris",
+      "progress": "Progression",
+      "lists": "Mes listes",
+      "collections": "Listes toutes faites",
+      "all": "Tout le catalogue",
+      "groupLabel": "Affichage"
+    },
+    "summary": {
+      "title": "Éducation de {{name}}",
+      "dogFallback": "ton chien",
+      "started": "{{count}} en cours",
+      "reliable_one": "{{count}} fiable dehors",
+      "reliable_other": "{{count}} fiables dehors",
+      "favourites_one": "{{count}} favori",
+      "favourites_other": "{{count}} favoris",
+      "sessions_one": "{{count}} séance",
+      "sessions_other": "{{count}} séances"
+    },
+    "catalog": {
+      "titleDefault": "Tours",
+      "titleForAge": "Pour ses {{weeks}} semaines",
+      "emptyFavourites": "Aucun favori. Touche l’étoile sur un tour pour le retrouver ici.",
+      "emptyGeneric": "Rien à afficher."
+    },
+    "progress": {
+      "empty": "Aucune séance rattachée à un tour pour l'instant. Choisis un tour au moment d'enregistrer une séance, et note le taux de réussite.",
+      "sessions_one": "{{count}} séance",
+      "sessions_other": "{{count}} séances",
+      "average": ", {{value}} % en moyenne",
+      "gained": ", {{value}} points gagnés depuis la première",
+      "lost": ", {{value}} points perdus depuis la première",
+      "stable": ", stable depuis la première",
+      "noRateSuffix": " sans taux de réussite. Renseigne-le pour suivre la progression.",
+      "singleSession": "Une seule séance chiffrée. La courbe apparaît à partir de deux."
+    },
+    "sessions": {
+      "formTitle": "Enregistrer une séance",
+      "skillLabel": "Tour travaillé",
+      "freeSession": "Séance libre",
+      "dateLabel": "Date",
+      "durationLabel": "Durée en minutes",
+      "rateLabel": "Taux de réussite en pourcentage",
+      "ratePlaceholder": "8 réussites sur 10 → 80",
+      "environmentLabel": "Environnement",
+      "notesLabel": "Note",
+      "notesPlaceholder": "Fatiguée après 3 minutes",
+      "submit": "Enregistrer la séance",
+      "listTitle": "Séances",
+      "skillColumn": "Tour",
+      "rateColumn": "Réussite",
+      "durationValue": "{{value}} min",
+      "rateValue": "{{value}} %"
+    },
+    "lists": {
+      "newTitle": "Nouvelle liste",
+      "nameLabel": "Nom",
+      "namePlaceholder": "Tours du week-end",
+      "creating": "Création…",
+      "create": "Créer la liste",
+      "rename": "Renommer",
+      "add": "Ajouter",
+      "moveUp": "Monter",
+      "moveDown": "Descendre",
+      "remove": "Retirer",
+      "emptyList": "Liste vide. Ajoute des tours avec le bouton « {{add}} ».",
+      "emptyAll": "Aucune liste pour l'instant. Crée la tienne, ou pars d'une liste toute faite depuis l'onglet Collections."
+    },
+    "collections": {
+      "empty": "Aucune liste toute faite pour l'instant.",
+      "copied": "Copiée",
+      "copyAction": "Copier dans mes listes",
+      "startsAt": "dès {{weeks}} sem.",
+      "source": "Sélection {{source}}."
+    },
+    "picker": {
+      "addTitle": "Ajouter un tour",
+      "addToListTitle": "Ajouter à « {{name}} »",
+      "close": "Fermer",
+      "categoryFilterLabel": "Filtrer par catégorie",
+      "allCategories": "Toutes",
+      "searchLabel": "Rechercher",
+      "searchPlaceholder": "rappel, panier, laisse…",
+      "results_one": "{{count}} tour",
+      "results_other": "{{count}} tours",
+      "alreadyInList": "déjà dans la liste",
+      "noResults": "Aucun tour ne correspond."
+    },
+    "skills": {
+      "addFavourite": "Mettre {{name}} en favori",
+      "removeFavourite": "Retirer {{name}} des favoris",
+      "addToList": "Ajouter {{name}} à une liste",
+      "startsAt": "dès {{weeks}} semaines",
+      "levelGroupLabel": "Palier pour {{name}}"
+    },
+    "levels": {
+      "notStarted": { "label": "Pas commencé", "hint": "Le travail n'a pas encore démarré." },
+      "discovery": { "label": "Découverte", "hint": "Le geste apparaît, guidé et récompensé." },
+      "calm": { "label": "Compris au calme", "hint": "Répond à la maison, sans distraction." },
+      "distractions": { "label": "Avec distractions", "hint": "Tient malgré le bruit, les gens, les odeurs." },
+      "reliable": { "label": "Fiable dehors", "hint": "Répond en extérieur, même en situation nouvelle." }
+    },
+    "categories": {
+      "base": "Fondations",
+      "quotidien": "Quotidien",
+      "obeissance": "Obéissance",
+      "exterieur": "Extérieur",
+      "securite": "Sécurité",
+      "novice": "Débutant",
+      "intermediate": "Intermédiaire",
+      "advanced": "Avancé",
+      "performer": "Expert"
+    },
+    "environments": {
+      "home": "Maison",
+      "garden": "Jardin",
+      "quietStreet": "Rue calme",
+      "busyStreet": "Rue passante",
+      "park": "Parc",
+      "other": "Autre"
+    }
+  },
   "profile": {
     "otherDogs": "Les autres chiens",
     "you": "Toi",

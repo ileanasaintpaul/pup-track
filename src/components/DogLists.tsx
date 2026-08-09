@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useListActions } from '../hooks/useTrainingLists';
 import type { DogList, Skill } from '../types/models';
@@ -14,6 +15,7 @@ export function DogLists({
   skills: Skill[] | undefined;
   onOpenPicker: (listId: string) => void;
 }) {
+  const { t } = useTranslation();
   const { createList, renameList, deleteList, removeFromList, reorderList } = useListActions(dogId);
   const [newName, setNewName] = useState('');
   const [renaming, setRenaming] = useState<string | null>(null);
@@ -40,18 +42,18 @@ export function DogLists({
   return (
     <>
       <section className="card">
-        <h2>Nouvelle liste</h2>
+        <h2>{t('training.lists.newTitle')}</h2>
         <form onSubmit={submit}>
-          <label htmlFor="list-name">Nom</label>
+          <label htmlFor="list-name">{t('training.lists.nameLabel')}</label>
           <input
             id="list-name"
             type="text"
-            placeholder="Tours du week-end"
+            placeholder={t('training.lists.namePlaceholder')}
             value={newName}
             onChange={(event) => setNewName(event.target.value)}
           />
           <button type="submit" disabled={createList.isPending || !newName.trim()}>
-            {createList.isPending ? 'Création…' : 'Créer la liste'}
+            {createList.isPending ? t('training.lists.creating') : t('training.lists.create')}
           </button>
         </form>
       </section>
@@ -85,17 +87,17 @@ export function DogLists({
                     setRenameValue(list.name);
                   }}
                 >
-                  Renommer
+                  {t('training.lists.rename')}
                 </button>
                 <button type="button" className="linkish" onClick={() => onOpenPicker(list.id)}>
-                  Ajouter
+                  {t('training.lists.add')}
                 </button>
                 <button
                   type="button"
                   className="linkish danger-link"
                   onClick={() => deleteList.mutate(list.id)}
                 >
-                  Supprimer
+                  {t('common.delete')}
                 </button>
               </span>
             </div>
@@ -110,7 +112,7 @@ export function DogLists({
                       <button
                         type="button"
                         className="icon-button"
-                        aria-label="Monter"
+                        aria-label={t('training.lists.moveUp')}
                         disabled={index === 0 || reorderList.isPending}
                         onClick={() => move(list, index, -1)}
                       >
@@ -119,7 +121,7 @@ export function DogLists({
                       <button
                         type="button"
                         className="icon-button"
-                        aria-label="Descendre"
+                        aria-label={t('training.lists.moveDown')}
                         disabled={index === list.items.length - 1 || reorderList.isPending}
                         onClick={() => move(list, index, 1)}
                       >
@@ -128,7 +130,7 @@ export function DogLists({
                       <button
                         type="button"
                         className="icon-button"
-                        aria-label="Retirer"
+                        aria-label={t('training.lists.remove')}
                         onClick={() =>
                           removeFromList.mutate({ listId: list.id, skillSlug: item.skill_slug })
                         }
@@ -140,16 +142,15 @@ export function DogLists({
                 ))}
               </ol>
             ) : (
-              <p className="muted">Liste vide. Ajoute des tours avec le bouton « Ajouter ».</p>
+              <p className="muted">
+                {t('training.lists.emptyList', { add: t('training.lists.add') })}
+              </p>
             )}
           </section>
         ))
       ) : (
         <section className="card">
-          <p className="muted">
-            Aucune liste pour l'instant. Crée la tienne, ou pars d'une liste toute faite depuis
-            l'onglet Collections.
-          </p>
+          <p className="muted">{t('training.lists.emptyAll')}</p>
         </section>
       )}
     </>
