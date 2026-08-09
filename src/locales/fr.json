@@ -23,5 +23,8 @@
       "weeks_other": "{{count}} semaines",
       "withMonths": "{{weeks}} · {{months}} mois"
     }
+  },
+  "placeholder": {
+    "body": "Cette partie arrive bientôt. Elle est déjà prévue dans la feuille de route."
   }
 }
