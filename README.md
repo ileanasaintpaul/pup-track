@@ -83,6 +83,21 @@ Application **web**, utilisable depuis le navigateur du téléphone comme de l'o
 Le README initial proposait du SQLite offline-first. Le suivi à deux impose une
 source de vérité côté serveur : c'est le rôle de Supabase.
 
+### Navigation et traductions
+
+L'interface est organisée en cinq onglets — Accueil, Santé, Éducation, Carte, IA Chat —
+sous `DogLayout`, qui fournit l'en-tête et la barre d'onglets : les pages ne rendent plus
+leur propre chrome. Les routes sont en anglais (`/dog/:dogId/health/growth`,
+`/dog/:dogId/training`, `/dog/:dogId/profile`), les anciennes URLs françaises redirigent.
+Santé est une grille de cartes vers des sous-pages, pour absorber les fonctionnalités à
+venir sans devenir un scroll infini ; seule Croissance — poids et taille au garrot réunis
+derrière une bascule — est développée, les autres cartes sont désactivées.
+
+Tous les textes visibles passent par des clés de traduction : les valeurs françaises sont
+dans `src/locales/fr.json`, servies par react-i18next et typées depuis le JSON, donc une
+clé inexistante casse le `typecheck`. Ajouter une langue revient à déposer un fichier à
+côté et à l'enregistrer dans `src/lib/i18n.ts`.
+
 ## 🚀 Démarrage
 
 ```bash
@@ -159,7 +174,7 @@ Les features arrivent une par une, chacune avec sa migration SQL.
 - [x] Fiche profil du chien (nom, race, sexe, naissance, adoption, âge)
 - [x] Suivi du poids : pesées, courbe et historique
 - [x] Courbes de référence WALTHAM par catégorie de poids adulte et sexe
-- [ ] Taille au garrot
+- [x] Taille au garrot : mesures, courbe et historique
 - [x] Module éducation : paliers, séances, favoris, listes ordonnées, listes toutes faites et courbe de progression par tour
 - [ ] Arbre de progression des tours par niveaux (débutant/intermédiaire/avancé)
 - [ ] Analyse de récurrence (taux de réussite par lieu)

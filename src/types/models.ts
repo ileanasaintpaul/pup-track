@@ -62,6 +62,14 @@ export type WeightEntry = {
   note: string | null;
 };
 
+export type HeightEntry = {
+  id: string;
+  dog_id: string;
+  measured_on: string;
+  withers_cm: number;
+  note: string | null;
+};
+
 export type DogInput = {
   name: string;
   breed: string | null;

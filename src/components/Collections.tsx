@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useListActions } from '../hooks/useTrainingLists';
 import type { Collection, Skill } from '../types/models';
@@ -14,6 +15,7 @@ export function Collections({
   skills: Skill[] | undefined;
   weeks: number | null;
 }) {
+  const { t } = useTranslation();
   const { createList } = useListActions(dogId);
   const [copied, setCopied] = useState<string | null>(null);
 
@@ -30,7 +32,7 @@ export function Collections({
   if (!collections?.length) {
     return (
       <section className="card">
-        <p className="muted">Aucune liste toute faite pour l'instant.</p>
+        <p className="muted">{t('training.collections.empty')}</p>
       </section>
     );
   }
@@ -47,7 +49,9 @@ export function Collections({
               disabled={createList.isPending}
               onClick={() => copy(collection)}
             >
-              {copied === collection.slug ? 'Copiée' : 'Copier dans mes listes'}
+              {copied === collection.slug
+                ? t('training.collections.copied')
+                : t('training.collections.copyAction')}
             </button>
           </div>
           {collection.description ? <p className="muted">{collection.description}</p> : null}
@@ -63,7 +67,9 @@ export function Collections({
                     {item.note ? <span className="muted small-text"> — {item.note}</span> : null}
                   </span>
                   <span className={tooEarly ? 'muted small-text' : 'small-text highlight'}>
-                    {item.start_age_weeks ? `dès ${item.start_age_weeks} sem.` : ''}
+                    {item.start_age_weeks
+                      ? t('training.collections.startsAt', { weeks: item.start_age_weeks })
+                      : ''}
                   </span>
                 </li>
               );
@@ -71,7 +77,9 @@ export function Collections({
           </ol>
 
           {collection.source ? (
-            <p className="muted small-text">Sélection {collection.source}.</p>
+            <p className="muted small-text">
+              {t('training.collections.source', { source: collection.source })}
+            </p>
           ) : null}
         </section>
       ))}

@@ -1,8 +1,11 @@
+import { useTranslation } from 'react-i18next';
+
 import { RateChart } from './RateChart';
 import type { SkillProgressEntry } from '../lib/progress';
 import { SKILL_LEVELS } from '../lib/skills';
 
 export function SkillProgress({ entry }: { entry: SkillProgressEntry }) {
+  const { t } = useTranslation();
   const { skill, points, sessions, level } = entry;
   const first = points[0];
   const last = points[points.length - 1];
@@ -15,7 +18,7 @@ export function SkillProgress({ entry }: { entry: SkillProgressEntry }) {
     <section className="card">
       <div className="card-head">
         <h2>{skill.name}</h2>
-        <span className="muted small-text">{SKILL_LEVELS[level].label}</span>
+        <span className="muted small-text">{t(SKILL_LEVELS[level].labelKey)}</span>
       </div>
 
       {points.length ? (
@@ -24,29 +27,27 @@ export function SkillProgress({ entry }: { entry: SkillProgressEntry }) {
             {last.rate} <span className="hero-unit">%</span>
           </p>
           <p className="muted">
-            {sessions} séance{sessions > 1 ? 's' : ''}
-            {average !== null ? `, ${average} % en moyenne` : ''}
+            {t('training.progress.sessions', { count: sessions })}
+            {average !== null ? t('training.progress.average', { value: average }) : ''}
             {change !== null
               ? change > 0
-                ? `, ${change} points gagnés depuis la première`
+                ? t('training.progress.gained', { value: change })
                 : change < 0
-                  ? `, ${Math.abs(change)} points perdus depuis la première`
-                  : ', stable depuis la première'
+                  ? t('training.progress.lost', { value: Math.abs(change) })
+                  : t('training.progress.stable')
               : ''}
             .
           </p>
           {points.length > 1 ? (
             <RateChart points={points} />
           ) : (
-            <p className="muted small-text">
-              Une seule séance chiffrée. La courbe apparaît à partir de deux.
-            </p>
+            <p className="muted small-text">{t('training.progress.singleSession')}</p>
           )}
         </>
       ) : (
         <p className="muted">
-          {sessions} séance{sessions > 1 ? 's' : ''} sans taux de réussite. Renseigne-le pour suivre
-          la progression.
+          {t('training.progress.sessions', { count: sessions })}
+          {t('training.progress.noRateSuffix')}
         </p>
       )}
     </section>

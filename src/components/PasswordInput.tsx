@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export function PasswordInput({
   id,
@@ -13,6 +14,7 @@ export function PasswordInput({
   autoComplete: 'current-password' | 'new-password';
   minLength?: number;
 }) {
+  const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
 
   return (
@@ -29,7 +31,7 @@ export function PasswordInput({
       <button
         type="button"
         className="field-toggle"
-        aria-label={visible ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+        aria-label={visible ? t('auth.passwordToggle.hide') : t('auth.passwordToggle.show')}
         aria-pressed={visible}
         onClick={() => setVisible((previous) => !previous)}
       >

@@ -1,0 +1,356 @@
+{
+  "common": {
+    "loading": "Chargement…",
+    "back": "← Retour",
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "empty": "—",
+    "error": "Une erreur est survenue"
+  },
+  "nav": {
+    "home": "Accueil",
+    "health": "Santé",
+    "training": "Éducation",
+    "map": "Carte",
+    "coach": "IA Chat",
+    "soon": "bientôt"
+  },
+  "dog": {
+    "age": {
+      "weeks_one": "{{count}} semaine",
+      "weeks_other": "{{count}} semaines",
+      "withMonths": "{{weeks}} · {{months}} mois"
+    },
+    "breed": "Race",
+    "sex": "Sexe"
+  },
+  "placeholder": {
+    "body": "Cette partie arrive bientôt. Elle est déjà prévue dans la feuille de route."
+  },
+  "growth": {
+    "title": "Croissance",
+    "toggle": { "weight": "Poids", "height": "Taille" },
+    "weight": {
+      "title": "Poids",
+      "unit": "kg",
+      "change": "{{value}} kg depuis la pesée précédente",
+      "first": "Première pesée enregistrée.",
+      "empty": "Aucune pesée pour l'instant. Ajoute la première ci-dessous.",
+      "addTitle": "Ajouter une pesée",
+      "dateLabel": "Date",
+      "valueLabel": "Poids en kilos",
+      "valuePlaceholder": "5,4",
+      "noteLabel": "Note",
+      "notePlaceholder": "Après la visite chez le véto",
+      "invalid": "Entre un poids en kilos, par exemple 5,4",
+      "range": "À {{weeks}} semaines, 82 % des chiens de ce gabarit pèsent entre <1>{{low}} et {{high}} kg</1>",
+      "position": {
+        "below": "sous la fourchette",
+        "inside": "dans la fourchette",
+        "above": "au-dessus de la fourchette"
+      },
+      "centile": ", autour du {{centile}}",
+      "source": "Courbes WALTHAM Petcare Science Institute, catégorie {{min}}–{{max}} kg de poids adulte, {{sex}}. Un repère, pas un diagnostic : c'est la régularité de la courbe qui compte, et le vétérinaire qui tranche.",
+      "missing": "Renseigne {{fields}} dans la fiche pour comparer aux courbes de croissance.",
+      "missingLink": "Compléter",
+      "missingBreed": "la race",
+      "missingSex": "le sexe",
+      "missingBirthDate": "la date de naissance",
+      "tooYoung_one": "Les courbes de référence démarrent à 12 semaines. Encore {{count}} semaine avant de pouvoir situer la croissance.",
+      "tooYoung_other": "Les courbes de référence démarrent à 12 semaines. Encore {{count}} semaines avant de pouvoir situer la croissance.",
+      "historyTitle": "Historique",
+      "historyDate": "Date",
+      "historyValue": "Poids"
+    },
+    "height": {
+      "title": "Taille au garrot",
+      "unit": "cm au garrot",
+      "change": "{{value}} cm depuis la mesure précédente",
+      "first": "Première mesure enregistrée.",
+      "empty": "Aucune mesure pour l'instant. La taille au garrot se prend du sol au sommet des omoplates, chien debout sur un sol plat.",
+      "addTitle": "Ajouter une mesure",
+      "dateLabel": "Date",
+      "valueLabel": "Taille au garrot en centimètres",
+      "valuePlaceholder": "26,5",
+      "noteLabel": "Note",
+      "notePlaceholder": "Mesuré contre le mur",
+      "invalid": "Entre une taille en centimètres, par exemple 26,5",
+      "measuredAt": "Mesuré à {{weeks}} semaines. ",
+      "method": "La taille au garrot se prend du sol au sommet des omoplates, chien debout sur un sol plat. Aucun barème publié n'existe par race et par âge : la courbe montre sa progression à lui, sans comparaison.",
+      "standard": "{{breed}} : le standard de race donne une taille adulte, pas une courbe de croissance. À confirmer auprès du club de race ou du vétérinaire.",
+      "cmUnit": "cm",
+      "historyTitle": "Historique",
+      "historyDate": "Date",
+      "historyValue": "Taille"
+    }
+  },
+  "dogSex": { "female": "femelle", "male": "mâle" },
+  "health": {
+    "title": "Santé & Suivi",
+    "cards": {
+      "growth": "Croissance",
+      "record": "Carnet de santé",
+      "feeding": "Alimentation",
+      "hygiene": "Hygiène",
+      "vet": "Vétérinaire & urgence",
+      "teething": "Mue dentaire"
+    }
+  },
+  "home": {
+    "tiles": { "weight": "Poids", "height": "Taille au garrot", "age": "Âge" },
+    "socialization": "Période critique de socialisation : chaque nouvelle expérience compte jusqu'à 16 semaines.",
+    "quickJournal": {
+      "title": "Journal express",
+      "body": "Repas, sortie, pipi, caca en un tap. Bientôt disponible."
+    },
+    "dailyJournal": {
+      "title": "Journal quotidien",
+      "body": "Le résumé de la journée arrive bientôt."
+    },
+    "reminders": {
+      "title": "Rappels de santé",
+      "body": "Vaccins et antiparasitaires arriveront avec le carnet de santé."
+    }
+  },
+  "training": {
+    "views": {
+      "age": "Pour son âge",
+      "favourites": "Favoris",
+      "progress": "Progression",
+      "lists": "Mes listes",
+      "collections": "Listes toutes faites",
+      "all": "Tout le catalogue",
+      "groupLabel": "Affichage"
+    },
+    "summary": {
+      "title": "Éducation de {{name}}",
+      "dogFallback": "ton chien",
+      "started": "{{count}} en cours",
+      "reliable_one": "{{count}} fiable dehors",
+      "reliable_other": "{{count}} fiables dehors",
+      "favourites_one": "{{count}} favori",
+      "favourites_other": "{{count}} favoris",
+      "sessions_one": "{{count}} séance",
+      "sessions_other": "{{count}} séances"
+    },
+    "catalog": {
+      "titleDefault": "Tours",
+      "titleForAge": "Pour ses {{weeks}} semaines",
+      "emptyFavourites": "Aucun favori. Touche l’étoile sur un tour pour le retrouver ici.",
+      "emptyGeneric": "Rien à afficher."
+    },
+    "progress": {
+      "empty": "Aucune séance rattachée à un tour pour l'instant. Choisis un tour au moment d'enregistrer une séance, et note le taux de réussite.",
+      "sessions_one": "{{count}} séance",
+      "sessions_other": "{{count}} séances",
+      "average": ", {{value}} % en moyenne",
+      "gained": ", {{value}} points gagnés depuis la première",
+      "lost": ", {{value}} points perdus depuis la première",
+      "stable": ", stable depuis la première",
+      "noRateSuffix": " sans taux de réussite. Renseigne-le pour suivre la progression.",
+      "singleSession": "Une seule séance chiffrée. La courbe apparaît à partir de deux."
+    },
+    "sessions": {
+      "formTitle": "Enregistrer une séance",
+      "skillLabel": "Tour travaillé",
+      "freeSession": "Séance libre",
+      "dateLabel": "Date",
+      "durationLabel": "Durée en minutes",
+      "rateLabel": "Taux de réussite en pourcentage",
+      "ratePlaceholder": "8 réussites sur 10 → 80",
+      "environmentLabel": "Environnement",
+      "notesLabel": "Note",
+      "notesPlaceholder": "Fatiguée après 3 minutes",
+      "submit": "Enregistrer la séance",
+      "listTitle": "Séances",
+      "skillColumn": "Tour",
+      "rateColumn": "Réussite",
+      "durationValue": "{{value}} min",
+      "rateValue": "{{value}} %"
+    },
+    "lists": {
+      "newTitle": "Nouvelle liste",
+      "nameLabel": "Nom",
+      "namePlaceholder": "Tours du week-end",
+      "creating": "Création…",
+      "create": "Créer la liste",
+      "rename": "Renommer",
+      "add": "Ajouter",
+      "moveUp": "Monter",
+      "moveDown": "Descendre",
+      "remove": "Retirer",
+      "emptyList": "Liste vide. Ajoute des tours avec le bouton « {{add}} ».",
+      "emptyAll": "Aucune liste pour l'instant. Crée la tienne, ou pars d'une liste toute faite depuis l'onglet Collections."
+    },
+    "collections": {
+      "empty": "Aucune liste toute faite pour l'instant.",
+      "copied": "Copiée",
+      "copyAction": "Copier dans mes listes",
+      "startsAt": "dès {{weeks}} sem.",
+      "source": "Sélection {{source}}."
+    },
+    "picker": {
+      "addTitle": "Ajouter un tour",
+      "addToListTitle": "Ajouter à « {{name}} »",
+      "close": "Fermer",
+      "categoryFilterLabel": "Filtrer par catégorie",
+      "allCategories": "Toutes",
+      "searchLabel": "Rechercher",
+      "searchPlaceholder": "rappel, panier, laisse…",
+      "results_one": "{{count}} tour",
+      "results_other": "{{count}} tours",
+      "alreadyInList": "déjà dans la liste",
+      "noResults": "Aucun tour ne correspond."
+    },
+    "skills": {
+      "addFavourite": "Mettre {{name}} en favori",
+      "removeFavourite": "Retirer {{name}} des favoris",
+      "addToList": "Ajouter {{name}} à une liste",
+      "startsAt": "dès {{weeks}} semaines",
+      "levelGroupLabel": "Palier pour {{name}}"
+    },
+    "levels": {
+      "notStarted": { "label": "Pas commencé", "hint": "Le travail n'a pas encore démarré." },
+      "discovery": { "label": "Découverte", "hint": "Le geste apparaît, guidé et récompensé." },
+      "calm": { "label": "Compris au calme", "hint": "Répond à la maison, sans distraction." },
+      "distractions": { "label": "Avec distractions", "hint": "Tient malgré le bruit, les gens, les odeurs." },
+      "reliable": { "label": "Fiable dehors", "hint": "Répond en extérieur, même en situation nouvelle." }
+    },
+    "categories": {
+      "base": "Fondations",
+      "quotidien": "Quotidien",
+      "obeissance": "Obéissance",
+      "exterieur": "Extérieur",
+      "securite": "Sécurité",
+      "novice": "Débutant",
+      "intermediate": "Intermédiaire",
+      "advanced": "Avancé",
+      "performer": "Expert"
+    },
+    "environments": {
+      "home": "Maison",
+      "garden": "Jardin",
+      "quietStreet": "Rue calme",
+      "busyStreet": "Rue passante",
+      "park": "Parc",
+      "other": "Autre"
+    }
+  },
+  "profile": {
+    "otherDogs": "Les autres chiens",
+    "you": "Toi",
+    "memberFallback": "Membre",
+    "member": "membre",
+    "owner": "propriétaire",
+    "codeHint": "Valable 7 jours, utilisable une fois.",
+    "copy": "Copier le code",
+    "copied": "Copié",
+    "invite": "Inviter l'autre maître",
+    "generating": "Génération…",
+    "signOut": "Se déconnecter"
+  },
+  "auth": {
+    "tabs": { "signIn": "Se connecter", "signUp": "Créer un compte" },
+    "forgotIntro": "On t'envoie un lien pour choisir un nouveau mot de passe.",
+    "sent": "Si un compte existe pour <1>{{email}}</1>, le lien vient de partir. Ouvre-le depuis ce navigateur.",
+    "emailLabel": "Adresse e-mail",
+    "emailPlaceholder": "ton@email.fr",
+    "passwordLabel": "Mot de passe",
+    "passwordHint": "Au moins {{count}} caractères, avec des lettres et des chiffres.",
+    "confirmLabel": "Confirmation",
+    "mismatch": "Les deux mots de passe diffèrent.",
+    "submit": {
+      "busy": "Un instant…",
+      "forgot": "Envoyer le lien",
+      "create": "Créer mon compte",
+      "signIn": "Se connecter"
+    },
+    "forgotLink": "Mot de passe oublié ?",
+    "backToSignIn": "Revenir à la connexion",
+    "expiredTitle": "Lien expiré",
+    "expiredBody": "Ce lien de récupération n'est plus valable. Demande-en un nouveau depuis l'écran de connexion.",
+    "returnToLogin": "Retour à la connexion",
+    "resetTitle": "Nouveau mot de passe",
+    "resetSubmit": "Changer mon mot de passe",
+    "passwordToggle": { "show": "Afficher le mot de passe", "hide": "Masquer le mot de passe" },
+    "onboarding": {
+      "title": "Un foyer pour deux",
+      "intro": "Les données du chien appartiennent au foyer. Tout ce que l'un enregistre, l'autre le voit.",
+      "nameTitle": "Ton prénom",
+      "nameHint": "Pour que l'autre maître sache qui a enregistré quoi.",
+      "namePlaceholder": "Ileana",
+      "createTitle": "Créer un foyer",
+      "householdNameLabel": "Nom du foyer",
+      "householdNameDefault": "Ma maison",
+      "createButton": { "pending": "Création…", "idle": "Créer" },
+      "joinTitle": "Rejoindre un foyer",
+      "codeLabel": "Code d'invitation",
+      "codePlaceholder": "XXXXXXXX",
+      "joinButton": { "pending": "Connexion…", "idle": "Rejoindre" }
+    },
+    "errors": {
+      "invalidCredentials": "E-mail ou mot de passe incorrect.",
+      "accountExists": "Un compte existe déjà avec cet e-mail. Connecte-toi.",
+      "weakPassword": "Mot de passe trop faible : au moins 8 caractères, avec des lettres et des chiffres.",
+      "rateLimited": "Trop de tentatives. Réessaie dans quelques minutes.",
+      "emailNotConfirmed": "Confirme d'abord ton adresse e-mail.",
+      "signupDisabled": "Les inscriptions sont fermées sur ce projet.",
+      "confirmEmail": "Compte créé. Confirme ton adresse e-mail depuis le message qu'on vient de t'envoyer, puis connecte-toi."
+    }
+  },
+  "dogForm": {
+    "newTitle": "La fiche du chien",
+    "editTitle": "Modifier {{name}}",
+    "notFound": "Fiche introuvable.",
+    "nameLabel": "Nom",
+    "sex": { "unspecified": "Non renseigné", "female": "Femelle", "male": "Mâle" },
+    "birthDateLabel": "Date de naissance",
+    "adoptionDateLabel": "Date d'adoption"
+  },
+  "breedPicker": {
+    "adultRange": " · {{min}}–{{max}} kg adulte",
+    "weightRange": "{{min}}–{{max}} kg",
+    "choose": "Choisir une race",
+    "title": "Choisir la race",
+    "remove": "Retirer la race",
+    "close": "Fermer",
+    "filterLabel": "Filtrer par gabarit adulte",
+    "allSizes": "Tous les gabarits",
+    "searchLabel": "Rechercher",
+    "searchPlaceholder": "corgi, berger, retriever…",
+    "results_one": "{{count}} race",
+    "results_other": "{{count}} races",
+    "withinBand": " sur {{count}} dans ce gabarit",
+    "noResults": "Aucune race ne correspond. Essaie un autre mot ou un autre gabarit.",
+    "sizeBands": {
+      "toy": { "label": "Très petit", "range": "jusqu’à 6,5 kg" },
+      "small": { "label": "Petit", "range": "6,5 à 9 kg" },
+      "mediumsmall": { "label": "Moyen-petit", "range": "9 à 15 kg" },
+      "mediumlarge": { "label": "Moyen-grand", "range": "15 à 30 kg" },
+      "large": { "label": "Grand", "range": "30 à 40 kg" },
+      "giant": { "label": "Très grand", "range": "40 à 47,5 kg" },
+      "giantplus": { "label": "Géant", "range": "plus de 47,5 kg" }
+    }
+  },
+  "setup": {
+    "title": "Configuration requise",
+    "body": "Copie <1>.env.example</1> vers <2>.env</2>, renseigne l'URL et la clé anon de ton projet Supabase, puis relance <3>npm run dev</3>."
+  },
+  "charts": {
+    "weight": {
+      "summary": "Courbe de poids, de {{min}} à {{max}} kilos sur {{count}} pesées.",
+      "legendMeasured": "Poids mesuré",
+      "legendMedian": "Médiane",
+      "legendBand": "9ᵉ–91ᵉ centile",
+      "expectedRange": "attendu {{low}}–{{high}} kg"
+    },
+    "height": {
+      "summary": "Taille au garrot, de {{min}} à {{max}} centimètres sur {{count}} mesures."
+    },
+    "rate": {
+      "summary": "Taux de réussite sur {{count}} séances, de {{from}} à {{to}} pour cent."
+    }
+  }
+}

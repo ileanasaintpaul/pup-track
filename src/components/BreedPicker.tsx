@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useBreeds } from '../hooks/useBreeds';
-import { SIZE_BANDS, normalize } from '../lib/breeds';
+import { SIZE_BANDS, normalize, sizeBandLabelKey, sizeBandRangeKey } from '../lib/breeds';
 import type { Breed, SizeBand } from '../types/models';
 
 export function BreedPicker({
@@ -11,6 +12,7 @@ export function BreedPicker({
   selected: Breed | null;
   onSelect: (breed: Breed | null) => void;
 }) {
+  const { t } = useTranslation();
   const { data: breeds, isPending } = useBreeds();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
@@ -66,75 +68,74 @@ export function BreedPicker({
           <span className="picker-value">
             {selected.name}
             <span className="muted small-text">
-              {' '}
-              · {selected.adult_min_kg}–{selected.adult_max_kg} kg adulte
+              {t('breedPicker.adultRange', { min: selected.adult_min_kg, max: selected.adult_max_kg })}
             </span>
           </span>
         ) : (
-          <span className="muted">{isPending ? 'Chargement…' : 'Choisir une race'}</span>
+          <span className="muted">{isPending ? t('common.loading') : t('breedPicker.choose')}</span>
         )}
         <span aria-hidden="true">›</span>
       </button>
 
       {selected ? (
         <button type="button" className="linkish" onClick={() => choose(null)}>
-          Retirer la race
+          {t('breedPicker.remove')}
         </button>
       ) : null}
 
       <dialog
         ref={dialogRef}
         className="modal"
-        aria-label="Choisir la race"
+        aria-label={t('breedPicker.title')}
         onClose={() => setOpen(false)}
         onClick={(event) => {
           if (event.target === dialogRef.current) setOpen(false);
         }}
       >
         <div className="modal-head">
-          <h2>Choisir la race</h2>
+          <h2>{t('breedPicker.title')}</h2>
           <button type="button" className="linkish" onClick={() => setOpen(false)}>
-            Fermer
+            {t('breedPicker.close')}
           </button>
         </div>
 
-        <div className="chips" role="group" aria-label="Filtrer par gabarit adulte">
+        <div className="chips" role="group" aria-label={t('breedPicker.filterLabel')}>
           <button
             type="button"
             className={band === null ? 'chip chip-active' : 'chip'}
             aria-pressed={band === null}
             onClick={() => setBand(null)}
           >
-            Tous les gabarits
+            {t('breedPicker.allSizes')}
           </button>
-          {SIZE_BANDS.map((item) => (
+          {SIZE_BANDS.map((option) => (
             <button
-              key={item.band}
+              key={option}
               type="button"
-              className={band === item.band ? 'chip chip-active' : 'chip'}
-              aria-pressed={band === item.band}
-              onClick={() => setBand(band === item.band ? null : item.band)}
+              className={band === option ? 'chip chip-active' : 'chip'}
+              aria-pressed={band === option}
+              onClick={() => setBand(band === option ? null : option)}
             >
-              {item.label}
-              <span className="chip-range">{item.range}</span>
+              {t(sizeBandLabelKey(option))}
+              <span className="chip-range">{t(sizeBandRangeKey(option))}</span>
             </button>
           ))}
         </div>
 
-        <label htmlFor="breed-search">Rechercher</label>
+        <label htmlFor="breed-search">{t('breedPicker.searchLabel')}</label>
         <input
           id="breed-search"
           ref={searchRef}
           type="search"
           autoComplete="off"
-          placeholder="corgi, berger, retriever…"
+          placeholder={t('breedPicker.searchPlaceholder')}
           value={search}
           onChange={(event) => setSearch(event.target.value)}
         />
 
         <p className="muted small-text">
-          {results.length} race{results.length > 1 ? 's' : ''}
-          {band && search.trim() ? ` sur ${counts.get(band) ?? 0} dans ce gabarit` : ''}
+          {t('breedPicker.results', { count: results.length })}
+          {band && search.trim() ? t('breedPicker.withinBand', { count: counts.get(band) ?? 0 }) : ''}
         </p>
 
         <ul className="picker-list">
@@ -147,14 +148,14 @@ export function BreedPicker({
               >
                 <span>{breed.name}</span>
                 <span className="muted small-text">
-                  {breed.adult_min_kg}–{breed.adult_max_kg} kg
+                  {t('breedPicker.weightRange', { min: breed.adult_min_kg, max: breed.adult_max_kg })}
                 </span>
               </button>
             </li>
           ))}
           {results.length === 0 ? (
             <li>
-              <p className="muted">Aucune race ne correspond. Essaie un autre mot ou un autre gabarit.</p>
+              <p className="muted">{t('breedPicker.noResults')}</p>
             </li>
           ) : null}
         </ul>

@@ -1,35 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
+import { niceScale } from '../lib/chartScale';
 import { formatKg, formatShortDate } from '../lib/format';
 import type { ExpectedRange } from '../lib/growth';
 import type { WeightEntry } from '../types/models';
 
 const HEIGHT = 190;
 const PADDING = { top: 14, right: 18, bottom: 26, left: 40 };
-const MAX_TICKS = 5;
-
-function niceScale(min: number, max: number) {
-  const span = max - min || Math.max(max * 0.2, 1);
-  const paddedMin = Math.max(0, min - span * 0.15);
-  const paddedMax = max + span * 0.15;
-
-  const steps = [0.05, 0.1, 0.2, 0.25, 0.5, 1, 2, 2.5, 5, 10, 20, 25];
-
-  for (const step of steps) {
-    const low = Math.floor(paddedMin / step) * step;
-    const high = Math.ceil(paddedMax / step) * step;
-    const count = Math.round((high - low) / step) + 1;
-    if (count <= MAX_TICKS) return { low, high, ticks: buildTicks(low, step, count) };
-  }
-
-  const step = steps[steps.length - 1];
-  const low = Math.floor(paddedMin / step) * step;
-  return { low, high: low + step * 2, ticks: buildTicks(low, step, 3) };
-}
-
-function buildTicks(low: number, step: number, count: number) {
-  return Array.from({ length: count }, (_, index) => Number((low + step * index).toFixed(2)));
-}
 
 export function WeightChart({
   entries,
@@ -38,6 +16,7 @@ export function WeightChart({
   entries: WeightEntry[];
   expected?: (ExpectedRange | null)[] | null;
 }) {
+  const { t } = useTranslation();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(320);
   const [hovered, setHovered] = useState<number | null>(null);
@@ -102,7 +81,11 @@ export function WeightChart({
     setHovered(nearest);
   }
 
-  const summary = `Courbe de poids, de ${formatKg(minWeight)} à ${formatKg(maxWeight)} kilos sur ${entries.length} pesées.`;
+  const summary = t('charts.weight.summary', {
+    min: formatKg(minWeight),
+    max: formatKg(maxWeight),
+    count: entries.length,
+  });
 
   return (
     <div className="chart" ref={wrapperRef}>
@@ -152,7 +135,7 @@ export function WeightChart({
 
         {!active && entries.length > 1 ? (
           <text className="chart-value" x={last.cx} y={last.cy - 12} textAnchor="end">
-            {formatKg(last.entry.weight_kg)} kg
+            {formatKg(last.entry.weight_kg)} {t('growth.weight.unit')}
           </text>
         ) : null}
       </svg>
@@ -165,11 +148,16 @@ export function WeightChart({
             top: active.cy < 74 ? active.cy + 16 : active.cy - (active.range ? 76 : 62),
           }}
         >
-          <strong>{formatKg(active.entry.weight_kg)} kg</strong>
+          <strong>
+            {formatKg(active.entry.weight_kg)} {t('growth.weight.unit')}
+          </strong>
           <span className="muted">{formatShortDate(active.entry.measured_on)}</span>
           {active.range ? (
             <span className="muted">
-              attendu {formatKg(active.range.low)}–{formatKg(active.range.high)} kg
+              {t('charts.weight.expectedRange', {
+                low: formatKg(active.range.low),
+                high: formatKg(active.range.high),
+              })}
             </span>
           ) : null}
         </div>
@@ -179,15 +167,15 @@ export function WeightChart({
         <ul className="legend">
           <li>
             <span className="legend-line" />
-            Poids mesuré
+            {t('charts.weight.legendMeasured')}
           </li>
           <li>
             <span className="legend-median" />
-            Médiane
+            {t('charts.weight.legendMedian')}
           </li>
           <li>
             <span className="legend-band" />
-            9ᵉ–91ᵉ centile
+            {t('charts.weight.legendBand')}
           </li>
         </ul>
       ) : null}

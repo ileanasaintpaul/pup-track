@@ -1,33 +1,46 @@
+import type { ParseKeys } from 'i18next';
+
 import type { SkillLevel } from '../types/models';
 
-export const SKILL_LEVELS: { level: SkillLevel; label: string; hint: string }[] = [
-  { level: 0, label: 'Pas commencé', hint: "Le travail n'a pas encore démarré." },
-  { level: 1, label: 'Découverte', hint: 'Le geste apparaît, guidé et récompensé.' },
-  { level: 2, label: 'Compris au calme', hint: 'Répond à la maison, sans distraction.' },
-  { level: 3, label: 'Avec distractions', hint: 'Tient malgré le bruit, les gens, les odeurs.' },
-  { level: 4, label: 'Fiable dehors', hint: 'Répond en extérieur, même en situation nouvelle.' },
-];
+export type Key = ParseKeys;
+
+export const SKILL_LEVELS = [
+  { level: 0, labelKey: 'training.levels.notStarted.label', hintKey: 'training.levels.notStarted.hint' },
+  { level: 1, labelKey: 'training.levels.discovery.label', hintKey: 'training.levels.discovery.hint' },
+  { level: 2, labelKey: 'training.levels.calm.label', hintKey: 'training.levels.calm.hint' },
+  { level: 3, labelKey: 'training.levels.distractions.label', hintKey: 'training.levels.distractions.hint' },
+  { level: 4, labelKey: 'training.levels.reliable.label', hintKey: 'training.levels.reliable.hint' },
+] as const satisfies { level: SkillLevel; labelKey: string; hintKey: string }[];
 
 export const ENVIRONMENTS = ['Maison', 'Jardin', 'Rue calme', 'Rue passante', 'Parc', 'Autre'];
 
-export const SKILL_CATEGORIES: Record<string, string> = {
-  base: 'Fondations',
-  quotidien: 'Quotidien',
-  obeissance: 'Obéissance',
-  exterieur: 'Extérieur',
-  securite: 'Sécurité',
-  novice: 'Débutant',
-  intermediate: 'Intermédiaire',
-  advanced: 'Avancé',
-  performer: 'Expert',
-};
+const ENVIRONMENT_KEYS = {
+  Maison: 'training.environments.home',
+  Jardin: 'training.environments.garden',
+  'Rue calme': 'training.environments.quietStreet',
+  'Rue passante': 'training.environments.busyStreet',
+  Parc: 'training.environments.park',
+  Autre: 'training.environments.other',
+} as const satisfies Record<string, Key>;
+
+export const SKILL_CATEGORIES = {
+  base: 'training.categories.base',
+  quotidien: 'training.categories.quotidien',
+  obeissance: 'training.categories.obeissance',
+  exterieur: 'training.categories.exterieur',
+  securite: 'training.categories.securite',
+  novice: 'training.categories.novice',
+  intermediate: 'training.categories.intermediate',
+  advanced: 'training.categories.advanced',
+  performer: 'training.categories.performer',
+} as const satisfies Record<string, Key>;
 
 export const FOUNDATION_CATEGORIES = ['base', 'quotidien', 'obeissance', 'exterieur', 'securite'];
 
-export function levelLabel(level: SkillLevel): string {
-  return SKILL_LEVELS[level].label;
+export function categoryLabelKey(category: string): Key | string {
+  return (SKILL_CATEGORIES as Record<string, Key>)[category] ?? category;
 }
 
-export function categoryLabel(category: string): string {
-  return SKILL_CATEGORIES[category] ?? category;
+export function environmentLabelKey(environment: string): Key | string {
+  return (ENVIRONMENT_KEYS as Record<string, Key>)[environment] ?? environment;
 }

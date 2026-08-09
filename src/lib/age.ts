@@ -10,15 +10,12 @@ export function ageInWeeks(birthDate: string | null, now = new Date()): number |
   return weeks < 0 ? null : weeks;
 }
 
-export function formatAge(birthDate: string | null, now = new Date()): string | null {
+export type AgeParts = { weeks: number; months: number | null };
+
+export function ageParts(birthDate: string | null, now = new Date()): AgeParts | null {
   const weeks = ageInWeeks(birthDate, now);
   if (weeks === null) return null;
-
-  const label = weeks <= 1 ? `${weeks} semaine` : `${weeks} semaines`;
-  if (weeks < 9) return label;
-
-  const months = Math.floor(weeks / 4.345);
-  return `${label} · ${months} mois`;
+  return { weeks, months: weeks < 9 ? null : Math.floor(weeks / 4.345) };
 }
 
 export function isInSocializationWindow(birthDate: string | null, now = new Date()): boolean {

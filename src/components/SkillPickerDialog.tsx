@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { normalize } from '../lib/breeds';
-import { SKILL_CATEGORIES, categoryLabel } from '../lib/skills';
+import { categoryLabelKey, type Key } from '../lib/skills';
 import type { Skill } from '../types/models';
 
 export function SkillPickerDialog({
@@ -19,6 +20,7 @@ export function SkillPickerDialog({
   onPick: (skill: Skill) => void;
   onClose: () => void;
 }) {
+  const { t } = useTranslation();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const [category, setCategory] = useState<string | null>(null);
@@ -63,18 +65,18 @@ export function SkillPickerDialog({
       <div className="modal-head">
         <h2>{title}</h2>
         <button type="button" className="linkish" onClick={onClose}>
-          Fermer
+          {t('training.picker.close')}
         </button>
       </div>
 
-      <div className="chips" role="group" aria-label="Filtrer par catégorie">
+      <div className="chips" role="group" aria-label={t('training.picker.categoryFilterLabel')}>
         <button
           type="button"
           className={category === null ? 'chip chip-active' : 'chip'}
           aria-pressed={category === null}
           onClick={() => setCategory(null)}
         >
-          Toutes
+          {t('training.picker.allCategories')}
         </button>
         {categories.map((item) => (
           <button
@@ -84,25 +86,23 @@ export function SkillPickerDialog({
             aria-pressed={category === item}
             onClick={() => setCategory(category === item ? null : item)}
           >
-            {SKILL_CATEGORIES[item] ?? item}
+            {t(categoryLabelKey(item) as Key)}
           </button>
         ))}
       </div>
 
-      <label htmlFor="skill-search">Rechercher</label>
+      <label htmlFor="skill-search">{t('training.picker.searchLabel')}</label>
       <input
         id="skill-search"
         ref={searchRef}
         type="search"
         autoComplete="off"
-        placeholder="rappel, panier, laisse…"
+        placeholder={t('training.picker.searchPlaceholder')}
         value={search}
         onChange={(event) => setSearch(event.target.value)}
       />
 
-      <p className="muted small-text">
-        {results.length} tour{results.length > 1 ? 's' : ''}
-      </p>
+      <p className="muted small-text">{t('training.picker.results', { count: results.length })}</p>
 
       <ul className="picker-list">
         {results.map((skill) => {
@@ -117,7 +117,9 @@ export function SkillPickerDialog({
               >
                 <span>{skill.name}</span>
                 <span className="muted small-text">
-                  {inList ? 'déjà dans la liste' : categoryLabel(skill.category)}
+                  {inList
+                    ? t('training.picker.alreadyInList')
+                    : t(categoryLabelKey(skill.category) as Key)}
                 </span>
               </button>
             </li>
@@ -125,7 +127,7 @@ export function SkillPickerDialog({
         })}
         {results.length === 0 ? (
           <li>
-            <p className="muted">Aucun tour ne correspond.</p>
+            <p className="muted">{t('training.picker.noResults')}</p>
           </li>
         ) : null}
       </ul>
