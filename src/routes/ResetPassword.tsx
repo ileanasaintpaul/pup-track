@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { PasswordInput } from '../components/PasswordInput';
 import { useAuth } from '../hooks/useAuth';
 import { authErrorMessage } from '../lib/authErrors';
 
@@ -65,27 +66,23 @@ export function ResetPassword() {
 
         <form onSubmit={onSubmit}>
           <label htmlFor="new-password">Mot de passe</label>
-          <input
+          <PasswordInput
             id="new-password"
-            type="password"
-            required
-            minLength={MIN_PASSWORD_LENGTH}
-            autoComplete="new-password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={setPassword}
+            autoComplete="new-password"
+            minLength={MIN_PASSWORD_LENGTH}
           />
           <p className="muted small-text">
             Au moins {MIN_PASSWORD_LENGTH} caractères, avec des lettres et des chiffres.
           </p>
 
           <label htmlFor="confirm-password">Confirmation</label>
-          <input
+          <PasswordInput
             id="confirm-password"
-            type="password"
-            required
-            autoComplete="new-password"
             value={confirmation}
-            onChange={(e) => setConfirmation(e.target.value)}
+            onChange={setConfirmation}
+            autoComplete="new-password"
           />
           {mismatch ? <p className="error">Les deux mots de passe diffèrent.</p> : null}
 
