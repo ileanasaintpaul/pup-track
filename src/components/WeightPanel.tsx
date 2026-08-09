@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { WeightChart } from './WeightChart';
 import { useBreed } from '../hooks/useBreeds';
@@ -85,11 +85,15 @@ export function WeightPanel() {
             {todayRange ? (
               <>
                 <p>
-                  {t('growth.weight.range', {
-                    weeks,
-                    low: formatKg(todayRange.low),
-                    high: formatKg(todayRange.high),
-                  })}{' '}
+                  <Trans
+                    i18nKey="growth.weight.range"
+                    values={{
+                      weeks,
+                      low: formatKg(todayRange.low),
+                      high: formatKg(todayRange.high),
+                    }}
+                    components={{ 1: <strong /> }}
+                  />{' '}
                   — {position ? t(`growth.weight.position.${position}`) : null}
                   {centile !== null
                     ? t('growth.weight.centile', { centile: formatCentile(centile) })

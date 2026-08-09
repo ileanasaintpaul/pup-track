@@ -43,7 +43,7 @@
       "noteLabel": "Note",
       "notePlaceholder": "Après la visite chez le véto",
       "invalid": "Entre un poids en kilos, par exemple 5,4",
-      "range": "À {{weeks}} semaines, 82 % des chiens de ce gabarit pèsent entre {{low}} et {{high}} kg",
+      "range": "À {{weeks}} semaines, 82 % des chiens de ce gabarit pèsent entre <1>{{low}} et {{high}} kg</1>",
       "position": {
         "below": "sous la fourchette",
         "inside": "dans la fourchette",

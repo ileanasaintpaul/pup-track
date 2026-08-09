@@ -36,6 +36,7 @@ export function Growth() {
 
   return (
     <>
+      <h1>{t('growth.title')}</h1>
       <div className="chips">
         <button
           type="button"
