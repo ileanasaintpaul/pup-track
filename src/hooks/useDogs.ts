@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../lib/supabase';
 import type { Dog, DogInput } from '../types/models';
 
-const DOG_COLUMNS = 'id, household_id, name, breed, size_category, sex, birth_date, adoption_date';
+const DOG_COLUMNS = 'id, household_id, name, breed, breed_slug, sex, birth_date, adoption_date';
 
 export function useDogs(householdId: string | undefined) {
   return useQuery({

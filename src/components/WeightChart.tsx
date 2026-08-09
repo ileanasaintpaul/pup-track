@@ -34,11 +34,9 @@ function buildTicks(low: number, step: number, count: number) {
 export function WeightChart({
   entries,
   expected,
-  expectedLabel,
 }: {
   entries: WeightEntry[];
   expected?: (ExpectedRange | null)[] | null;
-  expectedLabel?: string;
 }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(320);
@@ -57,7 +55,7 @@ export function WeightChart({
 
   const times = entries.map((entry) => new Date(`${entry.measured_on}T00:00:00`).getTime());
   const weights = entries.map((entry) => entry.weight_kg);
-  const bandValues = (expected ?? []).flatMap((range) => (range ? [range.min, range.max] : []));
+  const bandValues = (expected ?? []).flatMap((range) => (range ? [range.low, range.high] : []));
 
   const minTime = Math.min(...times);
   const maxTime = Math.max(...times);
@@ -86,6 +84,7 @@ export function WeightChart({
 
   const path = points.map((point, index) => `${index === 0 ? 'M' : 'L'}${point.cx} ${point.cy}`).join(' ');
   const bandPath = buildBandPath(points, y);
+  const medianPath = buildMedianPath(points, y);
 
   const last = points[points.length - 1];
   const active = hovered === null ? null : points[hovered];
@@ -131,6 +130,7 @@ export function WeightChart({
         ))}
 
         {bandPath ? <path className="chart-band" d={bandPath} /> : null}
+        {medianPath ? <path className="chart-median" d={medianPath} /> : null}
 
         <text className="chart-tick" x={PADDING.left} y={HEIGHT - 8}>
           {formatShortDate(entries[0].measured_on)}
@@ -169,7 +169,7 @@ export function WeightChart({
           <span className="muted">{formatShortDate(active.entry.measured_on)}</span>
           {active.range ? (
             <span className="muted">
-              attendu {formatKg(active.range.min)}–{formatKg(active.range.max)} kg
+              attendu {formatKg(active.range.low)}–{formatKg(active.range.high)} kg
             </span>
           ) : null}
         </div>
@@ -182,8 +182,12 @@ export function WeightChart({
             Poids mesuré
           </li>
           <li>
+            <span className="legend-median" />
+            Médiane
+          </li>
+          <li>
             <span className="legend-band" />
-            {expectedLabel ?? 'Fourchette attendue'}
+            9ᵉ–91ᵉ centile
           </li>
         </ul>
       ) : null}
@@ -195,16 +199,27 @@ function buildBandPath(
   points: { cx: number; range: ExpectedRange | null }[],
   y: (weight: number) => number,
 ): string | null {
-  const covered = points.filter((point) => point.range) as {
-    cx: number;
-    range: ExpectedRange;
-  }[];
+  const covered = coveredPoints(points);
   if (covered.length < 2) return null;
 
-  const top = covered.map((point, index) => `${index === 0 ? 'M' : 'L'}${point.cx} ${y(point.range.max)}`);
-  const bottom = [...covered]
-    .reverse()
-    .map((point) => `L${point.cx} ${y(point.range.min)}`);
+  const top = covered.map((point, index) => `${index === 0 ? 'M' : 'L'}${point.cx} ${y(point.range.high)}`);
+  const bottom = [...covered].reverse().map((point) => `L${point.cx} ${y(point.range.low)}`);
 
   return `${top.join(' ')} ${bottom.join(' ')} Z`;
+}
+
+function buildMedianPath(
+  points: { cx: number; range: ExpectedRange | null }[],
+  y: (weight: number) => number,
+): string | null {
+  const covered = coveredPoints(points);
+  if (covered.length < 2) return null;
+
+  return covered
+    .map((point, index) => `${index === 0 ? 'M' : 'L'}${point.cx} ${y(point.range.median)}`)
+    .join(' ');
+}
+
+function coveredPoints(points: { cx: number; range: ExpectedRange | null }[]) {
+  return points.filter((point) => point.range) as { cx: number; range: ExpectedRange }[];
 }

@@ -255,6 +255,21 @@ select {
   background: var(--primary);
 }
 
+.chart-median {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 1.5;
+  stroke-dasharray: 5 4;
+  opacity: 0.55;
+}
+
+.legend-median {
+  width: 16px;
+  height: 0;
+  border-top: 2px dashed var(--primary);
+  opacity: 0.6;
+}
+
 .legend-band {
   width: 16px;
   height: 10px;
