@@ -1,5 +1,5 @@
 import { QueryClientProvider } from '@tanstack/react-query';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Outlet, Route, Routes, useParams } from 'react-router-dom';
 
 import { useHousehold } from './hooks/useHousehold';
 import { isSupabaseConfigured } from './lib/env';
@@ -7,15 +7,19 @@ import './lib/i18n';
 import { queryClient } from './lib/queryClient';
 import { useAuth } from './hooks/useAuth';
 import { AuthProvider } from './providers/AuthProvider';
+import { DogLayout } from './components/DogLayout';
 import { Login } from './routes/Login';
-import { HeightLog } from './routes/HeightLog';
+import { Growth } from './routes/Growth';
+import { Health } from './routes/Health';
 import { Home } from './routes/Home';
+import { HomeRedirect } from './routes/HomeRedirect';
 import { EditDog, NewDog } from './routes/DogForm';
 import { Onboarding } from './routes/Onboarding';
+import { Placeholder } from './routes/Placeholder';
+import { Profile } from './routes/Profile';
 import { ResetPassword } from './routes/ResetPassword';
 import { Setup } from './routes/Setup';
 import { Training } from './routes/Training';
-import { WeightLog } from './routes/WeightLog';
 
 function Loading() {
   return <p className="centered muted">Chargement…</p>;
@@ -55,6 +59,11 @@ function RedirectIfHousehold({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+function LegacyRedirect({ to }: { to: string }) {
+  const { dogId } = useParams();
+  return <Navigate to={`/dog/${dogId}/${to}`} replace />;
+}
+
 export default function App() {
   if (!isSupabaseConfigured) return <Setup />;
 
@@ -81,67 +90,36 @@ export default function App() {
                 </RequireAuth>
               }
             />
-            <Route
-              path="/"
-              element={
-                <RequireAuth>
-                  <RequireHousehold>
-                    <Home />
-                  </RequireHousehold>
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/dog/new"
-              element={
-                <RequireAuth>
-                  <RequireHousehold>
-                    <NewDog />
-                  </RequireHousehold>
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/dog/:dogId"
-              element={
-                <RequireAuth>
-                  <RequireHousehold>
-                    <EditDog />
-                  </RequireHousehold>
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/dog/:dogId/poids"
-              element={
-                <RequireAuth>
-                  <RequireHousehold>
-                    <WeightLog />
-                  </RequireHousehold>
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/dog/:dogId/taille"
-              element={
-                <RequireAuth>
-                  <RequireHousehold>
-                    <HeightLog />
-                  </RequireHousehold>
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/dog/:dogId/education"
-              element={
-                <RequireAuth>
-                  <RequireHousehold>
-                    <Training />
-                  </RequireHousehold>
-                </RequireAuth>
-              }
-            />
             <Route path="/nouveau-mot-de-passe" element={<ResetPassword />} />
+
+            <Route
+              element={
+                <RequireAuth>
+                  <RequireHousehold>
+                    <Outlet />
+                  </RequireHousehold>
+                </RequireAuth>
+              }
+            >
+              <Route path="/" element={<HomeRedirect />} />
+              <Route path="/dog/new" element={<NewDog />} />
+              <Route path="/dog/:dogId/edit" element={<EditDog />} />
+
+              <Route path="/dog/:dogId" element={<DogLayout />}>
+                <Route index element={<Home />} />
+                <Route path="health" element={<Health />} />
+                <Route path="health/growth" element={<Growth />} />
+                <Route path="training" element={<Training />} />
+                <Route path="map" element={<Placeholder titleKey="nav.map" />} />
+                <Route path="coach" element={<Placeholder titleKey="nav.coach" />} />
+                <Route path="profile" element={<Profile />} />
+              </Route>
+
+              <Route path="/dog/:dogId/poids" element={<LegacyRedirect to="health/growth" />} />
+              <Route path="/dog/:dogId/taille" element={<LegacyRedirect to="health/growth" />} />
+              <Route path="/dog/:dogId/education" element={<LegacyRedirect to="training" />} />
+            </Route>
+
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>
