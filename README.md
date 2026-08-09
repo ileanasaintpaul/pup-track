@@ -139,14 +139,20 @@ npx supabase stop         # arrête les conteneurs
 
 Les e-mails éventuels ne partent pas : ils s'ouvrent sur http://127.0.0.1:54324.
 
-### Vaccins
+### Carnet de santé
 
-Le catalogue de vaccins et leurs intervalles de rappel viennent des
+Une saisie correspond à une visite : on coche dans une modale tous les actes réalisés
+— plusieurs vaccins, un vermifuge, un antiparasitaire — et chacun devient une ligne
+avec sa propre échéance de rappel. Il n'y a pas de champ libre : le libellé et le type
+viennent du catalogue `health_products`.
+
+Les vaccins et leurs intervalles viennent des
 [recommandations de vaccination WSAVA 2024](https://wsava.org/wp-content/uploads/2024/04/WSAVA-Vaccination-guidelines-2024.pdf)
 ([Squires et al., Journal of Small Animal Practice](https://doi.org/10.1111/jsap.13718)),
-table 1 pour les chiens. Le libellé anglais d'origine est conservé dans
-`vaccines.source_name`. Sélectionner un vaccin propose une date de rappel, modifiable :
-c'est un repère, pas une prescription.
+table 1 pour les chiens. Les vermifuges et antiparasitaires externes suivent les
+recommandations [ESCCAP](https://www.esccap.org/). Le libellé anglais d'origine est
+conservé dans `health_products.source_name`. Les dates proposées sont des repères,
+pas une prescription.
 
 ### Données de croissance
 
