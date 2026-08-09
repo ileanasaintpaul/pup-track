@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { useDogs } from '../hooks/useDogs';
 import { useCreateInvite, useHousehold, useMembers } from '../hooks/useHousehold';
 import { useAuth } from '../hooks/useAuth';
 import { latestHeight, useHeights } from '../hooks/useHeights';
 import { latestWeight, useWeights, weightChange } from '../hooks/useWeights';
-import { formatAge, isInSocializationWindow } from '../lib/age';
+import { ageParts, isInSocializationWindow } from '../lib/age';
 import { formatCm, formatKg, formatSignedKg } from '../lib/format';
 import type { Dog } from '../types/models';
 
@@ -92,7 +93,13 @@ export function Home() {
 }
 
 function DogCard({ dog }: { dog: Dog }) {
-  const age = formatAge(dog.birth_date);
+  const { t } = useTranslation();
+  const parts = ageParts(dog.birth_date);
+  const weeksLabel = parts ? t('dog.age.weeks', { count: parts.weeks }) : null;
+  const age =
+    parts && parts.months !== null
+      ? t('dog.age.withMonths', { weeks: weeksLabel, months: parts.months })
+      : weeksLabel;
   const { data: weights } = useWeights(dog.id);
   const { data: heights } = useHeights(dog.id);
   const last = latestWeight(weights);

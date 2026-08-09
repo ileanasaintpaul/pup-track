@@ -16,5 +16,12 @@
     "map": "Carte",
     "coach": "IA Chat",
     "soon": "bientôt"
+  },
+  "dog": {
+    "age": {
+      "weeks_one": "{{count}} semaine",
+      "weeks_other": "{{count}} semaines",
+      "withMonths": "{{weeks}} · {{months}} mois"
+    }
   }
 }
