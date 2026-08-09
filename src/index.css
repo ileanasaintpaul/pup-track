@@ -527,3 +527,145 @@ code {
   border-color: var(--primary);
   color: var(--primary);
 }
+
+.field-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.picker-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-weight: 500;
+  padding: 10px 12px;
+}
+
+.picker-value {
+  font-weight: 600;
+}
+
+.modal {
+  width: min(560px, calc(100vw - 24px));
+  max-height: min(88dvh, 720px);
+  margin: auto;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  color: var(--text);
+  overflow: hidden;
+}
+
+.modal[open] {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal::backdrop {
+  background: rgb(0 0 0 / 0.5);
+}
+
+.modal-head {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 13px;
+  padding: 6px 10px;
+}
+
+.chip-range {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.chip-active {
+  background: var(--primary-soft);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.chip-active .chip-range {
+  color: var(--primary);
+}
+
+.picker-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  flex: 1 1 auto;
+  min-height: 30dvh;
+}
+
+@media (max-height: 620px) {
+  .chips {
+    flex: 0 0 auto;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .chip {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .chip-range {
+    display: none;
+  }
+
+  .modal label[for='breed-search'] {
+    display: none;
+  }
+}
+
+.picker-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  color: var(--text);
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 10px 8px;
+}
+
+.picker-item:hover {
+  background: var(--primary-soft);
+}
+
+.picker-chosen {
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-weight: 700;
+}
