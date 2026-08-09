@@ -53,3 +53,10 @@ export function formatShortDate(isoDate: string): string {
 export function formatLongDate(isoDate: string): string {
   return longDate().format(new Date(`${isoDate}T00:00:00`));
 }
+
+export function toISODate(date: Date = new Date()): string {
+  const year = date.getFullYear();
+  const month = `${date.getMonth() + 1}`.padStart(2, '0');
+  const day = `${date.getDate()}`.padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}

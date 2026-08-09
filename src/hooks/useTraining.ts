@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
+import { toISODate } from '../lib/format';
 import { supabase } from '../lib/supabase';
 import type { DogSkill, Skill, SkillLevel, TrainingSession, TrainingSessionInput } from '../types/models';
 
@@ -47,7 +48,7 @@ export function useSetSkillLevel(dogId: string) {
           dog_id: dogId,
           skill_slug: skillSlug,
           level,
-          started_on: level > 0 ? new Date().toISOString().slice(0, 10) : null,
+          started_on: level > 0 ? toISODate() : null,
         },
         { onConflict: 'dog_id,skill_slug' },
       );

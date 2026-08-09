@@ -8,7 +8,7 @@ import { useDog } from '../hooks/useDogs';
 import { useGrowthCurves } from '../hooks/useGrowthCurves';
 import { useDeleteWeight, useSaveWeight, useWeights, weightChange } from '../hooks/useWeights';
 import { ageInWeeks } from '../lib/age';
-import { formatKg, formatLongDate, formatSignedKg } from '../lib/format';
+import { formatKg, formatLongDate, formatSignedKg, toISODate } from '../lib/format';
 import { centileOf, expectedAt, expectedForEntries, formatCentile, rangePosition } from '../lib/growth';
 
 export function WeightPanel() {
@@ -21,7 +21,7 @@ export function WeightPanel() {
   const saveWeight = useSaveWeight(dogId!);
   const deleteWeight = useDeleteWeight(dogId!);
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = toISODate();
   const [measuredOn, setMeasuredOn] = useState(today);
   const [weight, setWeight] = useState('');
   const [note, setNote] = useState('');
