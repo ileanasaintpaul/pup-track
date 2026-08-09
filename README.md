@@ -1,39 +1,66 @@
 # 🐾 PupTrack
 
-**Une app mobile pour suivre l'éducation, la croissance et le bien-être de votre chiot.**
+**Une app mobile pour suivre l'éducation, la santé, la croissance et le quotidien de votre chiot.**
 
 ## 📖 À propos
 
-PupTrack accompagne les nouveaux propriétaires de chiot dans les mois cruciaux qui suivent l'adoption. L'app centralise le suivi de l'éducation, de la santé et de la croissance de l'animal, avec des repères adaptés à son âge et à sa race.
+PupTrack accompagne les nouveaux propriétaires de chiot dans les mois cruciaux qui suivent l'adoption. L'app centralise le suivi de l'éducation, de la santé, de la croissance et du quotidien de l'animal, avec des repères adaptés à son âge et à sa race — et un coach IA pour ne jamais rester bloqué.
 
 ## ✨ Fonctionnalités principales
 
 ### 🎓 Éducation & dressage
-- **Suivi par niveaux de compétence** : chaque ordre (assis, rappel, propreté...) progresse à travers des paliers — découverte, compréhension en contexte calme, généralisation avec distractions, fiabilité en extérieur
+- **Arbre de progression des tours** : découpage par niveaux — Débutant (assis, couché), Intermédiaire (donne la patte, reste), Avancé (fais le mort, range ses jouets)
+- **Suivi par niveaux de compétence** : chaque ordre progresse à travers des paliers — découverte, compréhension en contexte calme, généralisation avec distractions, fiabilité en extérieur
 - **Journal de séances** : durée, méthode, taux de réussite, avec visualisation de la progression dans le temps
+- **Analyse de récurrence** : graphique du taux de réussite d'un ordre selon le lieu (ex. 90 % à la maison, 30 % au parc) pour repérer où retravailler
 - **Suggestions de commandes selon l'âge** : recommandations basées sur les étapes de développement du chiot
 - **Tracker de socialisation** : checklist des stimuli à exposer pendant la période critique (3–16 semaines) — autres chiens, enfants, bruits, surfaces, véhicules...
 
 ### 🩺 Santé & croissance
+- **Carnet de santé digital** : dates de vaccins et traitements antiparasitaires (puces/tiques/vers) avec notifications de rappel
+- **Historique vétérinaire** : fiche d'urgence (numéro de puce, groupe sanguin, contacts véto/urgences 24/7) et stockage des ordonnances
 - Courbe de poids avec fourchette attendue selon la race
-- Carnet de vaccination et de vermifuge avec rappels
 - Suivi de la mue dentaire (dents de lait → dents adultes)
 - Suivi de la taille au garrot, croisé avec les standards de race
 
+### 🍽️ Alimentation
+- **Calculateur de rations quotidiennes** (croquettes/BARF) selon le chien
+- Historique des marques essayées et suivi des allergies ou intolérances
+
 ### 🏡 Quotidien & bien-être
+- **Journal des promenades** : durée, distance et lieux fréquentés, avec tags (parc, forêt, ville)
+- **Besoins & hygiène** : rappels pour le brossage, la coupe des griffes, le nettoyage des oreilles et le lavage des dents
+- **Calculateur de dépense énergétique** : estimation des besoins d'exercice quotidiens selon l'âge, la race et le poids
 - Journal alimentaire (quantité, type, transitions, réactions)
 - Tracker de sommeil et d'énergie
-- Suivi des sorties et de l'exercice, avec recommandations selon l'âge
 - Suivi des accidents de propreté pour repérer des patterns
 
+### 🌍 Communauté & sorties
+- **Carte interactive intercommunautaire** :
+    - Signalement de dangers en temps réel (chenilles processionnaires, puces/tiques signalées dans la zone, cyanobactéries, appâts empoisonnés)
+    - Repérage des points d'eau, parcs canins fermés et poubelles à sacs à crottes
+- **Mode "Rencontre" / Playdates** : indiquer si son chien est sociable et trouver des copains de balade à proximité
+
 ### 🎉 Fun & motivation
+- **Système de badges & victoires** : succès débloqués ("10 km parcourus", "5 tours maîtrisés", "100 % à jour dans les vaccins"...)
+- **Séries d'entraînement (streaks)** : compteur de jours d'entraînement consécutifs pour motiver les petites sessions quotidiennes
+- **Défis mensuels** : défis thématiques proposés par l'app ("Mois du rappel", "Apprendre un tour complexe en 14 jours")
 - Timeline photo automatique (une photo/semaine → time-lapse de croissance)
-- Badges et succès débloqués ("premier assis", "premier rappel en extérieur"...)
-- Export/partage des progrès (PDF ou lien) pour la famille ou le vétérinaire
+
+### 🤖 Coach IA
+- **Assistant / coach canin IA (LLM)** : chat interactif entraîné sur l'éducation positive, pour répondre aux questions, proposer des méthodes alternatives quand le chien bloque sur un tour, ou donner des conseils personnalisés
+- **Programme d'entraînement adaptatif** : l'IA génère un programme sur mesure qui s'ajuste automatiquement selon le rythme, l'âge, la race et le taux de réussite du chien
+- **Ajustement automatique des rations** : l'IA recalcule la quantité de nourriture selon l'activité mesurée (balades), l'évolution de la courbe de poids et la météo
+
+### 📄 Documents & partage
+- **Export PDF "Fiche garde"** : document récapitulatif généré automatiquement à envoyer au dog-sitter avant un départ (habitudes, doses de nourriture, consignes, contacts d'urgence)
+- Export/partage des progrès pour la famille ou le vétérinaire
 
 ## 🐕 Fiche profil du chien
 
 Chaque chien dispose d'une fiche complète : nom, race, date de naissance, poids et taille actuels, avec comparaison automatique aux standards de croissance de sa race (par gabarit ou base de données par race).
+
+**Profil détaillé** : numéro d'identification I-CAD, fiche de caractère, contacts utiles et documents (assurance, ordonnances...).
 
 ## 👫 Suivi à deux
 
@@ -49,6 +76,8 @@ Application **web**, utilisable depuis le navigateur du téléphone comme de l'o
 - **Backend** : [Supabase](https://supabase.com/) — Postgres, Auth (e-mail + mot de passe), Realtime, Storage
 - **Isolation des données** : Row Level Security par foyer (`household`) — personne d'autre ne voit le chien
 - **Données serveur** : TanStack Query
+- **Coach IA** : appel à un LLM (API Claude/OpenAI) pour le chat conseil et la génération de programmes adaptatifs
+- **Cartographie communautaire** : couche carte (type Leaflet/Mapbox) + stockage des signalements géolocalisés côté Supabase
 - **Déploiement** : build statique (`npm run build` → `dist/`), déployable sur Vercel, Netlify ou Cloudflare Pages
 
 Le README initial proposait du SQLite offline-first. Le suivi à deux impose une
@@ -109,6 +138,16 @@ SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... \
   node scripts/import-growth-data.mjs breeds.json waltham_curves.json
 ```
 
+### Catalogue de tours
+
+Les 121 tours du catalogue viennent des checklists officielles du programme
+[AKC Trick Dog](https://www.akc.org/sports/trick-dog/), réparties en quatre niveaux
+(Débutant, Intermédiaire, Avancé, Expert). Le nom anglais d'origine est conservé dans
+`skills.source_name`. Les traductions françaises et les descriptions sont de PupTrack.
+
+L'AKC ne publie pas d'âge minimum par tour : seules les 14 compétences de fondation,
+rédigées par PupTrack, portent un repère d'âge.
+
 Scripts : `dev`, `build`, `preview`, `lint`, `typecheck`, `db:push`, `db:types`.
 
 ## 🗺️ Roadmap
@@ -122,11 +161,24 @@ Les features arrivent une par une, chacune avec sa migration SQL.
 - [x] Courbes de référence WALTHAM par catégorie de poids adulte et sexe
 - [ ] Taille au garrot
 - [x] Module éducation : paliers, journal de séances, favoris, listes ordonnées et listes toutes faites
+- [ ] Arbre de progression des tours par niveaux (débutant/intermédiaire/avancé)
+- [ ] Analyse de récurrence (taux de réussite par lieu)
 - [ ] Tracker de socialisation
+- [ ] Carnet de santé digital (vaccins, antiparasitaires, rappels)
+- [ ] Historique vétérinaire & fiche d'urgence
+- [ ] Calculateur de rations & suivi des allergies
+- [ ] Journal des promenades (durée, distance, tags de lieu)
+- [ ] Rappels d'hygiène (brossage, griffes, oreilles, dents)
+- [ ] Carte communautaire (dangers, points d'eau, parcs)
+- [ ] Mode Rencontre / Playdates
+- [ ] Calculateur de dépense énergétique
+- [ ] Export PDF "fiche garde"
+- [ ] Badges, streaks et défis mensuels
+- [ ] Assistant/coach canin IA (chat)
+- [ ] Programme d'entraînement adaptatif (IA)
+- [ ] Ajustement automatique des rations (IA)
 - [ ] Journal quotidien (repas, sorties, sommeil)
-- [ ] Badges et gamification
-- [ ] Export/partage
 
 ---
 
-*Projet personnel développé à l'occasion de l'adoption d'un corgi 🐶*
+*Projet personnel développé à l'occasion de l'adoption d'un chiot 🐶*
