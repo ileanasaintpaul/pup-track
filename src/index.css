@@ -736,7 +736,7 @@ code {
 }
 
 .shell-tabs {
-  padding-bottom: 84px;
+  padding-bottom: calc(84px + env(safe-area-inset-bottom));
 }
 
 .shell-body {
@@ -779,6 +779,8 @@ code {
   right: 0;
   bottom: 0;
   z-index: 10;
+  max-width: 720px;
+  margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   background: var(--card);
