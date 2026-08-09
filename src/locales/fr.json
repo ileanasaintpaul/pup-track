@@ -128,27 +128,30 @@
       },
       "form": {
         "title": "Ajouter au carnet",
-        "type": "Type",
-        "label": "Intitulé",
-        "labelPlaceholder": "Primo-vaccination CHPPiL",
-        "labelRequired": "Donne un intitulé, par exemple « Rappel CHPPiL ».",
         "doneOn": "Fait le",
-        "nextDue": "Prochain rappel",
-        "nextDueHint": "Laisse vide si aucun rappel n’est prévu.",
-        "dueBeforeDone": "Le rappel ne peut pas précéder la date de l’acte.",
         "notes": "Note",
         "notesPlaceholder": "Lot, vétérinaire, réaction observée",
-        "vaccine": "Vaccin",
-        "vaccineFree": "Saisie libre",
-        "vaccineCore": "Vaccins essentiels",
-        "vaccineNonCore": "Vaccins optionnels",
-        "vaccineInterval_one": "Rappel proposé dans 1 mois.",
-        "vaccineInterval_other": "Rappel proposé dans {{count}} mois.",
-        "vaccineNoInterval": "Pas d'intervalle standard : à fixer avec le vétérinaire.",
-        "vaccineSource": "Repère {{source}}, à confirmer avec le vétérinaire."
+        "products": "Actes de la visite",
+        "productsEmpty": "Choisir un ou plusieurs actes",
+        "pickRequired": "Sélectionne au moins un acte.",
+        "dueOn": "rappel le {{date}}",
+        "noDue": "pas de rappel",
+        "submit_one": "Enregistrer l'acte",
+        "submit_other": "Enregistrer les {{count}} actes",
+        "sourceHint": "Vaccins d'après les recommandations WSAVA 2024, vermifuges et antiparasitaires d'après ESCCAP. Des repères, à confirmer avec le vétérinaire."
       },
       "history": {
         "title": "Historique"
+      },
+      "picker": {
+        "title": "Actes de la visite",
+        "search": "Rechercher",
+        "searchPlaceholder": "rage, vermifuge, tiques…",
+        "core": "essentiel",
+        "empty": "Aucun acte ne correspond.",
+        "done_zero": "Fermer",
+        "done_one": "Fermer · 1 sélectionné",
+        "done_other": "Fermer · {{count}} sélectionnés"
       }
     }
   },

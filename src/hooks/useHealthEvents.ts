@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../lib/supabase';
 import type { HealthEvent, HealthEventInput } from '../types/models';
 
-const EVENT_COLUMNS = 'id, dog_id, type, label, vaccine_slug, occurred_on, next_due_on, notes';
+const EVENT_COLUMNS = 'id, dog_id, type, label, product_slug, occurred_on, next_due_on, notes';
 
 export function useHealthEvents(dogId: string | undefined) {
   return useQuery({
@@ -23,17 +23,19 @@ export function useHealthEvents(dogId: string | undefined) {
   });
 }
 
-export function useSaveHealthEvent(dogId: string) {
+export function useSaveHealthEvents(dogId: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, ...event }: HealthEventInput & { id?: string }) => {
+    mutationFn: async (events: HealthEventInput[]) => {
+      if (!events.length) return;
       const { data: user } = await supabase.auth.getUser();
-      const payload = { ...event, dog_id: dogId, recorded_by: user.user?.id ?? null };
+      const rows = events.map((event) => ({
+        ...event,
+        dog_id: dogId,
+        recorded_by: user.user?.id ?? null,
+      }));
 
-      const { error } = id
-        ? await supabase.from('health_events').update(payload).eq('id', id)
-        : await supabase.from('health_events').insert(payload);
-
+      const { error } = await supabase.from('health_events').insert(rows);
       if (error) throw error;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['health-events', dogId] }),

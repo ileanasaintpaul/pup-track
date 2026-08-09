@@ -72,13 +72,13 @@ export type HeightEntry = {
 
 export type HealthEventType = 'vaccine' | 'deworming' | 'flea_tick' | 'vet_visit' | 'other';
 
-export type Vaccine = {
+export type HealthProduct = {
   slug: string;
+  type: HealthEventType;
   name: string;
   diseases: string | null;
   core: boolean;
   booster_interval_months: number | null;
-  first_dose_min_weeks: number | null;
   availability: string | null;
   source: string;
 };
@@ -88,7 +88,7 @@ export type HealthEvent = {
   dog_id: string;
   type: HealthEventType;
   label: string;
-  vaccine_slug: string | null;
+  product_slug: string | null;
   occurred_on: string;
   next_due_on: string | null;
   notes: string | null;
@@ -97,7 +97,7 @@ export type HealthEvent = {
 export type HealthEventInput = {
   type: HealthEventType;
   label: string;
-  vaccine_slug: string | null;
+  product_slug: string | null;
   occurred_on: string;
   next_due_on: string | null;
   notes: string | null;

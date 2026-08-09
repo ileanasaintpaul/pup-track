@@ -3,15 +3,15 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { BackLink } from '../components/BackLink';
-import { useVaccines } from '../hooks/useVaccines';
+import { ProductPickerDialog } from '../components/ProductPickerDialog';
 import {
   useDeleteHealthEvent,
   useHealthEvents,
-  useSaveHealthEvent,
+  useSaveHealthEvents,
 } from '../hooks/useHealthEvents';
+import { useHealthProducts } from '../hooks/useHealthProducts';
 import { formatLongDate, toISODate } from '../lib/format';
 import {
-  HEALTH_EVENT_TYPES,
   HEALTH_TYPE_ICONS,
   HEALTH_TYPE_KEYS,
   addMonths,
@@ -19,72 +19,58 @@ import {
   dueStatus,
   pendingReminders,
 } from '../lib/health';
-import type { HealthEvent, HealthEventType, Vaccine } from '../types/models';
+import type { HealthEvent, HealthProduct } from '../types/models';
 
 export function HealthRecord() {
   const { t } = useTranslation();
   const { dogId } = useParams();
   const { data: events, isPending } = useHealthEvents(dogId);
-  const { data: vaccines } = useVaccines();
-  const saveEvent = useSaveHealthEvent(dogId!);
+  const { data: products } = useHealthProducts();
+  const saveEvents = useSaveHealthEvents(dogId!);
   const deleteEvent = useDeleteHealthEvent(dogId!);
 
   const today = toISODate();
-  const [type, setType] = useState<HealthEventType>('vaccine');
-  const [label, setLabel] = useState('');
   const [occurredOn, setOccurredOn] = useState(today);
-  const [nextDueOn, setNextDueOn] = useState('');
   const [notes, setNotes] = useState('');
-  const [vaccineSlug, setVaccineSlug] = useState('');
+  const [picked, setPicked] = useState<HealthProduct[]>([]);
+  const [pickerOpen, setPickerOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const reminders = pendingReminders(events);
-  const vaccine = vaccines?.find((item) => item.slug === vaccineSlug) ?? null;
-  const isVaccine = type === 'vaccine';
+  const selectedSlugs = new Set(picked.map((product) => product.slug));
 
-  function pickVaccine(slug: string) {
-    setVaccineSlug(slug);
-    const picked = vaccines?.find((item) => item.slug === slug);
-    if (!picked) return;
-    setLabel(picked.name);
-    setNextDueOn(
-      picked.booster_interval_months ? addMonths(occurredOn, picked.booster_interval_months) : '',
+  function toggle(product: HealthProduct) {
+    setPicked((current) =>
+      current.some((item) => item.slug === product.slug)
+        ? current.filter((item) => item.slug !== product.slug)
+        : [...current, product],
     );
-  }
-
-  function pickDate(next: string) {
-    setOccurredOn(next);
-    if (vaccine?.booster_interval_months) {
-      setNextDueOn(addMonths(next, vaccine.booster_interval_months));
-    }
   }
 
   async function submit(event: FormEvent) {
     event.preventDefault();
     setError(null);
 
-    if (!label.trim()) {
-      setError(t('health.record.form.labelRequired'));
-      return;
-    }
-    if (nextDueOn && nextDueOn < occurredOn) {
-      setError(t('health.record.form.dueBeforeDone'));
+    if (!picked.length) {
+      setError(t('health.record.form.pickRequired'));
       return;
     }
 
     try {
-      await saveEvent.mutateAsync({
-        type,
-        label: label.trim(),
-        vaccine_slug: isVaccine ? vaccineSlug || null : null,
-        occurred_on: occurredOn,
-        next_due_on: nextDueOn || null,
-        notes: notes.trim() || null,
-      });
-      setLabel('');
-      setNextDueOn('');
+      await saveEvents.mutateAsync(
+        picked.map((product) => ({
+          type: product.type,
+          label: product.name,
+          product_slug: product.slug,
+          occurred_on: occurredOn,
+          next_due_on: product.booster_interval_months
+            ? addMonths(occurredOn, product.booster_interval_months)
+            : null,
+          notes: notes.trim() || null,
+        })),
+      );
+      setPicked([]);
       setNotes('');
-      setVaccineSlug('');
     } catch (e) {
       setError(e instanceof Error ? e.message : t('common.error'));
     }
@@ -116,64 +102,6 @@ export function HealthRecord() {
       <section className="card">
         <h2>{t('health.record.form.title')}</h2>
         <form onSubmit={submit}>
-          <label htmlFor="event-type">{t('health.record.form.type')}</label>
-          <select
-            id="event-type"
-            value={type}
-            onChange={(e) => {
-              setType(e.target.value as HealthEventType);
-              setVaccineSlug('');
-            }}
-          >
-            {HEALTH_EVENT_TYPES.map((item) => (
-              <option key={item} value={item}>
-                {t(HEALTH_TYPE_KEYS[item])}
-              </option>
-            ))}
-          </select>
-
-          {isVaccine ? (
-            <>
-              <label htmlFor="event-vaccine">{t('health.record.form.vaccine')}</label>
-              <select
-                id="event-vaccine"
-                value={vaccineSlug}
-                onChange={(e) => pickVaccine(e.target.value)}
-              >
-                <option value="">{t('health.record.form.vaccineFree')}</option>
-                <optgroup label={t('health.record.form.vaccineCore')}>
-                  {vaccines
-                    ?.filter((item) => item.core)
-                    .map((item) => (
-                      <option key={item.slug} value={item.slug}>
-                        {item.name}
-                      </option>
-                    ))}
-                </optgroup>
-                <optgroup label={t('health.record.form.vaccineNonCore')}>
-                  {vaccines
-                    ?.filter((item) => !item.core)
-                    .map((item) => (
-                      <option key={item.slug} value={item.slug}>
-                        {item.name}
-                      </option>
-                    ))}
-                </optgroup>
-              </select>
-              {vaccine ? <VaccineHint vaccine={vaccine} /> : null}
-            </>
-          ) : null}
-
-          <label htmlFor="event-label">{t('health.record.form.label')}</label>
-          <input
-            id="event-label"
-            type="text"
-            required
-            placeholder={t('health.record.form.labelPlaceholder')}
-            value={label}
-            onChange={(e) => setLabel(e.target.value)}
-          />
-
           <label htmlFor="event-date">{t('health.record.form.doneOn')}</label>
           <input
             id="event-date"
@@ -181,18 +109,40 @@ export function HealthRecord() {
             max={today}
             required
             value={occurredOn}
-            onChange={(e) => pickDate(e.target.value)}
+            onChange={(e) => setOccurredOn(e.target.value)}
           />
 
-          <label htmlFor="event-due">{t('health.record.form.nextDue')}</label>
-          <input
-            id="event-due"
-            type="date"
-            min={occurredOn}
-            value={nextDueOn}
-            onChange={(e) => setNextDueOn(e.target.value)}
-          />
-          <p className="muted small-text">{t('health.record.form.nextDueHint')}</p>
+          <span className="field-label">{t('health.record.form.products')}</span>
+          <button type="button" className="picker-trigger" onClick={() => setPickerOpen(true)}>
+            <span className={picked.length ? 'picker-value' : 'muted'}>
+              {picked.length
+                ? picked.map((product) => product.name).join(', ')
+                : t('health.record.form.productsEmpty')}
+            </span>
+            <span aria-hidden="true">›</span>
+          </button>
+
+          {picked.length ? (
+            <ul className="list">
+              {picked.map((product) => (
+                <li key={product.slug}>
+                  <span>
+                    <span aria-hidden="true">{HEALTH_TYPE_ICONS[product.type]} </span>
+                    {product.name}
+                  </span>
+                  <span className="muted small-text">
+                    {product.booster_interval_months
+                      ? t('health.record.form.dueOn', {
+                          date: formatLongDate(
+                            addMonths(occurredOn, product.booster_interval_months),
+                          ),
+                        })
+                      : t('health.record.form.noDue')}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : null}
 
           <label htmlFor="event-notes">{t('health.record.form.notes')}</label>
           <input
@@ -203,11 +153,14 @@ export function HealthRecord() {
             onChange={(e) => setNotes(e.target.value)}
           />
 
-          <button type="submit" disabled={saveEvent.isPending}>
-            {saveEvent.isPending ? t('common.saving') : t('common.save')}
+          <button type="submit" disabled={saveEvents.isPending || !picked.length}>
+            {saveEvents.isPending
+              ? t('common.saving')
+              : t('health.record.form.submit', { count: picked.length })}
           </button>
         </form>
         {error ? <p className="error">{error}</p> : null}
+        <p className="muted small-text">{t('health.record.form.sourceHint')}</p>
       </section>
 
       {events?.length ? (
@@ -238,22 +191,15 @@ export function HealthRecord() {
           </ul>
         </section>
       ) : null}
+
+      <ProductPickerDialog
+        open={pickerOpen}
+        products={products}
+        selected={selectedSlugs}
+        onToggle={toggle}
+        onClose={() => setPickerOpen(false)}
+      />
     </>
-  );
-}
-
-function VaccineHint({ vaccine }: { vaccine: Vaccine }) {
-  const { t } = useTranslation();
-
-  return (
-    <p className="muted small-text">
-      {vaccine.diseases ? `${vaccine.diseases}. ` : ''}
-      {vaccine.booster_interval_months
-        ? t('health.record.form.vaccineInterval', { count: vaccine.booster_interval_months })
-        : t('health.record.form.vaccineNoInterval')}
-      {vaccine.availability ? ` ${vaccine.availability}` : ''}{' '}
-      {t('health.record.form.vaccineSource', { source: vaccine.source })}
-    </p>
   );
 }
 
