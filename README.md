@@ -92,6 +92,23 @@ npx supabase stop         # arrête les conteneurs
 
 Les e-mails éventuels ne partent pas : ils s'ouvrent sur http://127.0.0.1:54324.
 
+### Données de croissance
+
+Les courbes de référence viennent des [Puppy Growth Charts du WALTHAM Petcare Science
+Institute](https://www.waltham.com/resources/puppy-growth-charts), construites sur les
+dossiers de plus de six millions de jeunes chiens
+([Salt et al., PLOS One 2017](https://doi.org/10.1371/journal.pone.0182064)).
+Elles sont indexées par catégorie de poids adulte et par sexe, de 12 semaines à 1–2 ans
+selon le gabarit.
+
+Ce jeu de données appartient à WALTHAM : il n'est pas versionné ici. Le schéma est créé
+par les migrations, les valeurs sont chargées séparément :
+
+```bash
+SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... \
+  node scripts/import-growth-data.mjs breeds.json waltham_curves.json
+```
+
 Scripts : `dev`, `build`, `preview`, `lint`, `typecheck`, `db:push`, `db:types`.
 
 ## 🗺️ Roadmap
@@ -102,7 +119,7 @@ Les features arrivent une par une, chacune avec sa migration SQL.
 - [x] Écrans foyer : créer / rejoindre avec un code, inviter l'autre maître
 - [x] Fiche profil du chien (nom, race, sexe, naissance, adoption, âge)
 - [x] Suivi du poids : pesées, courbe et historique
-- [x] Fourchette de poids attendue selon la race ou le gabarit
+- [x] Courbes de référence WALTHAM par catégorie de poids adulte et sexe
 - [ ] Taille au garrot
 - [ ] Module éducation avec paliers de compétence
 - [ ] Tracker de socialisation
